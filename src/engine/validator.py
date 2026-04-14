@@ -73,6 +73,11 @@ METRIC_MAP = {
     "div_payout_ratio": {"tbank": "div_payout_ratio"},
     "rev_3y_cagr":  {"tbank": "rev_3y_cagr"},
 
+    # ── Dividend calendar ──
+    "next_div_date":   {"tbank": "next_div_date", "dohod": "next_div_date"},
+    "next_div_amount": {"tbank": "next_div_amount", "dohod": "next_div_amount"},
+    "ex_div_date":     {"tbank": "ex_div_date"},
+
     # ── dohod.ru enrichment ──
     "div_dsi":      {"dohod": "div_dsi"},
     "div_forecast": {"dohod": "div_forecast_12m"},
@@ -175,6 +180,17 @@ def validate_ticker(
             continue
 
         values_list = list(source_values.values())
+
+        # Non-numeric metrics (dates, strings) — take first value, no divergence check
+        if any(isinstance(v, str) for v in values_list):
+            validated[metric] = {
+                "value": values_list[0],
+                "confidence": CONFIRMED if len(values_list) > 1 else SINGLE,
+                "sources": source_values,
+                "spread": 0,
+            }
+            continue
+
         confidence, spread = _check_divergence(values_list, metric)
 
         # Use median as the display value

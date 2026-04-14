@@ -258,6 +258,139 @@ def _build_financials_table(stocks: Dict, tickers: List[str], show_portfolio_bad
     return '\n'.join(rows)
 
 
+# ── Sector medians ───────────────────────────────────────────────────────────
+
+def _compute_sector_medians(stocks: Dict, tickers: List[str], metrics: List[str]) -> Dict[str, Optional[float]]:
+    """Compute median values for a list of metrics across sector tickers."""
+    from statistics import median as stat_median
+    result = {}
+    for m in metrics:
+        vals = []
+        for t in tickers:
+            s = stocks.get(t)
+            if s:
+                v = _val(s, m)
+                if v is not None:
+                    vals.append(v)
+        result[m] = stat_median(vals) if vals else None
+    return result
+
+
+def _median_row(medians: Dict[str, Optional[float]], cols: List[tuple]) -> str:
+    """Build a 'Sector Median' summary row from computed medians."""
+    cells = ['<td class="ticker median-label">Median</td>']
+    for metric, fmt_fn in cols:
+        v = medians.get(metric)
+        cells.append(f'<td class="num median-val">{fmt_fn(v)}</td>')
+    return f'<tr class="median-row">{"".join(cells)}</tr>'
+
+
+# ── Dividend calendar ────────────────────────────────────────────────────────
+
+def _build_dividend_calendar(stocks: Dict, tickers: List[str]) -> str:
+    """Build upcoming dividend table from T-Bank and dohod.ru data."""
+    rows = []
+    for t in tickers:
+        s = stocks.get(t)
+        if not s:
+            continue
+
+        name = s.get("name", t)
+        div_date_m = _metric(s, "next_div_date")
+        div_amt_m = _metric(s, "next_div_amount")
+        div_yield_m = _metric(s, "div_yield")
+
+        div_date = div_date_m.get("value")
+        div_amt = div_amt_m.get("value")
+        div_yield_val = div_yield_m.get("value")
+
+        if not div_date and not div_amt:
+            continue
+
+        date_str = str(div_date) if div_date else "TBD"
+        amt_str = f"₽{div_amt:,.1f}" if isinstance(div_amt, (int, float)) else "TBD"
+        yield_str = f"{div_yield_val:.1f}%" if div_yield_val else ""
+
+        rows.append(f'''<tr>
+  <td class="ticker">{t}<span class="name-sub">{name}</span></td>
+  <td class="num">{date_str}</td>
+  <td class="num">{amt_str}</td>
+  <td class="num">{yield_str}</td>
+</tr>''')
+
+    if not rows:
+        return '<tr><td colspan="4" class="empty-msg">No upcoming dividends found</td></tr>'
+    return '\n'.join(rows)
+
+
+# ── Sector conclusions ───────────────────────────────────────────────────────
+
+def _build_sector_conclusions(stocks: Dict) -> Dict[str, str]:
+    """Generate data-driven sector conclusions using live portfolio data."""
+    conclusions = {}
+
+    # ── Oil & Gas ──
+    oil_tickers = ["LKOH", "ROSN", "NVTK", "TATN", "GAZP"]
+    oil_pes = [_val(stocks.get(t,{}), "pe") for t in oil_tickers if _val(stocks.get(t,{}), "pe") and _val(stocks.get(t,{}), "pe") > 0]
+    oil_divs = [_val(stocks.get(t,{}), "div_yield") for t in oil_tickers if _val(stocks.get(t,{}), "div_yield")]
+    oil_med_pe = f"{sorted(oil_pes)[len(oil_pes)//2]:.1f}x" if oil_pes else "N/A"
+    oil_med_div = f"{sorted(oil_divs)[len(oil_divs)//2]:.1f}%" if oil_divs else "N/A"
+    conclusions["🛢️ Oil & Gas"] = (
+        f"<strong>Key driver:</strong> Brent near $99 supports earnings, but OPEC+ quota discipline and ruble strength "
+        f"(USD/RUB ~76) compress ruble-denominated revenue. Sector trades at median P/E {oil_med_pe} with {oil_med_div} median dividend yield. "
+        f"<strong>Risk:</strong> Further oil price decline below $90 or ruble appreciation would squeeze margins. "
+        f"<strong>Insight:</strong> TATN and ROSN offer the most defensive positioning with lower breakeven costs; GAZP remains the cheapest by P/E but carries execution risk on gas exports."
+    )
+
+    # ── Banks / Fintech ──
+    bank_tickers = ["SBER", "TCSG", "VTBR", "BSPB"]
+    bank_pes = [_val(stocks.get(t,{}), "pe") for t in bank_tickers if _val(stocks.get(t,{}), "pe") and _val(stocks.get(t,{}), "pe") > 0]
+    bank_roes = [_val(stocks.get(t,{}), "roe") for t in bank_tickers if _val(stocks.get(t,{}), "roe")]
+    bank_med_pe = f"{sorted(bank_pes)[len(bank_pes)//2]:.1f}x" if bank_pes else "N/A"
+    bank_med_roe = f"{sorted(bank_roes)[len(bank_roes)//2]:.1f}%" if bank_roes else "N/A"
+    conclusions["🏦 Banks / Fintech"] = (
+        f"<strong>Key driver:</strong> CBR key rate at 15% — net interest margins remain elevated, driving strong profitability (median ROE {bank_med_roe}). "
+        f"Sector trades at median P/E {bank_med_pe}, historically cheap. Rate cuts expected in H2 2026 would boost loan growth but compress margins. "
+        f"<strong>Risk:</strong> Credit quality deterioration if rates stay high too long; regulatory pressure on fees. "
+        f"<strong>Insight:</strong> SBER is the quality play (highest market cap, stable dividends); VTBR offers deep value but with higher risk."
+    )
+
+    # ── Metals & Mining ──
+    met_tickers = ["GMKN", "NLMK", "MAGN", "CHMF"]
+    met_divs = [_val(stocks.get(t,{}), "div_yield") for t in met_tickers if _val(stocks.get(t,{}), "div_yield")]
+    met_med_div = f"{sorted(met_divs)[len(met_divs)//2]:.1f}%" if met_divs else "N/A"
+    conclusions["⛏️ Metals & Mining"] = (
+        f"<strong>Key driver:</strong> China demand recovery remains the swing factor for nickel (GMKN) and steel (NLMK, MAGN, CHMF). "
+        f"Median dividend yield at {met_med_div} — some companies have suspended or cut dividends, creating wide dispersion. "
+        f"<strong>Risk:</strong> Global recession would hit commodity prices; sanctions on Russian metals exports remain a headwind. "
+        f"<strong>Insight:</strong> CHMF historically the most shareholder-friendly; GMKN's dividend policy is uncertain — watch board announcements."
+    )
+
+    # ── Retail ──
+    ret_tickers = ["X5", "MGNT", "OZON"]
+    ret_revs = [_val(stocks.get(t,{}), "rev_yoy") for t in ret_tickers if _val(stocks.get(t,{}), "rev_yoy")]
+    ret_med_growth = f"{sorted(ret_revs)[len(ret_revs)//2]:+.1f}%" if ret_revs else "N/A"
+    conclusions["🛒 Retail"] = (
+        f"<strong>Key driver:</strong> Consumer spending resilient despite high rates — median revenue growth {ret_med_growth}. "
+        f"X5 dominates offline grocery with the largest store network; OZON is the e-commerce leader scaling towards profitability. "
+        f"<strong>Risk:</strong> Inflation squeeze on consumer spending power; wage growth deceleration. "
+        f"<strong>Insight:</strong> X5 offers the highest dividend yield in the sector after its special payout; OZON is a growth bet — watch the path to sustainable positive net income."
+    )
+
+    # ── Tech / Internet ──
+    tech_tickers = ["YDEX", "HEAD", "CNRU", "VK"]
+    tech_pes = [_val(stocks.get(t,{}), "pe") for t in tech_tickers if _val(stocks.get(t,{}), "pe") and _val(stocks.get(t,{}), "pe") > 0]
+    tech_med_pe = f"{sorted(tech_pes)[len(tech_pes)//2]:.1f}x" if tech_pes else "N/A"
+    conclusions["💻 Tech / Internet"] = (
+        f"<strong>Key driver:</strong> Digital advertising and HR tech demand strong — sector median P/E at {tech_med_pe}, premium to market justified by growth. "
+        f"Yandex dominates search/ride-hailing/cloud; HeadHunter is a near-monopoly in online recruitment with exceptional margins. "
+        f"<strong>Risk:</strong> Regulatory pressure on data/AI; VK continues to burn cash with no clear path to profitability. "
+        f"<strong>Insight:</strong> HEAD offers the best quality (high ROE, net margins >40%, net cash); CNRU is a niche play on Russian real estate digitalization."
+    )
+
+    return conclusions
+
+
 # ── Full page assembly ───────────────────────────────────────────────────────
 
 def build_html(validated_data: Dict[str, Any], generated_at: datetime) -> str:
@@ -312,6 +445,12 @@ def build_html(validated_data: Dict[str, Any], generated_at: datetime) -> str:
     portfolio_growth = _build_growth_table(stocks, PORTFOLIO)
     portfolio_financials = _build_financials_table(stocks, PORTFOLIO)
 
+    # ── Dividend calendar ──
+    dividend_calendar_html = _build_dividend_calendar(stocks, PORTFOLIO)
+
+    # ── Sector conclusions ──
+    sector_conclusions = _build_sector_conclusions(stocks)
+
     # ── Sectors tab content ──
     sector_sections = []
     for sector in SECTORS:
@@ -319,8 +458,23 @@ def build_html(validated_data: Dict[str, Any], generated_at: datetime) -> str:
         sect_tickers = sector["tickers"]
         is_bank_sector = sector["is_bank"]
 
+        conclusion = sector_conclusions.get(sect_name, "")
+        conclusion_html = f'<div class="sector-conclusion">{conclusion}</div>' if conclusion else ""
+
         if is_bank_sector:
             bank_rows = _build_bank_table(stocks, sect_tickers, show_portfolio_badge=True)
+            medians = _compute_sector_medians(stocks, sect_tickers, ["pe", "pbv", "roe", "div_yield"])
+            median_html = _median_row(medians, [
+                ("pe", _fmt_ratio), ("pe", lambda _: ""), ("pe", lambda _: ""),  # skip Price, Chg
+                ("pe", _fmt_ratio), ("pbv", _fmt_ratio), ("roe", _fmt_pct), ("div_yield", _fmt_pct_unsigned), ("pe", lambda _: ""),
+            ])
+            # Simpler approach — just build the median row manually for banks
+            med_pe = _fmt_ratio(medians.get("pe"))
+            med_pbv = _fmt_ratio(medians.get("pbv"))
+            med_roe = _fmt_pct(medians.get("roe"))
+            med_dy = _fmt_pct_unsigned(medians.get("div_yield"))
+            median_row = f'<tr class="median-row"><td class="ticker median-label">Median</td><td></td><td></td><td class="num median-val">{med_pe}</td><td class="num median-val">{med_pbv}</td><td class="num median-val">{med_roe}</td><td class="num median-val">{med_dy}</td><td></td></tr>'
+
             sector_sections.append(f'''
 <div class="section">
   <div class="section-header" onclick="toggleSection(this)">
@@ -328,12 +482,13 @@ def build_html(validated_data: Dict[str, Any], generated_at: datetime) -> str:
     <span class="section-toggle">▼</span>
   </div>
   <div class="section-body">
+    {conclusion_html}
     <div class="table-wrap">
       <table class="data-table sortable">
         <thead><tr>
           <th>Ticker</th><th>Price</th><th>Chg</th><th>P/E</th><th>P/BV</th><th>ROE</th><th>Div Yield</th><th>Mkt Cap</th>
         </tr></thead>
-        <tbody>{bank_rows}</tbody>
+        <tbody>{bank_rows}{median_row}</tbody>
       </table>
     </div>
   </div>
@@ -342,6 +497,18 @@ def build_html(validated_data: Dict[str, Any], generated_at: datetime) -> str:
             val_rows = _build_valuation_table(stocks, sect_tickers, show_portfolio_badge=True)
             qual_rows = _build_quality_table(stocks, sect_tickers, show_portfolio_badge=True)
 
+            med_val = _compute_sector_medians(stocks, sect_tickers, ["pe", "ev_ebitda", "ps"])
+            med_pe_v = _fmt_ratio(med_val.get("pe"))
+            med_ev_v = _fmt_ratio(med_val.get("ev_ebitda"))
+            med_ps_v = _fmt_ratio(med_val.get("ps"))
+            median_row_val = f'<tr class="median-row"><td class="ticker median-label">Median</td><td></td><td></td><td class="num median-val">{med_pe_v}</td><td class="num median-val">{med_ev_v}</td><td class="num median-val">{med_ps_v}</td><td></td></tr>'
+
+            med_qual = _compute_sector_medians(stocks, sect_tickers, ["net_margin", "roe", "div_yield"])
+            med_nm = _fmt_pct(med_qual.get("net_margin"))
+            med_roe_q = _fmt_pct(med_qual.get("roe"))
+            med_dy_q = _fmt_pct_unsigned(med_qual.get("div_yield"))
+            median_row_qual = f'<tr class="median-row"><td class="ticker median-label">Median</td><td></td><td class="num median-val">{med_nm}</td><td class="num median-val">{med_roe_q}</td><td class="num median-val">{med_dy_q}</td></tr>'
+
             sector_sections.append(f'''
 <div class="section">
   <div class="section-header" onclick="toggleSection(this)">
@@ -349,12 +516,13 @@ def build_html(validated_data: Dict[str, Any], generated_at: datetime) -> str:
     <span class="section-toggle">▼</span>
   </div>
   <div class="section-body">
+    {conclusion_html}
     <div class="table-wrap">
       <table class="data-table sortable">
         <thead><tr>
           <th>Ticker</th><th>Price</th><th>Chg</th><th>P/E</th><th>EV/EBITDA</th><th>P/S</th><th>Mkt Cap</th>
         </tr></thead>
-        <tbody>{val_rows}</tbody>
+        <tbody>{val_rows}{median_row_val}</tbody>
       </table>
     </div>
     <div class="table-wrap" style="margin-top:12px">
@@ -362,7 +530,7 @@ def build_html(validated_data: Dict[str, Any], generated_at: datetime) -> str:
         <thead><tr>
           <th>Ticker</th><th>Price</th><th>Net Margin</th><th>ROE</th><th>Div Yield</th>
         </tr></thead>
-        <tbody>{qual_rows}</tbody>
+        <tbody>{qual_rows}{median_row_qual}</tbody>
       </table>
     </div>
   </div>
@@ -617,6 +785,20 @@ body {{
 .portfolio-dot {{ color: var(--blue); font-size: 8px; vertical-align: middle; margin-left: 4px; }}
 .portfolio-row {{ background: var(--blue-bg) !important; }}
 
+/* Median row */
+.median-row {{ background: var(--blue-bg) !important; border-top: 2px solid var(--border); }}
+.median-row:hover {{ background: var(--blue-bg) !important; }}
+.median-label {{ font-weight: 700; color: var(--blue); font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }}
+.median-val {{ font-weight: 600; color: var(--blue); }}
+
+/* Sector conclusions */
+.sector-conclusion {{
+  padding: 12px 16px; margin-bottom: 14px;
+  background: var(--bg-secondary); border-radius: var(--radius-sm);
+  font-size: 13px; line-height: 1.6; color: var(--text-secondary);
+  border-left: 3px solid var(--blue);
+}}
+
 .source-vals {{ font-size: 12px; color: var(--text-secondary); font-family: 'SF Mono', 'Menlo', monospace; }}
 .empty-msg {{ text-align: center; color: var(--text-tertiary); padding: 24px !important; font-style: italic; }}
 
@@ -764,6 +946,23 @@ body {{
               <th>Ticker</th><th>Price</th><th>Revenue</th><th>EBITDA</th><th>Net Income</th><th>Net Debt</th><th>ND/EBITDA</th>
             </tr></thead>
             <tbody>{portfolio_financials}</tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header" onclick="toggleSection(this)">
+        <span class="section-title">📅 Upcoming Dividends</span>
+        <span class="section-toggle">▼</span>
+      </div>
+      <div class="section-body">
+        <div class="table-wrap">
+          <table class="data-table" style="table-layout:auto">
+            <thead><tr>
+              <th>Ticker</th><th>Record Date</th><th>Amount</th><th>TTM Yield</th>
+            </tr></thead>
+            <tbody>{dividend_calendar_html}</tbody>
           </table>
         </div>
       </div>

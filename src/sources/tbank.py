@@ -163,6 +163,8 @@ def _parse_fundamentals(fund: dict) -> Dict[str, Any]:
         "beta": g("beta"),
         "free_float": g("freeFloat"),
         "shares_outstanding": g("sharesOutstanding"),
+        # Dates
+        "ex_div_date": fund.get("exDividendDate", "")[:10] if fund.get("exDividendDate") else None,
         # Notes
         "notes": [],
     }
@@ -204,7 +206,32 @@ def fetch_all(tickers: List[str], token: str) -> Dict[str, Dict]:
             parsed = _parse_fundamentals(fund)
             parsed["ticker"] = ticker
 
-            # Step 3: Fetch last price
+            # Step 3: Fetch upcoming dividends
+            if inst.get("figi"):
+                try:
+                    from datetime import datetime, timedelta
+                    now = datetime.utcnow().strftime("%Y-%m-%dT00:00:00Z")
+                    future = (datetime.utcnow() + timedelta(days=365)).strftime("%Y-%m-%dT00:00:00Z")
+                    div_data = _api_call(
+                        "tinkoff.public.invest.api.contract.v1.InstrumentsService/GetDividends",
+                        {"figi": inst["figi"], "from": now, "to": future},
+                        token,
+                    )
+                    if "_error" not in div_data:
+                        divs = div_data.get("dividends", [])
+                        if divs:
+                            # Next upcoming dividend
+                            d = divs[0]
+                            parsed["next_div_date"] = (d.get("recordDate") or "")[:10]
+                            parsed["next_div_payment"] = (d.get("paymentDate") or "")[:10]
+                            net = d.get("dividendNet", {})
+                            units = int(net.get("units", 0))
+                            nano = int(net.get("nano", 0))
+                            parsed["next_div_amount"] = units + nano / 1e9 if (units or nano) else None
+                except Exception:
+                    pass
+
+            # Step 4: Fetch last price
             inst = instruments.get(ticker, {})
             if inst.get("uid"):
                 try:

@@ -107,18 +107,41 @@ def fetch_ticker(ticker: str) -> Dict[str, Any]:
                             result["div_payout_ratio"] = val
 
             # The second table has dividend history
-            # First data row (after header) is forecast
             if len(tables) >= 2:
                 div_table = tables[1]
                 div_rows = div_table.find_all('tr')
                 if len(div_rows) >= 2:
-                    # Row 0 is header [Год, Дивиденд (руб.), Изм. к пред. году]
-                    # Row 1 is forecast [след 12m. (прогноз), amount, -]
                     forecast_cells = [td.get_text(strip=True) for td in div_rows[1].find_all('td')]
                     if forecast_cells and 'прогноз' in forecast_cells[0].lower():
                         val = _safe_float(forecast_cells[1] if len(forecast_cells) > 1 else None)
                         if val is not None:
                             result["div_forecast_12m"] = val
+
+            # The third table has detailed dates (registry close dates)
+            if len(tables) >= 3:
+                detail_table = tables[2]
+                detail_rows = detail_table.find_all('tr')
+                import re
+                from datetime import datetime as dt
+                today = dt.now()
+                for row in detail_rows[1:]:  # skip header
+                    cells = [td.get_text(strip=True) for td in row.find_all('td')]
+                    if len(cells) >= 4:
+                        # cells: [declared_date, registry_date, year, amount]
+                        registry_str = cells[1]
+                        # Extract date, may have (прогноз)
+                        date_match = re.search(r'(\d{2}\.\d{2}\.\d{4})', registry_str)
+                        if date_match:
+                            try:
+                                reg_date = dt.strptime(date_match.group(1), "%d.%m.%Y")
+                                if reg_date > today:
+                                    result["next_div_date"] = reg_date.strftime("%Y-%m-%d")
+                                    result["next_div_amount"] = _safe_float(cells[3])
+                                    is_forecast = 'прогноз' in registry_str.lower()
+                                    result["next_div_forecast"] = is_forecast
+                                    break
+                            except ValueError:
+                                pass
 
     except Exception as e:
         result["notes"].append(f"error: {str(e)[:80]}")
