@@ -124,7 +124,7 @@ def fetch_ticker(ticker: str, playwright_browser=None) -> Dict[str, Any]:
     except ImportError:
         result["notes"].append("playwright not installed")
     except Exception as e:
-        result["notes"].append(f"error: {str(e)[:80]}")
+        result["notes"].append(f"error: {type(e).__name__}")
 
     return result
 
@@ -164,7 +164,7 @@ def fetch_all(tickers: List[str]) -> Dict[str, Dict]:
                 "ticker": t,
                 "pe": None, "div_yield": None, "mktcap": None,
                 "revenue_b": None, "ebitda_b": None,
-                "notes": [f"browser error: {str(e)[:60]}"],
+                "notes": [f"browser error: {type(e).__name__}"],
             }
 
     return results

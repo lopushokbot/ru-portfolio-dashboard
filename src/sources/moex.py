@@ -47,7 +47,7 @@ def _moex_get_json(url: str, params: dict = None) -> dict:
     except json.JSONDecodeError:
         return {"_error": "Response is not JSON"}
     except Exception as e:
-        return {"_error": str(e)}
+        return {"_error": f"{type(e).__name__}"}
 
 
 def _block_to_dicts(data: dict, block_name: str) -> List[Dict]:

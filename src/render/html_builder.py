@@ -5,6 +5,7 @@ Generates a single self-contained HTML file.
 
 import math
 from datetime import datetime
+from html import escape as _esc
 from typing import Optional, Dict, List, Any
 
 from ..config import PORTFOLIO, SECTORS, BANKS, TICKER_NAMES
@@ -99,9 +100,9 @@ def _tooltip(sources: Dict[str, float], fmt_fn) -> str:
     parts = []
     source_labels = {"tbank": "T-Bank", "moex": "MOEX", "smartlab": "smart-lab", "tradernet": "Tradernet", "dohod": "dohod.ru"}
     for src, val in sources.items():
-        label = source_labels.get(src, src)
-        parts.append(f"{label}: {fmt_fn(val)}")
-    return " | ".join(parts)
+        label = source_labels.get(src, _esc(str(src)))
+        parts.append(f"{label}: {_esc(str(fmt_fn(val)))}")
+    return _esc(" | ".join(parts))
 
 
 def _metric(stock: Dict, name: str) -> Dict:
@@ -145,7 +146,7 @@ def _build_valuation_table(stocks: Dict, tickers: List[str], show_portfolio_badg
         dot = ' <span class="portfolio-dot">●</span>' if is_p and show_portfolio_badge else ""
 
         rows.append(f'''<tr class="{row_class}">
-  <td class="ticker">{t}{dot}<span class="name-sub">{name}</span></td>
+  <td class="ticker">{t}{dot}<span class="name-sub">{_esc(name)}</span></td>
   <td class="num price">{_fmt_price(_metric(s,"price")["value"])}</td>
   <td class="num {_change_class(_metric(s,"change_pct")["value"])}">{_fmt_change(_metric(s,"change_pct")["value"])}</td>
   {_cell(_metric(s,"pe"), _fmt_ratio)}
@@ -171,7 +172,7 @@ def _build_bank_table(stocks: Dict, tickers: List[str], show_portfolio_badge: bo
         dot = ' <span class="portfolio-dot">●</span>' if is_p and show_portfolio_badge else ""
 
         rows.append(f'''<tr class="{row_class}">
-  <td class="ticker">{t}{dot}<span class="name-sub">{name}</span></td>
+  <td class="ticker">{t}{dot}<span class="name-sub">{_esc(name)}</span></td>
   <td class="num price">{_fmt_price(_metric(s,"price")["value"])}</td>
   <td class="num {_change_class(_metric(s,"change_pct")["value"])}">{_fmt_change(_metric(s,"change_pct")["value"])}</td>
   {_cell(_metric(s,"pe"), _fmt_ratio)}
@@ -198,7 +199,7 @@ def _build_quality_table(stocks: Dict, tickers: List[str], show_portfolio_badge:
         dot = ' <span class="portfolio-dot">●</span>' if is_p and show_portfolio_badge else ""
 
         rows.append(f'''<tr class="{row_class}">
-  <td class="ticker">{t}{dot}<span class="name-sub">{name}</span></td>
+  <td class="ticker">{t}{dot}<span class="name-sub">{_esc(name)}</span></td>
   <td class="num price">{_fmt_price(_metric(s,"price")["value"])}</td>
   {_cell(_metric(s,"net_margin"), _fmt_pct)}
   {_cell(_metric(s,"roe"), _fmt_pct)}
@@ -222,7 +223,7 @@ def _build_growth_table(stocks: Dict, tickers: List[str], show_portfolio_badge: 
         dot = ' <span class="portfolio-dot">●</span>' if is_p and show_portfolio_badge else ""
 
         rows.append(f'''<tr class="{row_class}">
-  <td class="ticker">{t}{dot}<span class="name-sub">{name}</span></td>
+  <td class="ticker">{t}{dot}<span class="name-sub">{_esc(name)}</span></td>
   <td class="num price">{_fmt_price(_metric(s,"price")["value"])}</td>
   {_cell_colored(_metric(s,"rev_yoy"), _fmt_pct)}
   {_cell_colored(_metric(s,"ebitda_yoy"), _fmt_pct)}
@@ -246,7 +247,7 @@ def _build_financials_table(stocks: Dict, tickers: List[str], show_portfolio_bad
         dot = ' <span class="portfolio-dot">●</span>' if is_p and show_portfolio_badge else ""
 
         rows.append(f'''<tr class="{row_class}">
-  <td class="ticker">{t}{dot}<span class="name-sub">{name}</span></td>
+  <td class="ticker">{t}{dot}<span class="name-sub">{_esc(name)}</span></td>
   <td class="num price">{_fmt_price(_metric(s,"price")["value"])}</td>
   {_cell(_metric(s,"revenue_b"), _fmt_rub_b)}
   {_cell(_metric(s,"ebitda_b"), _fmt_rub_b)}
@@ -312,7 +313,7 @@ def _build_dividend_calendar(stocks: Dict, tickers: List[str]) -> str:
         yield_str = f"{div_yield_val:.1f}%" if div_yield_val else ""
 
         rows.append(f'''<tr>
-  <td class="ticker">{t}<span class="name-sub">{name}</span></td>
+  <td class="ticker">{t}<span class="name-sub">{_esc(name)}</span></td>
   <td class="num">{date_str}</td>
   <td class="num">{amt_str}</td>
   <td class="num">{yield_str}</td>
@@ -545,11 +546,11 @@ def build_html(validated_data: Dict[str, Any], generated_at: datetime) -> str:
         vals_parts = []
         source_labels = {"tbank": "T-Bank", "moex": "MOEX", "smartlab": "smart-lab", "tradernet": "Tradernet", "dohod": "dohod.ru"}
         for src, val in a["values"].items():
-            label = source_labels.get(src, src)
+            label = source_labels.get(src, _esc(str(src)))
             if isinstance(val, (int, float)):
                 vals_parts.append(f"{label}: {val:.2f}")
             else:
-                vals_parts.append(f"{label}: {val}")
+                vals_parts.append(f"{label}: {_esc(str(val))}")
         vals_str = " | ".join(vals_parts)
 
         audit_rows.append(f'''<tr>
@@ -568,7 +569,7 @@ def build_html(validated_data: Dict[str, Any], generated_at: datetime) -> str:
         s = stocks.get(t)
         if s:
             for note in s.get("notes", []):
-                all_notes.append(f"<li><strong>{t}</strong>: {note}</li>")
+                all_notes.append(f"<li><strong>{_esc(t)}</strong>: {_esc(note)}</li>")
 
     notes_html = '\n'.join(all_notes) if all_notes else '<li>No issues detected</li>'
 

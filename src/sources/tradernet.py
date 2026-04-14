@@ -87,7 +87,7 @@ def fetch_ticker(ticker: str) -> Dict[str, Any]:
             result["change_pct"] = ((result["price"] - result["prev_price"]) / result["prev_price"]) * 100.0
 
     except Exception as e:
-        result["notes"].append(f"error: {str(e)[:80]}")
+        result["notes"].append(f"error: {type(e).__name__}")
 
     return result
 

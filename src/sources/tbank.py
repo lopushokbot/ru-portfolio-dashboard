@@ -81,7 +81,7 @@ def _api_call(endpoint: str, body: dict, token: str) -> dict:
         timeout=10,
     )
     if resp.status_code != 200:
-        return {"_error": f"HTTP {resp.status_code}: {resp.text[:100]}"}
+        return {"_error": f"HTTP {resp.status_code}"}
     return resp.json()
 
 

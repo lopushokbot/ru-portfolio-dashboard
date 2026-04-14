@@ -41,25 +41,17 @@ logging.basicConfig(
 log = logging.getLogger("dashboard")
 
 
-def _ensure_deps():
-    """Auto-install missing dependencies."""
+def _check_deps():
+    """Verify required dependencies are installed."""
     missing = []
-    try:
-        import requests
-    except ImportError:
-        missing.append("requests")
-    try:
-        import bs4
-    except ImportError:
-        missing.append("beautifulsoup4")
-    try:
-        import lxml
-    except ImportError:
-        missing.append("lxml")
+    for pkg in ["requests", "bs4", "lxml"]:
+        try:
+            __import__(pkg)
+        except ImportError:
+            missing.append(pkg)
     if missing:
-        import subprocess
-        log.info(f"Installing missing deps: {', '.join(missing)}")
-        subprocess.check_call([sys.executable, "-m", "pip", "install", "-q"] + missing)
+        log.error(f"Missing packages: {', '.join(missing)}. Run: pip install -r requirements.txt")
+        sys.exit(1)
 
 
 def _load_tbank_token() -> str:
@@ -99,7 +91,7 @@ def _collect_all_tickers() -> List[str]:
 
 def run(output_path: str = None):
     """Main entry point: fetch, validate, render."""
-    _ensure_deps()
+    _check_deps()
 
     generated_at = datetime.now()
     all_tickers = _collect_all_tickers()

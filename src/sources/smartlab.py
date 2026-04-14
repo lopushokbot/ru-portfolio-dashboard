@@ -187,7 +187,7 @@ def fetch_ticker(ticker: str) -> Dict[str, Any]:
                     result["pbv"] = pb_vals[-1]
 
     except Exception as e:
-        result["notes"].append(f"error: {str(e)[:80]}")
+        result["notes"].append(f"error: {type(e).__name__}")
 
     return result
 
