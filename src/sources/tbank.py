@@ -207,6 +207,7 @@ def fetch_all(tickers: List[str], token: str) -> Dict[str, Dict]:
             parsed["ticker"] = ticker
 
             # Step 3: Fetch upcoming dividends
+            inst = instruments.get(ticker, {})
             if inst.get("figi"):
                 try:
                     from datetime import datetime, timedelta

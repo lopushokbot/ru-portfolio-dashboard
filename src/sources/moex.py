@@ -131,39 +131,6 @@ def fetch_dividends(ticker: str, current_price: Optional[float]) -> Optional[flo
     return None
 
 
-def fetch_ticker(ticker: str) -> Dict[str, Any]:
-    """
-    Fetch all MOEX data for a single ticker.
-    Returns standardized dict with metric names matching config.
-    """
-    market = fetch_market(ticker)
-    if "error" in market:
-        return {
-            "source": "moex",
-            "ticker": ticker,
-            "error": market["error"],
-            "price": None,
-            "change_pct": None,
-            "mktcap": None,
-            "div_yield": None,
-            "volume_rub": None,
-        }
-
-    price = market.get("price")
-    div_yield = fetch_dividends(ticker, price)
-
-    return {
-        "source": "moex",
-        "ticker": ticker,
-        "price": price,
-        "prev_price": market.get("prev_price"),
-        "change_pct": market.get("change_pct"),
-        "mktcap": market.get("mktcap"),
-        "div_yield": div_yield,
-        "volume_rub": market.get("volume_rub"),
-    }
-
-
 def fetch_history_52w(ticker: str) -> Dict[str, Optional[float]]:
     """Fetch 52-week high/low from MOEX historical data (independent of Tradernet)."""
     mt = _moex_ticker(ticker)
