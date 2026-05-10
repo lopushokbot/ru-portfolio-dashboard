@@ -16,7 +16,7 @@ DOHOD_BASE = "https://dohod.ru/ik/analytics/dividend"
 
 # dohod.ru uses lowercase MOEX tickers in URL
 DOHOD_TICKER = {
-    "TCSG": "tcsg",
+    "TCSG": "t",       # rebranded to T on MOEX; dohod.ru follows MOEX ticker
     "X5": "x5",
     "YDEX": "ydex",
     "LKOH": "lkoh",
