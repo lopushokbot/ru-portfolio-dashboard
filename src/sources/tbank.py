@@ -30,8 +30,8 @@ _ZERO_MEANS_MISSING = {
     "ebitdaTtm", "evToEbitdaMrq", "evToSales",
     "netDebtToEbitda", "totalDebtToEbitdaMrq",
     "totalEnterpriseValueMrq",
-    # Valuation — 0 P/E means loss-making, but T-Bank uses 0 for "not computed"
-    "peRatioTtm", "priceToFreeCashFlowTtm",
+    # Valuation — 0 P/E, P/S, P/BV means T-Bank hasn't computed it (not a real zero)
+    "peRatioTtm", "priceToFreeCashFlowTtm", "priceToSalesTtm", "priceToBookTtm",
     # Quality — 0 margin/ROE means T-Bank hasn't computed it (banks especially)
     "netMarginMrq", "netInterestMarginMrq",
     # Dividends — 0 means no dividend
