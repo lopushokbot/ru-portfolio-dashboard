@@ -1,0 +1,1778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Russian Portfolio — June 14, 2026</title>
+<meta name="description" content="Russian stock portfolio dashboard with multi-source cross-validation">
+<meta property="og:title" content="Russian Portfolio Dashboard — June 14, 2026">
+<meta property="og:description" content="10 Russian stocks tracked across 4 data sources with cross-validation">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #ffffff; --bg-secondary: #f5f5f7; --bg-card: #ffffff;
+  --text-primary: #1d1d1f; --text-secondary: #6e6e73; --text-tertiary: #86868b;
+  --border: #d2d2d7; --border-light: #e8e8ed;
+  --green: #34c759; --green-bg: #e8f9ed; --green-text: #1a7a2e;
+  --red: #ff3b30; --red-bg: #ffeae9; --red-text: #c0291f;
+  --amber: #ff9500; --amber-bg: #fff4e0; --amber-text: #996300;
+  --blue: #007aff; --blue-bg: #e5f1ff; --blue-border: #007aff;
+  --gray-bg: #f0f0f5; --gray-text: #6e6e73;
+  --purple: #af52de; --purple-bg: #f3e8fa; --purple-text: #7b2d9e;
+  --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-lg: 0 4px 12px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.04);
+  --radius: 12px; --radius-sm: 8px;
+  --hover-bg: #f5f5f7; --tab-active: #007aff; --tab-inactive: #86868b;
+  --stripe: #fafafa;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #000000; --bg-secondary: #1c1c1e; --bg-card: #1c1c1e;
+    --text-primary: #f5f5f7; --text-secondary: #a1a1a6; --text-tertiary: #6e6e73;
+    --border: #38383a; --border-light: #2c2c2e;
+    --green: #30d158; --green-bg: #0d3318; --green-text: #30d158;
+    --red: #ff453a; --red-bg: #3a1511; --red-text: #ff453a;
+    --amber: #ff9f0a; --amber-bg: #3a2a05; --amber-text: #ff9f0a;
+    --blue: #0a84ff; --blue-bg: #0a1e3a; --blue-border: #0a84ff;
+    --gray-bg: #2c2c2e; --gray-text: #a1a1a6;
+    --purple: #bf5af2; --purple-bg: #2a1540; --purple-text: #bf5af2;
+    --shadow: 0 1px 3px rgba(0,0,0,0.3);
+    --shadow-lg: 0 4px 12px rgba(0,0,0,0.4);
+    --hover-bg: #2c2c2e; --stripe: #141414;
+  }
+}
+html[data-theme="dark"] {
+  --bg: #000000; --bg-secondary: #1c1c1e; --bg-card: #1c1c1e;
+  --text-primary: #f5f5f7; --text-secondary: #a1a1a6; --text-tertiary: #6e6e73;
+  --border: #38383a; --border-light: #2c2c2e;
+  --green: #30d158; --green-bg: #0d3318; --green-text: #30d158;
+  --red: #ff453a; --red-bg: #3a1511; --red-text: #ff453a;
+  --amber: #ff9f0a; --amber-bg: #3a2a05; --amber-text: #ff9f0a;
+  --blue: #0a84ff; --blue-bg: #0a1e3a; --blue-border: #0a84ff;
+  --gray-bg: #2c2c2e; --gray-text: #a1a1a6;
+  --purple: #bf5af2; --purple-bg: #2a1540; --purple-text: #bf5af2;
+  --shadow: 0 1px 3px rgba(0,0,0,0.3);
+  --shadow-lg: 0 4px 12px rgba(0,0,0,0.4);
+  --hover-bg: #2c2c2e; --stripe: #141414;
+}
+html[data-theme="light"] {
+  --bg: #ffffff; --bg-secondary: #f5f5f7; --bg-card: #ffffff;
+  --text-primary: #1d1d1f; --text-secondary: #6e6e73; --text-tertiary: #86868b;
+  --border: #d2d2d7; --border-light: #e8e8ed;
+  --green: #34c759; --green-bg: #e8f9ed; --green-text: #1a7a2e;
+  --red: #ff3b30; --red-bg: #ffeae9; --red-text: #c0291f;
+  --amber: #ff9500; --amber-bg: #fff4e0; --amber-text: #996300;
+  --blue: #007aff; --blue-bg: #e5f1ff; --blue-border: #007aff;
+  --gray-bg: #f0f0f5; --gray-text: #6e6e73;
+  --purple: #af52de; --purple-bg: #f3e8fa; --purple-text: #7b2d9e;
+  --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-lg: 0 4px 12px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.04);
+  --hover-bg: #f5f5f7; --stripe: #fafafa;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif;
+  background: var(--bg); color: var(--text-primary);
+  -webkit-font-smoothing: antialiased; line-height: 1.5;
+}
+.header {
+  position: sticky; top: 0; z-index: 100; background: var(--bg);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border-light); padding: 16px 24px 0;
+}
+@supports (backdrop-filter: blur(20px)) {
+  .header { background: color-mix(in srgb, var(--bg) 80%, transparent); }
+}
+.header-content { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+.header h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; font-family: 'SF Pro Display', 'Inter', sans-serif; }
+.header .meta { font-size: 14px; color: var(--text-secondary); font-weight: 500; display:flex; align-items:center; gap:12px; }
+.theme-toggle {
+  background: var(--bg-secondary); border: 1px solid var(--border-light); border-radius: 20px;
+  padding: 4px 12px; cursor: pointer; font-size: 14px; color: var(--text-secondary);
+  transition: all 0.2s;
+}
+.theme-toggle:hover { background: var(--hover-bg); color: var(--text-primary); }
+.tabs { display: flex; gap: 0; margin-top: 12px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.tab {
+  padding: 10px 18px; font-size: 14px; font-weight: 600; color: var(--tab-inactive);
+  cursor: pointer; border-bottom: 2.5px solid transparent; transition: all 0.2s ease;
+  white-space: nowrap; user-select: none;
+}
+.tab:hover { color: var(--text-primary); }
+.tab.active { color: var(--tab-active); border-bottom-color: var(--tab-active); }
+.main { max-width: 1200px; margin: 0 auto; padding: 24px; }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+.summary-bar {
+  display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+  padding: 14px 20px; margin-bottom: 20px;
+  background: var(--bg-card); border: 1px solid var(--border-light);
+  border-radius: var(--radius); box-shadow: var(--shadow);
+  font-size: 14px; color: var(--text-secondary);
+}
+.summary-bar .stat { font-weight: 600; color: var(--text-primary); }
+.summary-bar .divider { width: 1px; height: 20px; background: var(--border-light); }
+.src-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: 600;
+}
+.src-green { background: var(--green-bg); color: var(--green-text); }
+.src-amber { background: var(--amber-bg); color: var(--amber-text); }
+.src-red { background: var(--red-bg); color: var(--red-text); }
+.src-gray { background: var(--gray-bg); color: var(--gray-text); }
+
+/* Macro strip */
+.macro-strip {
+  display: flex; gap: 10px; flex-wrap: wrap;
+  padding: 12px 20px; margin-bottom: 20px;
+  background: var(--bg-card); border: 1px solid var(--border-light);
+  border-radius: var(--radius); box-shadow: var(--shadow);
+}
+.macro-chip {
+  display: inline-flex; align-items: baseline; gap: 6px;
+  padding: 6px 12px; border-radius: 10px;
+  background: var(--bg-secondary); font-size: 13px;
+}
+.macro-chip .macro-label { color: var(--text-secondary); font-weight: 500; }
+.macro-chip .macro-value { color: var(--text-primary); font-weight: 600; font-variant-numeric: tabular-nums; }
+.macro-chip.macro-up .macro-value { color: var(--green-text); }
+.macro-chip.macro-down .macro-value { color: var(--red-text); }
+
+.section {
+  background: var(--bg-card); border: 1px solid var(--border-light);
+  border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 20px; overflow: hidden;
+}
+.section-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 20px; cursor: pointer; user-select: none; transition: background 0.15s;
+}
+.section-header:hover { background: var(--hover-bg); }
+.section-title { font-size: 17px; font-weight: 600; font-family: 'SF Pro Display', 'Inter', sans-serif; }
+.section-subtitle { font-size: 12px; font-weight: 400; color: var(--text-tertiary); margin-left: 8px; }
+.section-toggle { font-size: 14px; color: var(--text-tertiary); transition: transform 0.25s ease; }
+.section-body { padding: 0 20px 20px; }
+.section.collapsed .section-body { display: none; }
+.section.collapsed .section-toggle { transform: rotate(-90deg); }
+
+/* Tables — fixed column widths for alignment */
+.table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.table-wrap::-webkit-scrollbar { height: 6px; }
+.table-wrap::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+.data-table { width: 100%; border-collapse: collapse; font-size: 14px; table-layout: fixed; }
+.data-table thead { position: sticky; top: 0; z-index: 2; }
+.data-table th {
+  padding: 10px 12px; text-align: right; font-size: 11px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-tertiary);
+  background: var(--bg-card); border-bottom: 2px solid var(--border-light);
+  white-space: nowrap; cursor: pointer; user-select: none;
+  overflow: hidden; text-overflow: ellipsis;
+}
+.data-table th:first-child { text-align: left; }
+.data-table th:hover { color: var(--text-primary); }
+.data-table th.sort-asc::after { content: " ↑"; }
+.data-table th.sort-desc::after { content: " ↓"; }
+.data-table td {
+  padding: 10px 12px; border-bottom: 1px solid var(--border-light);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.data-table tbody tr:hover { background: var(--hover-bg); }
+.data-table tbody tr:nth-child(even) { background: var(--stripe); }
+.data-table tbody tr:nth-child(even):hover { background: var(--hover-bg); }
+
+/* Column widths */
+.data-table .ticker { text-align: left; width: 130px; min-width: 110px; }
+.data-table .num { text-align: right; font-variant-numeric: tabular-nums; font-feature-settings: "tnum"; }
+.data-table .price { font-weight: 600; }
+
+/* Fixed column widths for 7-col valuation table */
+.data-table.cols-7 th:nth-child(1),
+.data-table.cols-7 td:nth-child(1) { width: 130px; }
+.data-table.cols-7 th:nth-child(2),
+.data-table.cols-7 td:nth-child(2) { width: 110px; }
+.data-table.cols-7 th:nth-child(3),
+.data-table.cols-7 td:nth-child(3) { width: 70px; }
+.data-table.cols-7 th:nth-child(n+4),
+.data-table.cols-7 td:nth-child(n+4) { width: 100px; }
+.data-table.cols-7 th:last-child,
+.data-table.cols-7 td:last-child { width: 110px; }
+
+/* Fixed widths for 8-col bank table */
+.data-table.cols-8 th:nth-child(1),
+.data-table.cols-8 td:nth-child(1) { width: 130px; }
+.data-table.cols-8 th:nth-child(2),
+.data-table.cols-8 td:nth-child(2) { width: 100px; }
+.data-table.cols-8 th:nth-child(3),
+.data-table.cols-8 td:nth-child(3) { width: 65px; }
+.data-table.cols-8 th:nth-child(n+4),
+.data-table.cols-8 td:nth-child(n+4) { width: 90px; }
+.data-table.cols-8 th:last-child,
+.data-table.cols-8 td:last-child { width: 100px; }
+
+/* Fixed widths for 5-col quality/growth table */
+.data-table.cols-5 th:nth-child(1),
+.data-table.cols-5 td:nth-child(1) { width: 130px; }
+.data-table.cols-5 th:nth-child(2),
+.data-table.cols-5 td:nth-child(2) { width: 110px; }
+.data-table.cols-5 th:nth-child(n+3),
+.data-table.cols-5 td:nth-child(n+3) { width: 120px; }
+
+.ticker { font-weight: 600; }
+.name-sub { display: block; font-size: 11px; font-weight: 400; color: var(--text-tertiary); line-height: 1.2; }
+.val-green { color: var(--green); }
+.val-red { color: var(--red); }
+
+.badge { font-size: 10px; margin-left: 3px; cursor: help; vertical-align: middle; }
+.portfolio-dot { color: var(--blue); font-size: 8px; vertical-align: middle; margin-left: 4px; }
+.portfolio-row { background: var(--blue-bg) !important; }
+
+/* Median row */
+.median-row { background: var(--blue-bg) !important; border-top: 2px solid var(--border); }
+.median-row:hover { background: var(--blue-bg) !important; }
+.median-label { font-weight: 700; color: var(--blue); font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+.median-val { font-weight: 600; color: var(--blue); }
+
+/* Sector conclusions */
+.sector-conclusion {
+  padding: 12px 16px; margin-bottom: 14px;
+  background: var(--bg-secondary); border-radius: var(--radius-sm);
+  font-size: 13px; line-height: 1.6; color: var(--text-secondary);
+  border-left: 3px solid var(--blue);
+}
+
+.source-vals { font-size: 12px; color: var(--text-secondary); font-family: 'SF Mono', 'Menlo', monospace; }
+.empty-msg { text-align: center; color: var(--text-tertiary); padding: 24px !important; font-style: italic; }
+
+.source-detail { margin-bottom: 16px; padding: 16px; background: var(--bg-secondary); border-radius: var(--radius-sm); }
+.source-detail h3 { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+.source-detail .detail-meta { font-size: 13px; color: var(--text-secondary); }
+.notes-list { list-style: none; padding: 0; font-size: 13px; color: var(--text-secondary); }
+.notes-list li { padding: 4px 0; border-bottom: 1px solid var(--border-light); }
+.notes-list li:last-child { border-bottom: none; }
+
+.footer {
+  max-width: 1200px; margin: 0 auto; padding: 24px;
+  font-size: 12px; color: var(--text-tertiary); text-align: center;
+  border-top: 1px solid var(--border-light);
+}
+
+@media (max-width: 768px) {
+  .header h1 { font-size: 22px; }
+  .header { padding: 12px 16px 0; }
+  .main { padding: 16px; }
+  .tab { padding: 8px 14px; font-size: 13px; }
+  .summary-bar { gap: 10px; padding: 12px 16px; font-size: 13px; }
+  .data-table { font-size: 13px; table-layout: auto; }
+  .data-table td, .data-table th { padding: 8px 10px; }
+}
+
+@media print {
+  .header { position: relative; }
+  .tab-content { display: block !important; }
+  .tabs, .theme-toggle { display: none; }
+  .section.collapsed .section-body { display: block; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-content">
+    <div>
+      <h1>🇷🇺 Russian Portfolio</h1>
+      <div class="meta">June 14, 2026 · 09:02 MSK</div>
+    </div>
+    <button class="theme-toggle" onclick="toggleTheme()" title="Toggle dark/light mode">🌓</button>
+  </div>
+  <div class="tabs" style="max-width:1200px; margin:0 auto;">
+    <div class="tab active" onclick="switchTab(this, 'portfolio')">Portfolio</div>
+    <div class="tab" onclick="switchTab(this, 'sectors')">Sectors</div>
+    <div class="tab" onclick="switchTab(this, 'audit')">Audit</div>
+    <div class="tab" onclick="switchTab(this, 'sources')">Sources</div>
+  </div>
+</div>
+
+<div class="main">
+
+  <div class="summary-bar">
+    <span><span class="stat">10</span> stocks</span>
+    <span class="divider"></span>
+    <span>Verified: <span class="stat">81%</span></span>
+    <span class="divider"></span>
+    <span style="font-size:12px;">✅ 278 cross-checked · <span style="color:var(--text-tertiary)">· 352 single-source</span> · 🔴 65 divergent</span>
+    <span class="divider"></span>
+    <span><span class="src-badge src-green">T-Bank 18/20</span> <span class="src-badge src-green">MOEX 20/20</span> <span class="src-badge src-green">smart-lab 20/20</span> <span class="src-badge src-green">Tradernet 20/20</span> <span class="src-badge src-green">dohod.ru 18/20</span></span>
+  </div>
+
+  <div class="macro-strip" title="Live macro snapshot, 30-day change arrows"><div class="macro-chip "><span class="macro-label">Brent</span><span class="macro-value">$87.3 ▼</span></div><div class="macro-chip "><span class="macro-label">CBR rate</span><span class="macro-value">14.50%</span></div><div class="macro-chip "><span class="macro-label">USD/RUB</span><span class="macro-value">71.91</span></div><div class="macro-chip "><span class="macro-label">Shanghai</span><span class="macro-value">4032 ▼</span></div><div class="macro-chip "><span class="macro-label">Iron ore</span><span class="macro-value">$102 ▼</span></div></div>
+
+  <!-- ═══ PORTFOLIO TAB ═══ -->
+  <div class="tab-content active" id="tab-portfolio">
+
+    <div class="section">
+      <div class="section-header" onclick="toggleSection(this)">
+        <span class="section-title">📊 Valuation</span>
+        <span class="section-toggle">▼</span>
+      </div>
+      <div class="section-body">
+        <div class="table-wrap">
+          <table class="data-table sortable cols-7">
+            <thead><tr>
+              <th>Ticker</th><th>Price</th><th>Chg</th><th>P/E</th><th>EV/EBITDA</th><th>P/S</th><th>Mkt Cap</th>
+            </tr></thead>
+            <tbody><tr class="">
+  <td class="ticker">YDEX<span class="name-sub">Яндекс</span></td>
+  <td class="num price">₽3,993.0</td>
+  <td class="num val-green">+0.1%</td>
+  <td class="num" title="T-Bank: 13.2x | smart-lab: 9.7x">11.4x<span class="badge" title="Minor divergence between sources">⚠️</span></td>
+  <td class="num" title="T-Bank: 5.2x | smart-lab: 5.6x">5.4x<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: 1.1x | smart-lab: 1.1x">1.1x<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: ₽1.58T | MOEX: ₽1.58T">₽1.58T<span class="badge" title="All sources agree">✅</span></td>
+</tr>
+<tr class="">
+  <td class="ticker">LKOH<span class="name-sub">ЛУКОЙЛ</span></td>
+  <td class="num price">₽4,700.0</td>
+  <td class="num val-red">-0.7%</td>
+  <td class="num" title="smart-lab: 35.3x">35.3x</td>
+  <td class="num" title="T-Bank: 3.4x | smart-lab: 3.4x">3.4x<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: 0.9x | smart-lab: 0.9x">0.9x<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: ₽3.26T | MOEX: ₽3.26T">₽3.26T<span class="badge" title="All sources agree">✅</span></td>
+</tr>
+<tr class="">
+  <td class="ticker">HEAD<span class="name-sub">HeadHunter</span></td>
+  <td class="num price">₽2,794.0</td>
+  <td class="num val-green">+0.0%</td>
+  <td class="num" title="T-Bank: 7.2x | smart-lab: 6.8x">7.0x<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: 5.6x | smart-lab: 5.5x">5.6x<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: 3.2x | smart-lab: 3.4x">3.3x<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: ₽131.8B | MOEX: ₽131.8B">₽131.8B<span class="badge" title="All sources agree">✅</span></td>
+</tr>
+<tr class="">
+  <td class="ticker">X5<span class="name-sub">X5 Group</span></td>
+  <td class="num price">₽2,400.5</td>
+  <td class="num val-green">+0.4%</td>
+  <td class="num" title="T-Bank: 8.6x | smart-lab: 8.3x">8.4x<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: 3.5x | smart-lab: 3.3x">3.4x<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: 0.1x | smart-lab: 0.1x">0.1x<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: ₽651.9B | MOEX: ₽651.9B">₽651.9B<span class="badge" title="All sources agree">✅</span></td>
+</tr>
+<tr class="">
+  <td class="ticker">NVTK<span class="name-sub">НОВАТЭК</span></td>
+  <td class="num price">₽1,037.0</td>
+  <td class="num val-red">-0.8%</td>
+  <td class="num" title="T-Bank: 16.9x | smart-lab: 17.2x">17.1x<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: 3.6x | smart-lab: 3.6x">3.6x<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: 2.2x | smart-lab: 2.2x">2.2x<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: ₽3.15T | MOEX: ₽3.15T">₽3.15T<span class="badge" title="All sources agree">✅</span></td>
+</tr>
+<tr class="">
+  <td class="ticker">GMKN<span class="name-sub">Норильский никель</span></td>
+  <td class="num price">₽129.7</td>
+  <td class="num val-green">+0.7%</td>
+  <td class="num" title="T-Bank: 9.6x | smart-lab: 12.0x">10.8x<span class="badge" title="Minor divergence between sources">⚠️</span></td>
+  <td class="num" title="T-Bank: 5.6x | smart-lab: 5.6x">5.6x<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: 1.7x | smart-lab: 1.7x">1.7x<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: ₽1.98T | MOEX: ₽1.98T">₽1.98T<span class="badge" title="All sources agree">✅</span></td>
+</tr>
+<tr class="">
+  <td class="ticker">CNRU<span class="name-sub">ЦИАН</span></td>
+  <td class="num price">₽657.8</td>
+  <td class="num val-green">+1.0%</td>
+  <td class="num" title="smart-lab: 14.9x">14.9x</td>
+  <td class="num" title="smart-lab: 9.8x">9.8x</td>
+  <td class="num" title="T-Bank: 0.0x | smart-lab: 3.2x">1.6x<span class="badge" title="Major divergence — check audit tab">🔴</span></td>
+  <td class="num" title="T-Bank: ₽51.1B | MOEX: ₽51.1B">₽51.1B<span class="badge" title="All sources agree">✅</span></td>
+</tr>
+<tr class="">
+  <td class="ticker">TATN<span class="name-sub">Татнефть</span></td>
+  <td class="num price">₽591.3</td>
+  <td class="num val-red">-1.2%</td>
+  <td class="num" title="T-Bank: 8.5x | smart-lab: 8.7x">8.6x<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="smart-lab: 4.1x">4.1x</td>
+  <td class="num" title="T-Bank: 0.7x | smart-lab: 0.8x">0.7x<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: ₽1.29T | MOEX: ₽1.29T">₽1.29T<span class="badge" title="All sources agree">✅</span></td>
+</tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header" onclick="toggleSection(this)">
+        <span class="section-title">🏦 Banks</span>
+        <span class="section-toggle">▼</span>
+      </div>
+      <div class="section-body">
+        <div class="table-wrap">
+          <table class="data-table sortable cols-8">
+            <thead><tr>
+              <th>Ticker</th><th>Price</th><th>Chg</th><th>P/E</th><th>P/BV</th><th>ROE</th><th>Div Yield</th><th>Mkt Cap</th>
+            </tr></thead>
+            <tbody><tr class="">
+  <td class="ticker">TCSG<span class="name-sub">Т-Технологии</span></td>
+  <td class="num price">₽295.3</td>
+  <td class="num val-red">-0.3%</td>
+  <td class="num" title="T-Bank: 4.3x | smart-lab: 4.3x">4.3x<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: 1.1x | smart-lab: 1.1x">1.1x<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: +28.4% | smart-lab: +26.7%">+27.5%<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: 5.0% | MOEX: 11.2%">8.1%<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: ₽792.2B | MOEX: ₽792.2B">₽792.2B<span class="badge" title="All sources agree">✅</span></td>
+</tr>
+<tr class="">
+  <td class="ticker">SBER<span class="name-sub">Сбербанк</span></td>
+  <td class="num price">₽322.3</td>
+  <td class="num val-green">+0.3%</td>
+  <td class="num" title="T-Bank: 3.9x | smart-lab: 4.1x">4.0x<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: 0.8x | smart-lab: 0.8x">0.8x<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: +21.6% | smart-lab: +24.4%">+23.0%<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: 10.8% | MOEX: 10.8% | dohod.ru: 11.6%">10.8%<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: ₽6.96T | MOEX: ₽6.96T">₽6.96T<span class="badge" title="All sources agree">✅</span></td>
+</tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header" onclick="toggleSection(this)">
+        <span class="section-title">💎 Quality</span>
+        <span class="section-toggle">▼</span>
+      </div>
+      <div class="section-body">
+        <div class="table-wrap">
+          <table class="data-table sortable cols-5">
+            <thead><tr>
+              <th>Ticker</th><th>Price</th><th>Net Margin</th><th>ROE</th><th>Div Yield</th>
+            </tr></thead>
+            <tbody><tr class="">
+  <td class="ticker">YDEX<span class="name-sub">Яндекс</span></td>
+  <td class="num price">₽3,993.0</td>
+  <td class="num" title="T-Bank: +7.9% | smart-lab: +10.8%">+9.4%<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: +34.9% | smart-lab: +42.3%">+38.6%<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: 4.8% | dohod.ru: 5.9%">5.3%<span class="badge" title="All sources agree">✅</span></td>
+</tr>
+<tr class="">
+  <td class="ticker">LKOH<span class="name-sub">ЛУКОЙЛ</span></td>
+  <td class="num price">₽4,700.0</td>
+  <td class="num" title="T-Bank: -28.1% | smart-lab: +2.5%">-12.8%<span class="badge" title="Major divergence — check audit tab">🔴</span></td>
+  <td class="num" title="T-Bank: -20.1% | smart-lab: +2.8%">-8.7%<span class="badge" title="Major divergence — check audit tab">🔴</span></td>
+  <td class="num" title="T-Bank: 25.9% | dohod.ru: 13.4%">19.6%<span class="badge" title="Minor divergence between sources">⚠️</span></td>
+</tr>
+<tr class="">
+  <td class="ticker">HEAD<span class="name-sub">HeadHunter</span></td>
+  <td class="num price">₽2,794.0</td>
+  <td class="num" title="T-Bank: +44.5% | smart-lab: +50.2%">+47.4%<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: +140.9% | smart-lab: +282.5%">+211.7%<span class="badge" title="Major divergence — check audit tab">🔴</span></td>
+  <td class="num" title="T-Bank: 16.7% | dohod.ru: 10.4%">13.5%<span class="badge" title="All sources agree">✅</span></td>
+</tr>
+<tr class="">
+  <td class="ticker">X5<span class="name-sub">X5 Group</span></td>
+  <td class="num price">₽2,400.5</td>
+  <td class="num" title="T-Bank: +1.6% | smart-lab: +1.6%">+1.6%<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: +39.5% | smart-lab: +73.5%">+56.5%<span class="badge" title="Major divergence — check audit tab">🔴</span></td>
+  <td class="num" title="T-Bank: 42.3% | MOEX: 27.0% | dohod.ru: 16.4%">27.0%<span class="badge" title="Major divergence — check audit tab">🔴</span></td>
+</tr>
+<tr class="">
+  <td class="ticker">NVTK<span class="name-sub">НОВАТЭК</span></td>
+  <td class="num price">₽1,037.0</td>
+  <td class="num" title="T-Bank: +12.9% | smart-lab: +12.7%">+12.8%<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: +6.5% | smart-lab: +6.5%">+6.5%<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: 8.0% | dohod.ru: 5.2%">6.6%<span class="badge" title="All sources agree">✅</span></td>
+</tr>
+<tr class="">
+  <td class="ticker">GMKN<span class="name-sub">Норильский никель</span></td>
+  <td class="num price">₽129.7</td>
+  <td class="num" title="T-Bank: +17.9% | smart-lab: +14.3%">+16.1%<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: +22.0% | smart-lab: +18.5%">+20.3%<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: 0.0% | dohod.ru: 0.0%">0.0%<span class="badge" title="All sources agree">✅</span></td>
+</tr>
+<tr class="">
+  <td class="ticker">CNRU<span class="name-sub">ЦИАН</span></td>
+  <td class="num price">₽657.8</td>
+  <td class="num" title="smart-lab: +21.6%">+21.6%</td>
+  <td class="num" title="T-Bank: +0.0% | smart-lab: +54.6%">+27.3%<span class="badge" title="Major divergence — check audit tab">🔴</span></td>
+  <td class="num" title="T-Bank: 15.8% | dohod.ru: 8.2%">12.0%<span class="badge" title="All sources agree">✅</span></td>
+</tr>
+<tr class="">
+  <td class="ticker">TATN<span class="name-sub">Татнефть</span></td>
+  <td class="num price">₽591.3</td>
+  <td class="num" title="T-Bank: +8.4% | smart-lab: +8.7%">+8.5%<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: +11.4% | smart-lab: +12.0%">+11.7%<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: 11.1% | dohod.ru: 9.5%">10.3%<span class="badge" title="All sources agree">✅</span></td>
+</tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header" onclick="toggleSection(this)">
+        <span class="section-title">📈 Growth<span class="section-subtitle">FY2025 vs FY2024</span></span>
+        <span class="section-toggle">▼</span>
+      </div>
+      <div class="section-body">
+        <div class="table-wrap">
+          <table class="data-table sortable cols-5">
+            <thead><tr>
+              <th>Ticker</th><th>Price</th><th>Revenue</th><th>EBITDA</th><th>Net Income</th>
+            </tr></thead>
+            <tbody><tr class="">
+  <td class="ticker">YDEX<span class="name-sub">Яндекс</span></td>
+  <td class="num price">₽3,993.0</td>
+  <td class="num val-green" title="T-Bank: +31.7% | smart-lab: +4.6%">+18.1%<span class="badge" title="Major divergence — check audit tab">🔴</span></td>
+  <td class="num val-green" title="smart-lab: +8.7%">+8.7%</td>
+  <td class="num val-green" title="smart-lab: +15.5%">+15.5%</td>
+</tr>
+<tr class="">
+  <td class="ticker">TCSG<span class="name-sub">Т-Технологии</span></td>
+  <td class="num price">₽295.3</td>
+  <td class="num val-green" title="T-Bank: +51.0% | smart-lab: +5.0%">+28.0%<span class="badge" title="Major divergence — check audit tab">🔴</span></td>
+  <td class="num " title="">N/A</td>
+  <td class="num val-green" title="smart-lab: +3.1%">+3.1%</td>
+</tr>
+<tr class="">
+  <td class="ticker">LKOH<span class="name-sub">ЛУКОЙЛ</span></td>
+  <td class="num price">₽4,700.0</td>
+  <td class="num val-red" title="T-Bank: -56.3% | smart-lab: -14.8%">-35.5%<span class="badge" title="Major divergence — check audit tab">🔴</span></td>
+  <td class="num val-red" title="smart-lab: -35.8%">-35.8%</td>
+  <td class="num val-red" title="smart-lab: -88.3%">-88.3%</td>
+</tr>
+<tr class="">
+  <td class="ticker">HEAD<span class="name-sub">HeadHunter</span></td>
+  <td class="num price">₽2,794.0</td>
+  <td class="num val-green" title="T-Bank: +4.0% | smart-lab: -0.2%">+1.9%<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num val-red" title="smart-lab: -1.8%">-1.8%</td>
+  <td class="num val-red" title="smart-lab: -1.0%">-1.0%</td>
+</tr>
+<tr class="">
+  <td class="ticker">SBER<span class="name-sub">Сбербанк</span></td>
+  <td class="num price">₽322.3</td>
+  <td class="num val-green" title="T-Bank: +25.2% | smart-lab: +1.9%">+13.5%<span class="badge" title="Major divergence — check audit tab">🔴</span></td>
+  <td class="num " title="">N/A</td>
+  <td class="num val-green" title="smart-lab: +4.3%">+4.3%</td>
+</tr>
+<tr class="">
+  <td class="ticker">X5<span class="name-sub">X5 Group</span></td>
+  <td class="num price">₽2,400.5</td>
+  <td class="num val-green" title="T-Bank: +18.8% | smart-lab: +2.6%">+10.7%<span class="badge" title="Major divergence — check audit tab">🔴</span></td>
+  <td class="num val-green" title="smart-lab: +4.6%">+4.6%</td>
+  <td class="num val-red" title="smart-lab: -6.0%">-6.0%</td>
+</tr>
+<tr class="">
+  <td class="ticker">NVTK<span class="name-sub">НОВАТЭК</span></td>
+  <td class="num price">₽1,037.0</td>
+  <td class="num val-red" title="T-Bank: -6.5% | smart-lab: -6.5%">-6.5%<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num val-red" title="smart-lab: -14.8%">-14.8%</td>
+  <td class="num val-red" title="smart-lab: -62.9%">-62.9%</td>
+</tr>
+<tr class="">
+  <td class="ticker">GMKN<span class="name-sub">Норильский никель</span></td>
+  <td class="num price">₽129.7</td>
+  <td class="num val-red" title="T-Bank: -0.8% | smart-lab: -1.6%">-1.2%<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num val-red" title="smart-lab: -1.4%">-1.4%</td>
+  <td class="num val-green" title="smart-lab: +34.1%">+34.1%</td>
+</tr>
+<tr class="">
+  <td class="ticker">CNRU<span class="name-sub">ЦИАН</span></td>
+  <td class="num price">₽657.8</td>
+  <td class="num val-green" title="T-Bank: +16.7% | smart-lab: +3.9%">+10.3%<span class="badge" title="Minor divergence between sources">⚠️</span></td>
+  <td class="num val-green" title="smart-lab: +14.8%">+14.8%</td>
+  <td class="num val-green" title="smart-lab: +27.8%">+27.8%</td>
+</tr>
+<tr class="">
+  <td class="ticker">TATN<span class="name-sub">Татнефть</span></td>
+  <td class="num price">₽591.3</td>
+  <td class="num val-red" title="T-Bank: -10.4% | smart-lab: -10.4%">-10.4%<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num val-red" title="smart-lab: -31.5%">-31.5%</td>
+  <td class="num val-red" title="smart-lab: -48.2%">-48.2%</td>
+</tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header" onclick="toggleSection(this)">
+        <span class="section-title">🧾 Financials<span class="section-subtitle">FY2025, ₽B</span></span>
+        <span class="section-toggle">▼</span>
+      </div>
+      <div class="section-body">
+        <div class="table-wrap">
+          <table class="data-table sortable cols-7">
+            <thead><tr>
+              <th>Ticker</th><th>Price</th><th>Revenue</th><th>EBITDA</th><th>Net Income</th><th>Net Debt</th><th>ND/EBITDA</th>
+            </tr></thead>
+            <tbody><tr class="">
+  <td class="ticker">YDEX<span class="name-sub">Яндекс</span></td>
+  <td class="num price">₽3,993.0</td>
+  <td class="num" title="T-Bank: ₽1.51T | smart-lab: ₽1.51T">₽1.51T<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: ₽305B | smart-lab: ₽305B">₽305B<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: ₽119B | smart-lab: ₽163B">₽141B<span class="badge" title="Major divergence — check audit tab">🔴</span></td>
+  <td class="num" title="smart-lab: ₽120B">₽120B</td>
+  <td class="num">0.2x</td>
+</tr>
+<tr class="">
+  <td class="ticker">TCSG<span class="name-sub">Т-Технологии</span></td>
+  <td class="num price">₽295.3</td>
+  <td class="num" title="T-Bank: ₽1.40T | smart-lab: ₽813B">₽1.11T<span class="badge" title="Major divergence — check audit tab">🔴</span></td>
+  <td class="num" title="">N/A</td>
+  <td class="num" title="T-Bank: ₽183B | smart-lab: ₽182B">₽183B<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="">N/A</td>
+  <td class="num">N/A</td>
+</tr>
+<tr class="">
+  <td class="ticker">LKOH<span class="name-sub">ЛУКОЙЛ</span></td>
+  <td class="num price">₽4,700.0</td>
+  <td class="num" title="T-Bank: ₽3.77T | smart-lab: ₽3.77T">₽3.77T<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: ₽892B | smart-lab: ₽892B">₽892B<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: ₽-1.06T | smart-lab: ₽92.5B">₽-484B<span class="badge" title="Major divergence — check audit tab">🔴</span></td>
+  <td class="num" title="smart-lab: ₽-279B">₽-279B</td>
+  <td class="num">neg</td>
+</tr>
+<tr class="">
+  <td class="ticker">HEAD<span class="name-sub">HeadHunter</span></td>
+  <td class="num price">₽2,794.0</td>
+  <td class="num" title="T-Bank: ₽41.1B | smart-lab: ₽41.1B">₽41.1B<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: ₽20.4B | smart-lab: ₽22.4B">₽21.4B<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: ₽18.3B | smart-lab: ₽20.6B">₽19.4B<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="smart-lab: ₽-17.6B">₽-17.6B</td>
+  <td class="num">neg</td>
+</tr>
+<tr class="">
+  <td class="ticker">SBER<span class="name-sub">Сбербанк</span></td>
+  <td class="num price">₽322.3</td>
+  <td class="num" title="T-Bank: ₽10.85T | smart-lab: ₽4.32T">₽7.59T<span class="badge" title="Major divergence — check audit tab">🔴</span></td>
+  <td class="num" title="">N/A</td>
+  <td class="num" title="T-Bank: ₽1.78T | smart-lab: ₽1.78T">₽1.78T<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="">N/A</td>
+  <td class="num">N/A</td>
+</tr>
+<tr class="">
+  <td class="ticker">X5<span class="name-sub">X5 Group</span></td>
+  <td class="num price">₽2,400.5</td>
+  <td class="num" title="T-Bank: ₽4.76T | smart-lab: ₽4.76T">₽4.76T<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: ₽286B | smart-lab: ₽298B">₽292B<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: ₽76.1B | smart-lab: ₽78.1B">₽77.1B<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="smart-lab: ₽336B">₽336B</td>
+  <td class="num">1.2x</td>
+</tr>
+<tr class="">
+  <td class="ticker">NVTK<span class="name-sub">НОВАТЭК</span></td>
+  <td class="num price">₽1,037.0</td>
+  <td class="num" title="T-Bank: ₽1.45T | smart-lab: ₽1.45T">₽1.45T<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: ₽859B | smart-lab: ₽859B">₽859B<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: ₽186B | smart-lab: ₽183B">₽185B<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="smart-lab: ₽-39.2B">₽-39.2B</td>
+  <td class="num">neg</td>
+</tr>
+<tr class="">
+  <td class="ticker">GMKN<span class="name-sub">Норильский никель</span></td>
+  <td class="num price">₽129.7</td>
+  <td class="num" title="T-Bank: ₽1.15T | smart-lab: ₽1.15T">₽1.15T<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: ₽474B | smart-lab: ₽475B">₽475B<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: ₽207B | smart-lab: ₽164B">₽185B<span class="badge" title="Minor divergence between sources">⚠️</span></td>
+  <td class="num" title="smart-lab: ₽672B">₽672B</td>
+  <td class="num">1.4x</td>
+</tr>
+<tr class="">
+  <td class="ticker">CNRU<span class="name-sub">ЦИАН</span></td>
+  <td class="num price">₽657.8</td>
+  <td class="num" title="smart-lab: ₽15.8B">₽15.8B</td>
+  <td class="num" title="smart-lab: ₽4.51B">₽4.51B</td>
+  <td class="num" title="T-Bank: ₽0.00B | smart-lab: ₽3.40B">₽1.70B<span class="badge" title="Major divergence — check audit tab">🔴</span></td>
+  <td class="num" title="smart-lab: ₽-6.45B">₽-6.45B</td>
+  <td class="num">neg</td>
+</tr>
+<tr class="">
+  <td class="ticker">TATN<span class="name-sub">Татнефть</span></td>
+  <td class="num price">₽591.3</td>
+  <td class="num" title="T-Bank: ₽1.82T | smart-lab: ₽1.82T">₽1.82T<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="smart-lab: ₽328B">₽328B</td>
+  <td class="num" title="T-Bank: ₽152B | smart-lab: ₽159B">₽155B<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="smart-lab: ₽-32.0B">₽-32.0B</td>
+  <td class="num">neg</td>
+</tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header" onclick="toggleSection(this)">
+        <span class="section-title">📅 Upcoming Dividends</span>
+        <span class="section-toggle">▼</span>
+      </div>
+      <div class="section-body">
+        <div class="table-wrap">
+          <table class="data-table" style="table-layout:auto">
+            <thead><tr>
+              <th>Ticker</th><th>Record Date</th><th>Amount</th><th>TTM Yield</th>
+            </tr></thead>
+            <tbody><tr>
+  <td class="ticker">YDEX<span class="name-sub">Яндекс</span></td>
+  <td class="num">2027-04-27</td>
+  <td class="num">₽120.0</td>
+  <td class="num">5.3%</td>
+</tr>
+<tr>
+  <td class="ticker">LKOH<span class="name-sub">ЛУКОЙЛ</span></td>
+  <td class="num">2026-08-10</td>
+  <td class="num">₽176.1</td>
+  <td class="num">19.6%</td>
+</tr>
+<tr>
+  <td class="ticker">HEAD<span class="name-sub">HeadHunter</span></td>
+  <td class="num">2027-05-12</td>
+  <td class="num">₽122.4</td>
+  <td class="num">13.5%</td>
+</tr>
+<tr>
+  <td class="ticker">SBER<span class="name-sub">Сбербанк</span></td>
+  <td class="num">2026-07-20</td>
+  <td class="num">₽37.6</td>
+  <td class="num">10.8%</td>
+</tr>
+<tr>
+  <td class="ticker">X5<span class="name-sub">X5 Group</span></td>
+  <td class="num">2026-07-20</td>
+  <td class="num">₽99.8</td>
+  <td class="num">27.0%</td>
+</tr>
+<tr>
+  <td class="ticker">NVTK<span class="name-sub">НОВАТЭК</span></td>
+  <td class="num">2026-07-07</td>
+  <td class="num">₽137.3</td>
+  <td class="num">6.6%</td>
+</tr>
+<tr>
+  <td class="ticker">GMKN<span class="name-sub">Норильский никель</span></td>
+  <td class="num">2026-10-07</td>
+  <td class="num">₽0.0</td>
+  <td class="num"></td>
+</tr>
+<tr>
+  <td class="ticker">CNRU<span class="name-sub">ЦИАН</span></td>
+  <td class="num">2026-12-12</td>
+  <td class="num">₽0.0</td>
+  <td class="num">12.0%</td>
+</tr>
+<tr>
+  <td class="ticker">TATN<span class="name-sub">Татнефть</span></td>
+  <td class="num">2026-06-22</td>
+  <td class="num">₽34.2</td>
+  <td class="num">10.3%</td>
+</tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══ SECTORS TAB ═══ -->
+  <div class="tab-content" id="tab-sectors">
+    
+<div class="section">
+  <div class="section-header" onclick="toggleSection(this)">
+    <span class="section-title">🛢️ Oil & Gas</span>
+    <span class="section-toggle">▼</span>
+  </div>
+  <div class="section-body">
+    <div class="sector-conclusion"><strong>Key driver:</strong> Brent at $87.3 (down -17.3% over ~30 trading days) — neutral — near historical mid-cycle, earnings stable. USD/RUB 71.91 (strong ruble — compresses exporter ruble revenue, helps importers). Sector trades at median P/E 12.6x with 7.2% median dividend yield. <strong>Risk:</strong> A sustained Brent decline below $70 or further ruble strength would compress ruble-denominated revenue. <strong>Insight:</strong> TATN and ROSN have lower breakeven costs (most defensive); GAZP remains cheapest by P/E but carries gas-export execution risk.</div>
+    <div class="table-wrap">
+      <table class="data-table sortable">
+        <thead><tr>
+          <th>Ticker</th><th>Price</th><th>Chg</th><th>P/E</th><th>EV/EBITDA</th><th>P/S</th><th>Mkt Cap</th>
+        </tr></thead>
+        <tbody><tr class="portfolio-row">
+  <td class="ticker">LKOH <span class="portfolio-dot">●</span><span class="name-sub">ЛУКОЙЛ</span></td>
+  <td class="num price">₽4,700.0</td>
+  <td class="num val-red">-0.7%</td>
+  <td class="num" title="smart-lab: 35.3x">35.3x</td>
+  <td class="num" title="T-Bank: 3.4x | smart-lab: 3.4x">3.4x<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: 0.9x | smart-lab: 0.9x">0.9x<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: ₽3.26T | MOEX: ₽3.26T">₽3.26T<span class="badge" title="All sources agree">✅</span></td>
+</tr>
+<tr class="">
+  <td class="ticker">ROSN<span class="name-sub">Роснефть</span></td>
+  <td class="num price">₽362.9</td>
+  <td class="num val-red">-1.2%</td>
+  <td class="num" title="T-Bank: 9.0x | smart-lab: 16.3x">12.6x<span class="badge" title="Major divergence — check audit tab">🔴</span></td>
+  <td class="num" title="smart-lab: 1.7x">1.7x</td>
+  <td class="num" title="T-Bank: 0.5x | smart-lab: 0.5x">0.5x<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: ₽3.85T | MOEX: ₽3.85T">₽3.85T<span class="badge" title="All sources agree">✅</span></td>
+</tr>
+<tr class="portfolio-row">
+  <td class="ticker">NVTK <span class="portfolio-dot">●</span><span class="name-sub">НОВАТЭК</span></td>
+  <td class="num price">₽1,037.0</td>
+  <td class="num val-red">-0.8%</td>
+  <td class="num" title="T-Bank: 16.9x | smart-lab: 17.2x">17.1x<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: 3.6x | smart-lab: 3.6x">3.6x<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: 2.2x | smart-lab: 2.2x">2.2x<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: ₽3.15T | MOEX: ₽3.15T">₽3.15T<span class="badge" title="All sources agree">✅</span></td>
+</tr>
+<tr class="portfolio-row">
+  <td class="ticker">TATN <span class="portfolio-dot">●</span><span class="name-sub">Татнефть</span></td>
+  <td class="num price">₽591.3</td>
+  <td class="num val-red">-1.2%</td>
+  <td class="num" title="T-Bank: 8.5x | smart-lab: 8.7x">8.6x<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="smart-lab: 4.1x">4.1x</td>
+  <td class="num" title="T-Bank: 0.7x | smart-lab: 0.8x">0.7x<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: ₽1.29T | MOEX: ₽1.29T">₽1.29T<span class="badge" title="All sources agree">✅</span></td>
+</tr>
+<tr class="">
+  <td class="ticker">GAZP<span class="name-sub">Газпром</span></td>
+  <td class="num price">₽112.8</td>
+  <td class="num val-green">+0.3%</td>
+  <td class="num" title="T-Bank: 2.6x | smart-lab: 2.2x">2.4x<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="smart-lab: 2.8x">2.8x</td>
+  <td class="num" title="T-Bank: 0.3x | smart-lab: 0.3x">0.3x<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: ₽2.67T | MOEX: ₽2.67T">₽2.67T<span class="badge" title="All sources agree">✅</span></td>
+</tr><tr class="median-row"><td class="ticker median-label">Median</td><td></td><td></td><td class="num median-val">12.6x</td><td class="num median-val">3.4x</td><td class="num median-val">0.7x</td><td></td></tr></tbody>
+      </table>
+    </div>
+    <div class="table-wrap" style="margin-top:12px">
+      <table class="data-table sortable">
+        <thead><tr>
+          <th>Ticker</th><th>Price</th><th>Net Margin</th><th>ROE</th><th>Div Yield</th>
+        </tr></thead>
+        <tbody><tr class="portfolio-row">
+  <td class="ticker">LKOH <span class="portfolio-dot">●</span><span class="name-sub">ЛУКОЙЛ</span></td>
+  <td class="num price">₽4,700.0</td>
+  <td class="num" title="T-Bank: -28.1% | smart-lab: +2.5%">-12.8%<span class="badge" title="Major divergence — check audit tab">🔴</span></td>
+  <td class="num" title="T-Bank: -20.1% | smart-lab: +2.8%">-8.7%<span class="badge" title="Major divergence — check audit tab">🔴</span></td>
+  <td class="num" title="T-Bank: 25.9% | dohod.ru: 13.4%">19.6%<span class="badge" title="Minor divergence between sources">⚠️</span></td>
+</tr>
+<tr class="">
+  <td class="ticker">ROSN<span class="name-sub">Роснефть</span></td>
+  <td class="num price">₽362.9</td>
+  <td class="num" title="T-Bank: +5.4% | smart-lab: +3.0%">+4.2%<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: +4.7% | smart-lab: +2.6%">+3.6%<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: 7.2% | MOEX: 4.0% | dohod.ru: 7.4%">7.2%<span class="badge" title="All sources agree">✅</span></td>
+</tr>
+<tr class="portfolio-row">
+  <td class="ticker">NVTK <span class="portfolio-dot">●</span><span class="name-sub">НОВАТЭК</span></td>
+  <td class="num price">₽1,037.0</td>
+  <td class="num" title="T-Bank: +12.9% | smart-lab: +12.7%">+12.8%<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: +6.5% | smart-lab: +6.5%">+6.5%<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: 8.0% | dohod.ru: 5.2%">6.6%<span class="badge" title="All sources agree">✅</span></td>
+</tr>
+<tr class="portfolio-row">
+  <td class="ticker">TATN <span class="portfolio-dot">●</span><span class="name-sub">Татнефть</span></td>
+  <td class="num price">₽591.3</td>
+  <td class="num" title="T-Bank: +8.4% | smart-lab: +8.7%">+8.5%<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: +11.4% | smart-lab: +12.0%">+11.7%<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: 11.1% | dohod.ru: 9.5%">10.3%<span class="badge" title="All sources agree">✅</span></td>
+</tr>
+<tr class="">
+  <td class="ticker">GAZP<span class="name-sub">Газпром</span></td>
+  <td class="num price">₽112.8</td>
+  <td class="num" title="T-Bank: +10.6% | smart-lab: +12.2%">+11.4%<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: +5.5% | smart-lab: +6.5%">+6.0%<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: 0.0% | dohod.ru: 0.0%">0.0%<span class="badge" title="All sources agree">✅</span></td>
+</tr><tr class="median-row"><td class="ticker median-label">Median</td><td></td><td class="num median-val">+8.5%</td><td class="num median-val">+6.0%</td><td class="num median-val">7.2%</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-header" onclick="toggleSection(this)">
+    <span class="section-title">🏦 Banks / Fintech</span>
+    <span class="section-toggle">▼</span>
+  </div>
+  <div class="section-body">
+    <div class="sector-conclusion"><strong>Key driver:</strong> CBR key rate at 14.50% — restrictive — NIMs elevated, credit growth subdued. Median ROE 23.0%, sector trades at median P/E 4.0x. <strong>Risk:</strong> Credit-quality deterioration if rates stay elevated; regulatory pressure on fees. When CBR pivots to cuts, NIMs compress but loan growth accelerates. <strong>Insight:</strong> SBER is the quality play (largest cap, stable dividends); VTBR offers deep value with higher execution risk.</div>
+    <div class="table-wrap">
+      <table class="data-table sortable">
+        <thead><tr>
+          <th>Ticker</th><th>Price</th><th>Chg</th><th>P/E</th><th>P/BV</th><th>ROE</th><th>Div Yield</th><th>Mkt Cap</th>
+        </tr></thead>
+        <tbody><tr class="portfolio-row">
+  <td class="ticker">SBER <span class="portfolio-dot">●</span><span class="name-sub">Сбербанк</span></td>
+  <td class="num price">₽322.3</td>
+  <td class="num val-green">+0.3%</td>
+  <td class="num" title="T-Bank: 3.9x | smart-lab: 4.1x">4.0x<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: 0.8x | smart-lab: 0.8x">0.8x<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: +21.6% | smart-lab: +24.4%">+23.0%<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: 10.8% | MOEX: 10.8% | dohod.ru: 11.6%">10.8%<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: ₽6.96T | MOEX: ₽6.96T">₽6.96T<span class="badge" title="All sources agree">✅</span></td>
+</tr>
+<tr class="">
+  <td class="ticker">VTBR<span class="name-sub">ВТБ</span></td>
+  <td class="num price">₽75.91</td>
+  <td class="num val-green">+1.0%</td>
+  <td class="num" title="T-Bank: 1.0x | smart-lab: 2.0x">1.5x<span class="badge" title="Major divergence — check audit tab">🔴</span></td>
+  <td class="num" title="T-Bank: 0.2x | smart-lab: 0.3x">0.3x<span class="badge" title="Major divergence — check audit tab">🔴</span></td>
+  <td class="num" title="T-Bank: +17.4% | smart-lab: +19.2%">+18.3%<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: 33.7% | MOEX: 33.7% | dohod.ru: 12.7%">33.7%<span class="badge" title="Major divergence — check audit tab">🔴</span></td>
+  <td class="num" title="T-Bank: ₽502.5B | MOEX: ₽981.3B">₽741.9B<span class="badge" title="Major divergence — check audit tab">🔴</span></td>
+</tr>
+<tr class="portfolio-row">
+  <td class="ticker">TCSG <span class="portfolio-dot">●</span><span class="name-sub">Т-Технологии</span></td>
+  <td class="num price">₽295.3</td>
+  <td class="num val-red">-0.3%</td>
+  <td class="num" title="T-Bank: 4.3x | smart-lab: 4.3x">4.3x<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: 1.1x | smart-lab: 1.1x">1.1x<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: +28.4% | smart-lab: +26.7%">+27.5%<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: 5.0% | MOEX: 11.2%">8.1%<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: ₽792.2B | MOEX: ₽792.2B">₽792.2B<span class="badge" title="All sources agree">✅</span></td>
+</tr>
+<tr class="">
+  <td class="ticker">BSPB<span class="name-sub">Банк СПБ</span></td>
+  <td class="num price">₽288.2</td>
+  <td class="num val-red">-0.3%</td>
+  <td class="num" title="T-Bank: 3.9x | smart-lab: 3.9x">3.9x<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: 0.6x | smart-lab: 0.6x">0.6x<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: +14.9% | smart-lab: +19.9%">+17.4%<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: 14.9% | dohod.ru: 11.9%">13.4%<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: ₽128.4B | MOEX: ₽128.4B">₽128.4B<span class="badge" title="All sources agree">✅</span></td>
+</tr><tr class="median-row"><td class="ticker median-label">Median</td><td></td><td></td><td class="num median-val">3.9x</td><td class="num median-val">0.7x</td><td class="num median-val">+20.6%</td><td class="num median-val">12.1%</td><td></td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-header" onclick="toggleSection(this)">
+    <span class="section-title">⛏️ Metals & Mining</span>
+    <span class="section-toggle">▼</span>
+  </div>
+  <div class="section-body">
+    <div class="sector-conclusion"><strong>Key driver:</strong> China demand is the swing factor — Shanghai Composite 4032 (roughly flat, -3.5% over ~30 trading days) · iron ore $102 (down -8.7% over ~30 trading days). Strong ruble compresses exporter ruble margins. Median dividend yield 0.0%; wide dispersion as some issuers have suspended or cut payouts. <strong>Risk:</strong> Global slowdown hits commodity prices; sanctions on Russian metals exports remain a structural headwind. <strong>Insight:</strong> CHMF historically the most shareholder-friendly; GMKN's dividend policy remains uncertain — watch board announcements.</div>
+    <div class="table-wrap">
+      <table class="data-table sortable">
+        <thead><tr>
+          <th>Ticker</th><th>Price</th><th>Chg</th><th>P/E</th><th>EV/EBITDA</th><th>P/S</th><th>Mkt Cap</th>
+        </tr></thead>
+        <tbody><tr class="portfolio-row">
+  <td class="ticker">GMKN <span class="portfolio-dot">●</span><span class="name-sub">Норильский никель</span></td>
+  <td class="num price">₽129.7</td>
+  <td class="num val-green">+0.7%</td>
+  <td class="num" title="T-Bank: 9.6x | smart-lab: 12.0x">10.8x<span class="badge" title="Minor divergence between sources">⚠️</span></td>
+  <td class="num" title="T-Bank: 5.6x | smart-lab: 5.6x">5.6x<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: 1.7x | smart-lab: 1.7x">1.7x<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: ₽1.98T | MOEX: ₽1.98T">₽1.98T<span class="badge" title="All sources agree">✅</span></td>
+</tr>
+<tr class="">
+  <td class="ticker">NLMK<span class="name-sub">НЛМК</span></td>
+  <td class="num price">₽73.12</td>
+  <td class="num val-green">+1.1%</td>
+  <td class="num" title="T-Bank: 6.9x | smart-lab: 6.9x">6.9x<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="smart-lab: 4.2x">4.2x</td>
+  <td class="num" title="T-Bank: 0.5x | smart-lab: 0.5x">0.5x<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: ₽438.2B | MOEX: ₽438.2B">₽438.2B<span class="badge" title="All sources agree">✅</span></td>
+</tr>
+<tr class="">
+  <td class="ticker">MAGN<span class="name-sub">ММК</span></td>
+  <td class="num price">₽21.29</td>
+  <td class="num val-green">+0.4%</td>
+  <td class="num" title="smart-lab: neg">neg</td>
+  <td class="num" title="T-Bank: 3.6x | smart-lab: 2.4x">3.0x<span class="badge" title="Major divergence — check audit tab">🔴</span></td>
+  <td class="num" title="T-Bank: 0.4x | smart-lab: 0.4x">0.4x<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: ₽237.9B | MOEX: ₽237.9B">₽237.9B<span class="badge" title="All sources agree">✅</span></td>
+</tr>
+<tr class="">
+  <td class="ticker">CHMF<span class="name-sub">Северсталь</span></td>
+  <td class="num price">₽691.8</td>
+  <td class="num val-green">+1.2%</td>
+  <td class="num" title="T-Bank: 52.8x | smart-lab: 52.2x">52.5x<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: 5.5x | smart-lab: 5.5x">5.5x<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: 0.8x | smart-lab: 0.8x">0.8x<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: ₽579.5B | MOEX: ₽579.5B">₽579.5B<span class="badge" title="All sources agree">✅</span></td>
+</tr><tr class="median-row"><td class="ticker median-label">Median</td><td></td><td></td><td class="num median-val">8.9x</td><td class="num median-val">4.9x</td><td class="num median-val">0.7x</td><td></td></tr></tbody>
+      </table>
+    </div>
+    <div class="table-wrap" style="margin-top:12px">
+      <table class="data-table sortable">
+        <thead><tr>
+          <th>Ticker</th><th>Price</th><th>Net Margin</th><th>ROE</th><th>Div Yield</th>
+        </tr></thead>
+        <tbody><tr class="portfolio-row">
+  <td class="ticker">GMKN <span class="portfolio-dot">●</span><span class="name-sub">Норильский никель</span></td>
+  <td class="num price">₽129.7</td>
+  <td class="num" title="T-Bank: +17.9% | smart-lab: +14.3%">+16.1%<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: +22.0% | smart-lab: +18.5%">+20.3%<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: 0.0% | dohod.ru: 0.0%">0.0%<span class="badge" title="All sources agree">✅</span></td>
+</tr>
+<tr class="">
+  <td class="ticker">NLMK<span class="name-sub">НЛМК</span></td>
+  <td class="num price">₽73.12</td>
+  <td class="num" title="T-Bank: +7.6% | smart-lab: +7.6%">+7.6%<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: +7.2% | smart-lab: +7.1%">+7.2%<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: 0.0% | dohod.ru: 0.0%">0.0%<span class="badge" title="All sources agree">✅</span></td>
+</tr>
+<tr class="">
+  <td class="ticker">MAGN<span class="name-sub">ММК</span></td>
+  <td class="num price">₽21.29</td>
+  <td class="num" title="T-Bank: -3.3% | smart-lab: -3.2%">-3.3%<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: -2.9% | smart-lab: -2.8%">-2.8%<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: 0.0% | dohod.ru: 0.0%">0.0%<span class="badge" title="All sources agree">✅</span></td>
+</tr>
+<tr class="">
+  <td class="ticker">CHMF<span class="name-sub">Северсталь</span></td>
+  <td class="num price">₽691.8</td>
+  <td class="num" title="T-Bank: +1.6% | smart-lab: +1.6%">+1.6%<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: +2.1% | smart-lab: +2.1%">+2.1%<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: 0.0% | dohod.ru: 0.0%">0.0%<span class="badge" title="All sources agree">✅</span></td>
+</tr><tr class="median-row"><td class="ticker median-label">Median</td><td></td><td class="num median-val">+4.6%</td><td class="num median-val">+4.6%</td><td class="num median-val">0.0%</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-header" onclick="toggleSection(this)">
+    <span class="section-title">🛒 Retail</span>
+    <span class="section-toggle">▼</span>
+  </div>
+  <div class="section-body">
+    <div class="sector-conclusion"><strong>Key driver:</strong> CBR at 14.50% keeps consumer credit expensive; median revenue growth +10.7%. X5 dominates offline grocery with the largest store network; OZON is the e-commerce leader scaling toward profitability. <strong>Risk:</strong> Inflation squeezing consumer spending power; wage-growth deceleration. <strong>Insight:</strong> X5 offers the highest dividend yield in the sector after its special payout; OZON is a growth bet — watch the path to sustainable positive net income.</div>
+    <div class="table-wrap">
+      <table class="data-table sortable">
+        <thead><tr>
+          <th>Ticker</th><th>Price</th><th>Chg</th><th>P/E</th><th>EV/EBITDA</th><th>P/S</th><th>Mkt Cap</th>
+        </tr></thead>
+        <tbody><tr class="portfolio-row">
+  <td class="ticker">X5 <span class="portfolio-dot">●</span><span class="name-sub">X5 Group</span></td>
+  <td class="num price">₽2,400.5</td>
+  <td class="num val-green">+0.4%</td>
+  <td class="num" title="T-Bank: 8.6x | smart-lab: 8.3x">8.4x<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: 3.5x | smart-lab: 3.3x">3.4x<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: 0.1x | smart-lab: 0.1x">0.1x<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: ₽651.9B | MOEX: ₽651.9B">₽651.9B<span class="badge" title="All sources agree">✅</span></td>
+</tr>
+<tr class="">
+  <td class="ticker">MGNT<span class="name-sub">Магнит</span></td>
+  <td class="num price">₽2,160.5</td>
+  <td class="num val-red">-0.2%</td>
+  <td class="num" title="smart-lab: neg">neg</td>
+  <td class="num" title="T-Bank: 2.4x | smart-lab: 4.3x">3.3x<span class="badge" title="Major divergence — check audit tab">🔴</span></td>
+  <td class="num" title="T-Bank: 0.1x | smart-lab: 0.1x">0.1x<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: ₽220.2B | MOEX: ₽220.2B">₽220.2B<span class="badge" title="All sources agree">✅</span></td>
+</tr>
+<tr class="">
+  <td class="ticker">OZON<span class="name-sub">Ozon</span></td>
+  <td class="num price">₽3,869.5</td>
+  <td class="num val-green">+0.4%</td>
+  <td class="num" title="smart-lab: 74.9x">74.9x</td>
+  <td class="num" title="smart-lab: 6.1x">6.1x</td>
+  <td class="num" title="T-Bank: 0.0x | smart-lab: 0.8x">0.4x<span class="badge" title="Major divergence — check audit tab">🔴</span></td>
+  <td class="num" title="T-Bank: ₽837.4B | MOEX: ₽837.4B">₽837.4B<span class="badge" title="All sources agree">✅</span></td>
+</tr><tr class="median-row"><td class="ticker median-label">Median</td><td></td><td></td><td class="num median-val">8.4x</td><td class="num median-val">3.4x</td><td class="num median-val">0.1x</td><td></td></tr></tbody>
+      </table>
+    </div>
+    <div class="table-wrap" style="margin-top:12px">
+      <table class="data-table sortable">
+        <thead><tr>
+          <th>Ticker</th><th>Price</th><th>Net Margin</th><th>ROE</th><th>Div Yield</th>
+        </tr></thead>
+        <tbody><tr class="portfolio-row">
+  <td class="ticker">X5 <span class="portfolio-dot">●</span><span class="name-sub">X5 Group</span></td>
+  <td class="num price">₽2,400.5</td>
+  <td class="num" title="T-Bank: +1.6% | smart-lab: +1.6%">+1.6%<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: +39.5% | smart-lab: +73.5%">+56.5%<span class="badge" title="Major divergence — check audit tab">🔴</span></td>
+  <td class="num" title="T-Bank: 42.3% | MOEX: 27.0% | dohod.ru: 16.4%">27.0%<span class="badge" title="Major divergence — check audit tab">🔴</span></td>
+</tr>
+<tr class="">
+  <td class="ticker">MGNT<span class="name-sub">Магнит</span></td>
+  <td class="num price">₽2,160.5</td>
+  <td class="num" title="T-Bank: -0.9% | smart-lab: -0.9%">-0.9%<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: -19.1% | smart-lab: -21.7%">-20.4%<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: 0.0% | dohod.ru: 0.0%">0.0%<span class="badge" title="All sources agree">✅</span></td>
+</tr>
+<tr class="">
+  <td class="ticker">OZON<span class="name-sub">Ozon</span></td>
+  <td class="num price">₽3,869.5</td>
+  <td class="num" title="smart-lab: +1.0%">+1.0%</td>
+  <td class="num" title="T-Bank: +0.0% | smart-lab: -8.0%">-4.0%<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: 5.5% | dohod.ru: 1.8%">3.6%<span class="badge" title="All sources agree">✅</span></td>
+</tr><tr class="median-row"><td class="ticker median-label">Median</td><td></td><td class="num median-val">+1.0%</td><td class="num median-val">-4.0%</td><td class="num median-val">3.6%</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-header" onclick="toggleSection(this)">
+    <span class="section-title">💻 Tech / Internet</span>
+    <span class="section-toggle">▼</span>
+  </div>
+  <div class="section-body">
+    <div class="sector-conclusion"><strong>Key driver:</strong> Digital advertising and HR-tech demand remain firm — sector median P/E 11.4x. CBR at 14.50% continues to weigh on long-duration growth multiples. Yandex dominates search / ride-hailing / cloud; HeadHunter is a near-monopoly in online recruitment with exceptional margins. <strong>Risk:</strong> Regulatory pressure on data/AI; VK continues to burn cash with no clear path to profitability. <strong>Insight:</strong> HEAD offers the best quality (high ROE, net margins &gt;40%, net cash); CNRU is a niche play on Russian real-estate digitalization.</div>
+    <div class="table-wrap">
+      <table class="data-table sortable">
+        <thead><tr>
+          <th>Ticker</th><th>Price</th><th>Chg</th><th>P/E</th><th>EV/EBITDA</th><th>P/S</th><th>Mkt Cap</th>
+        </tr></thead>
+        <tbody><tr class="portfolio-row">
+  <td class="ticker">YDEX <span class="portfolio-dot">●</span><span class="name-sub">Яндекс</span></td>
+  <td class="num price">₽3,993.0</td>
+  <td class="num val-green">+0.1%</td>
+  <td class="num" title="T-Bank: 13.2x | smart-lab: 9.7x">11.4x<span class="badge" title="Minor divergence between sources">⚠️</span></td>
+  <td class="num" title="T-Bank: 5.2x | smart-lab: 5.6x">5.4x<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: 1.1x | smart-lab: 1.1x">1.1x<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: ₽1.58T | MOEX: ₽1.58T">₽1.58T<span class="badge" title="All sources agree">✅</span></td>
+</tr>
+<tr class="portfolio-row">
+  <td class="ticker">HEAD <span class="portfolio-dot">●</span><span class="name-sub">HeadHunter</span></td>
+  <td class="num price">₽2,794.0</td>
+  <td class="num val-green">+0.0%</td>
+  <td class="num" title="T-Bank: 7.2x | smart-lab: 6.8x">7.0x<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: 5.6x | smart-lab: 5.5x">5.6x<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: 3.2x | smart-lab: 3.4x">3.3x<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: ₽131.8B | MOEX: ₽131.8B">₽131.8B<span class="badge" title="All sources agree">✅</span></td>
+</tr>
+<tr class="portfolio-row">
+  <td class="ticker">CNRU <span class="portfolio-dot">●</span><span class="name-sub">ЦИАН</span></td>
+  <td class="num price">₽657.8</td>
+  <td class="num val-green">+1.0%</td>
+  <td class="num" title="smart-lab: 14.9x">14.9x</td>
+  <td class="num" title="smart-lab: 9.8x">9.8x</td>
+  <td class="num" title="T-Bank: 0.0x | smart-lab: 3.2x">1.6x<span class="badge" title="Major divergence — check audit tab">🔴</span></td>
+  <td class="num" title="T-Bank: ₽51.1B | MOEX: ₽51.1B">₽51.1B<span class="badge" title="All sources agree">✅</span></td>
+</tr>
+<tr class="">
+  <td class="ticker">VK<span class="name-sub">VK</span></td>
+  <td class="num price">₽236.6</td>
+  <td class="num val-green">+0.5%</td>
+  <td class="num" title="smart-lab: neg">neg</td>
+  <td class="num" title="T-Bank: 9.1x | smart-lab: 9.7x">9.4x<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: 0.8x | smart-lab: 0.9x">0.9x<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: ₽135.5B | MOEX: ₽135.5B">₽135.5B<span class="badge" title="All sources agree">✅</span></td>
+</tr><tr class="median-row"><td class="ticker median-label">Median</td><td></td><td></td><td class="num median-val">9.2x</td><td class="num median-val">7.5x</td><td class="num median-val">1.3x</td><td></td></tr></tbody>
+      </table>
+    </div>
+    <div class="table-wrap" style="margin-top:12px">
+      <table class="data-table sortable">
+        <thead><tr>
+          <th>Ticker</th><th>Price</th><th>Net Margin</th><th>ROE</th><th>Div Yield</th>
+        </tr></thead>
+        <tbody><tr class="portfolio-row">
+  <td class="ticker">YDEX <span class="portfolio-dot">●</span><span class="name-sub">Яндекс</span></td>
+  <td class="num price">₽3,993.0</td>
+  <td class="num" title="T-Bank: +7.9% | smart-lab: +10.8%">+9.4%<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: +34.9% | smart-lab: +42.3%">+38.6%<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: 4.8% | dohod.ru: 5.9%">5.3%<span class="badge" title="All sources agree">✅</span></td>
+</tr>
+<tr class="portfolio-row">
+  <td class="ticker">HEAD <span class="portfolio-dot">●</span><span class="name-sub">HeadHunter</span></td>
+  <td class="num price">₽2,794.0</td>
+  <td class="num" title="T-Bank: +44.5% | smart-lab: +50.2%">+47.4%<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: +140.9% | smart-lab: +282.5%">+211.7%<span class="badge" title="Major divergence — check audit tab">🔴</span></td>
+  <td class="num" title="T-Bank: 16.7% | dohod.ru: 10.4%">13.5%<span class="badge" title="All sources agree">✅</span></td>
+</tr>
+<tr class="portfolio-row">
+  <td class="ticker">CNRU <span class="portfolio-dot">●</span><span class="name-sub">ЦИАН</span></td>
+  <td class="num price">₽657.8</td>
+  <td class="num" title="smart-lab: +21.6%">+21.6%</td>
+  <td class="num" title="T-Bank: +0.0% | smart-lab: +54.6%">+27.3%<span class="badge" title="Major divergence — check audit tab">🔴</span></td>
+  <td class="num" title="T-Bank: 15.8% | dohod.ru: 8.2%">12.0%<span class="badge" title="All sources agree">✅</span></td>
+</tr>
+<tr class="">
+  <td class="ticker">VK<span class="name-sub">VK</span></td>
+  <td class="num price">₽236.6</td>
+  <td class="num" title="T-Bank: -15.6% | smart-lab: -13.8%">-14.7%<span class="badge" title="All sources agree">✅</span></td>
+  <td class="num" title="T-Bank: -28.1% | smart-lab: -16.6%">-22.4%<span class="badge" title="Minor divergence between sources">⚠️</span></td>
+  <td class="num" title="T-Bank: 0.0%">0.0%</td>
+</tr><tr class="median-row"><td class="ticker median-label">Median</td><td></td><td class="num median-val">+15.5%</td><td class="num median-val">+32.9%</td><td class="num median-val">8.7%</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+  </div>
+
+  <!-- ═══ AUDIT TAB ═══ -->
+  <div class="tab-content" id="tab-audit">
+    <div class="section">
+      <div class="section-header" onclick="toggleSection(this)">
+        <span class="section-title">🔍 Data Divergence Report</span>
+        <span class="section-toggle">▼</span>
+      </div>
+      <div class="section-body">
+        <div class="table-wrap">
+          <table class="data-table" style="table-layout:auto">
+            <thead><tr>
+              <th style="width:30px"></th><th>Ticker</th><th>Metric</th><th>Spread</th><th>Source Values</th>
+            </tr></thead>
+            <tbody><tr>
+  <td>🔴</td>
+  <td class="ticker">BSPB</td>
+  <td>revenue_b</td>
+  <td>74.6%</td>
+  <td class="source-vals">T-Bank: 214.62 | smart-lab: 98.00</td>
+</tr>
+<tr>
+  <td>🔴</td>
+  <td class="ticker">BSPB</td>
+  <td>rev_yoy</td>
+  <td>24.2%</td>
+  <td class="source-vals">T-Bank: 29.42 | smart-lab: 5.26</td>
+</tr>
+<tr>
+  <td>🔴</td>
+  <td class="ticker">BSPB</td>
+  <td>next_div_amount</td>
+  <td>48.9%</td>
+  <td class="source-vals">T-Bank: 9.71 | dohod.ru: 15.99</td>
+</tr>
+<tr>
+  <td>🔴</td>
+  <td class="ticker">CNRU</td>
+  <td>pbv</td>
+  <td>45.0%</td>
+  <td class="source-vals">T-Bank: 7.78 | smart-lab: 12.30</td>
+</tr>
+<tr>
+  <td>🔴</td>
+  <td class="ticker">CNRU</td>
+  <td>ps</td>
+  <td>200.0%</td>
+  <td class="source-vals">T-Bank: 0.00 | smart-lab: 3.21</td>
+</tr>
+<tr>
+  <td>🔴</td>
+  <td class="ticker">CNRU</td>
+  <td>roe</td>
+  <td>54.6pp</td>
+  <td class="source-vals">T-Bank: 0.00 | smart-lab: 54.60</td>
+</tr>
+<tr>
+  <td>🔴</td>
+  <td class="ticker">CNRU</td>
+  <td>net_income_b</td>
+  <td>200.0%</td>
+  <td class="source-vals">T-Bank: 0.00 | smart-lab: 3.40</td>
+</tr>
+<tr>
+  <td>🔴</td>
+  <td class="ticker">GAZP</td>
+  <td>next_div_amount</td>
+  <td>200.0%</td>
+  <td class="source-vals">T-Bank: 2.27 | dohod.ru: 0.00</td>
+</tr>
+<tr>
+  <td>🔴</td>
+  <td class="ticker">HEAD</td>
+  <td>pbv</td>
+  <td>402.4%</td>
+  <td class="source-vals">T-Bank: 7.66 | smart-lab: -22.80</td>
+</tr>
+<tr>
+  <td>🔴</td>
+  <td class="ticker">HEAD</td>
+  <td>roe</td>
+  <td>141.6pp</td>
+  <td class="source-vals">T-Bank: 140.91 | smart-lab: 282.50</td>
+</tr>
+<tr>
+  <td>🔴</td>
+  <td class="ticker">LKOH</td>
+  <td>roe</td>
+  <td>22.9pp</td>
+  <td class="source-vals">T-Bank: -20.15 | smart-lab: 2.80</td>
+</tr>
+<tr>
+  <td>🔴</td>
+  <td class="ticker">LKOH</td>
+  <td>net_margin</td>
+  <td>30.6pp</td>
+  <td class="source-vals">T-Bank: -28.13 | smart-lab: 2.50</td>
+</tr>
+<tr>
+  <td>🔴</td>
+  <td class="ticker">LKOH</td>
+  <td>net_income_b</td>
+  <td>238.2%</td>
+  <td class="source-vals">T-Bank: -1059.86 | smart-lab: 92.50</td>
+</tr>
+<tr>
+  <td>🔴</td>
+  <td class="ticker">LKOH</td>
+  <td>rev_yoy</td>
+  <td>41.5%</td>
+  <td class="source-vals">T-Bank: -56.30 | smart-lab: -14.77</td>
+</tr>
+<tr>
+  <td>🔴</td>
+  <td class="ticker">LKOH</td>
+  <td>next_div_amount</td>
+  <td>194.8%</td>
+  <td class="source-vals">T-Bank: 4.60 | dohod.ru: 347.68</td>
+</tr>
+<tr>
+  <td>🔴</td>
+  <td class="ticker">MAGN</td>
+  <td>ev_ebitda</td>
+  <td>39.9%</td>
+  <td class="source-vals">T-Bank: 3.61 | smart-lab: 2.41</td>
+</tr>
+<tr>
+  <td>🔴</td>
+  <td class="ticker">MAGN</td>
+  <td>nd_ebitda</td>
+  <td>295.0%</td>
+  <td class="source-vals">T-Bank: 0.19 | smart-lab: -0.99</td>
+</tr>
+<tr>
+  <td>🔴</td>
+  <td class="ticker">MAGN</td>
+  <td>rev_yoy</td>
+  <td>15.8%</td>
+  <td class="source-vals">T-Bank: -20.64 | smart-lab: -4.84</td>
+</tr>
+<tr>
+  <td>🔴</td>
+  <td class="ticker">MGNT</td>
+  <td>ev_ebitda</td>
+  <td>57.2%</td>
+  <td class="source-vals">T-Bank: 2.37 | smart-lab: 4.27</td>
+</tr>
+<tr>
+  <td>🔴</td>
+  <td class="ticker">MGNT</td>
+  <td>pbv</td>
+  <td>210.7%</td>
+  <td class="source-vals">T-Bank: 1.47 | smart-lab: -56.30</td>
+</tr>
+<tr>
+  <td>🔴</td>
+  <td class="ticker">MGNT</td>
+  <td>ebitda_b</td>
+  <td>57.6%</td>
+  <td class="source-vals">T-Bank: 306.16 | smart-lab: 169.30</td>
+</tr>
+<tr>
+  <td>🔴</td>
+  <td class="ticker">MGNT</td>
+  <td>nd_ebitda</td>
+  <td>56.8%</td>
+  <td class="source-vals">T-Bank: 1.65 | smart-lab: 2.96</td>
+</tr>
+<tr>
+  <td>🔴</td>
+  <td class="ticker">NVTK</td>
+  <td>next_div_amount</td>
+  <td>156.9%</td>
+  <td class="source-vals">T-Bank: 245.00 | dohod.ru: 29.62</td>
+</tr>
+<tr>
+  <td>🔴</td>
+  <td class="ticker">OZON</td>
+  <td>ps</td>
+  <td>200.0%</td>
+  <td class="source-vals">T-Bank: 0.00 | smart-lab: 0.79</td>
+</tr>
+<tr>
+  <td>🔴</td>
+  <td class="ticker">OZON</td>
+  <td>net_income_b</td>
+  <td>200.0%</td>
+  <td class="source-vals">T-Bank: 0.00 | smart-lab: 11.50</td>
+</tr>
+<tr>
+  <td>🔴</td>
+  <td class="ticker">ROSN</td>
+  <td>pe</td>
+  <td>58.1%</td>
+  <td class="source-vals">T-Bank: 8.96 | smart-lab: 16.30</td>
+</tr>
+<tr>
+  <td>🔴</td>
+  <td class="ticker">ROSN</td>
+  <td>net_income_b</td>
+  <td>57.3%</td>
+  <td class="source-vals">T-Bank: 429.00 | smart-lab: 238.00</td>
+</tr>
+<tr>
+  <td>🔴</td>
+  <td class="ticker">ROSN</td>
+  <td>rev_yoy</td>
+  <td>15.7%</td>
+  <td class="source-vals">T-Bank: -18.77 | smart-lab: -3.05</td>
+</tr>
+<tr>
+  <td>🔴</td>
+  <td class="ticker">ROSN</td>
+  <td>next_div_amount</td>
+  <td>79.8%</td>
+  <td class="source-vals">T-Bank: 11.61 | dohod.ru: 27.03</td>
+</tr>
+<tr>
+  <td>🔴</td>
+  <td class="ticker">SBER</td>
+  <td>revenue_b</td>
+  <td>86.1%</td>
+  <td class="source-vals">T-Bank: 10854.40 | smart-lab: 4319.00</td>
+</tr>
+<tr>
+  <td>🔴</td>
+  <td class="ticker">SBER</td>
+  <td>rev_yoy</td>
+  <td>23.3%</td>
+  <td class="source-vals">T-Bank: 25.20 | smart-lab: 1.86</td>
+</tr>
+<tr>
+  <td>🔴</td>
+  <td class="ticker">TATN</td>
+  <td>next_div_amount</td>
+  <td>109.5%</td>
+  <td class="source-vals">T-Bank: 53.00 | dohod.ru: 15.50</td>
+</tr>
+<tr>
+  <td>🔴</td>
+  <td class="ticker">TCSG</td>
+  <td>revenue_b</td>
+  <td>53.3%</td>
+  <td class="source-vals">T-Bank: 1402.43 | smart-lab: 812.60</td>
+</tr>
+<tr>
+  <td>🔴</td>
+  <td class="ticker">TCSG</td>
+  <td>rev_yoy</td>
+  <td>46.1%</td>
+  <td class="source-vals">T-Bank: 51.05 | smart-lab: 4.97</td>
+</tr>
+<tr>
+  <td>🔴</td>
+  <td class="ticker">TCSG</td>
+  <td>high_52w</td>
+  <td>163.5%</td>
+  <td class="source-vals">T-Bank: 354.30 | Tradernet: 3528.80</td>
+</tr>
+<tr>
+  <td>🔴</td>
+  <td class="ticker">TCSG</td>
+  <td>low_52w</td>
+  <td>163.9%</td>
+  <td class="source-vals">T-Bank: 281.00 | Tradernet: 2832.00</td>
+</tr>
+<tr>
+  <td>🔴</td>
+  <td class="ticker">VK</td>
+  <td>pbv</td>
+  <td>358.1%</td>
+  <td class="source-vals">T-Bank: 1.02 | smart-lab: -3.60</td>
+</tr>
+<tr>
+  <td>🔴</td>
+  <td class="ticker">VK</td>
+  <td>high_52w</td>
+  <td>53.5%</td>
+  <td class="source-vals">T-Bank: 366.50 | Tradernet: 634.00</td>
+</tr>
+<tr>
+  <td>🔴</td>
+  <td class="ticker">VTBR</td>
+  <td>pe</td>
+  <td>66.7%</td>
+  <td class="source-vals">T-Bank: 1.02 | smart-lab: 2.04</td>
+</tr>
+<tr>
+  <td>🔴</td>
+  <td class="ticker">VTBR</td>
+  <td>pbv</td>
+  <td>61.5%</td>
+  <td class="source-vals">T-Bank: 0.18 | smart-lab: 0.34</td>
+</tr>
+<tr>
+  <td>🔴</td>
+  <td class="ticker">VTBR</td>
+  <td>div_yield</td>
+  <td>21.1pp</td>
+  <td class="source-vals">T-Bank: 33.70 | MOEX: 33.70 | dohod.ru: 12.65</td>
+</tr>
+<tr>
+  <td>🔴</td>
+  <td class="ticker">VTBR</td>
+  <td>revenue_b</td>
+  <td>115.3%</td>
+  <td class="source-vals">T-Bank: 4818.10 | smart-lab: 1294.00</td>
+</tr>
+<tr>
+  <td>🔴</td>
+  <td class="ticker">VTBR</td>
+  <td>rev_yoy</td>
+  <td>20.5%</td>
+  <td class="source-vals">T-Bank: 21.31 | smart-lab: 0.78</td>
+</tr>
+<tr>
+  <td>🔴</td>
+  <td class="ticker">VTBR</td>
+  <td>mktcap</td>
+  <td>64.5%</td>
+  <td class="source-vals">T-Bank: 502522849695.21 | MOEX: 981282109806.48</td>
+</tr>
+<tr>
+  <td>🔴</td>
+  <td class="ticker">X5</td>
+  <td>pbv</td>
+  <td>1556.9%</td>
+  <td class="source-vals">T-Bank: 6.14 | smart-lab: -7.95</td>
+</tr>
+<tr>
+  <td>🔴</td>
+  <td class="ticker">X5</td>
+  <td>roe</td>
+  <td>34.0pp</td>
+  <td class="source-vals">T-Bank: 39.50 | smart-lab: 73.50</td>
+</tr>
+<tr>
+  <td>🔴</td>
+  <td class="ticker">X5</td>
+  <td>div_yield</td>
+  <td>25.9pp</td>
+  <td class="source-vals">T-Bank: 42.32 | MOEX: 26.99 | dohod.ru: 16.45</td>
+</tr>
+<tr>
+  <td>🔴</td>
+  <td class="ticker">X5</td>
+  <td>rev_yoy</td>
+  <td>16.2%</td>
+  <td class="source-vals">T-Bank: 18.78 | smart-lab: 2.61</td>
+</tr>
+<tr>
+  <td>🔴</td>
+  <td class="ticker">X5</td>
+  <td>next_div_amount</td>
+  <td>124.6%</td>
+  <td class="source-vals">T-Bank: 37.64 | dohod.ru: 162.00</td>
+</tr>
+<tr>
+  <td>🔴</td>
+  <td class="ticker">YDEX</td>
+  <td>pbv</td>
+  <td>60.4%</td>
+  <td class="source-vals">T-Bank: 4.09 | smart-lab: 7.63</td>
+</tr>
+<tr>
+  <td>🔴</td>
+  <td class="ticker">YDEX</td>
+  <td>net_income_b</td>
+  <td>31.2%</td>
+  <td class="source-vals">T-Bank: 119.28 | smart-lab: 163.30</td>
+</tr>
+<tr>
+  <td>🔴</td>
+  <td class="ticker">YDEX</td>
+  <td>nd_ebitda</td>
+  <td>180.5%</td>
+  <td class="source-vals">T-Bank: 0.02 | smart-lab: 0.39</td>
+</tr>
+<tr>
+  <td>🔴</td>
+  <td class="ticker">YDEX</td>
+  <td>rev_yoy</td>
+  <td>27.1%</td>
+  <td class="source-vals">T-Bank: 31.66 | smart-lab: 4.58</td>
+</tr>
+<tr>
+  <td>⚠️</td>
+  <td class="ticker">CHMF</td>
+  <td>rev_yoy</td>
+  <td>9.4%</td>
+  <td class="source-vals">T-Bank: -14.09 | smart-lab: -4.69</td>
+</tr>
+<tr>
+  <td>⚠️</td>
+  <td class="ticker">CHMF</td>
+  <td>high_52w</td>
+  <td>22.8%</td>
+  <td class="source-vals">T-Bank: 1147.60 | Tradernet: 1442.20</td>
+</tr>
+<tr>
+  <td>⚠️</td>
+  <td class="ticker">CHMF</td>
+  <td>low_52w</td>
+  <td>34.7%</td>
+  <td class="source-vals">T-Bank: 667.40 | Tradernet: 947.60</td>
+</tr>
+<tr>
+  <td>⚠️</td>
+  <td class="ticker">CNRU</td>
+  <td>rev_yoy</td>
+  <td>12.8%</td>
+  <td class="source-vals">T-Bank: 16.70 | smart-lab: 3.95</td>
+</tr>
+<tr>
+  <td>⚠️</td>
+  <td class="ticker">GMKN</td>
+  <td>pe</td>
+  <td>22.3%</td>
+  <td class="source-vals">T-Bank: 9.59 | smart-lab: 12.00</td>
+</tr>
+<tr>
+  <td>⚠️</td>
+  <td class="ticker">GMKN</td>
+  <td>net_income_b</td>
+  <td>23.0%</td>
+  <td class="source-vals">T-Bank: 206.66 | smart-lab: 164.10</td>
+</tr>
+<tr>
+  <td>⚠️</td>
+  <td class="ticker">LKOH</td>
+  <td>div_yield</td>
+  <td>12.5pp</td>
+  <td class="source-vals">T-Bank: 25.87 | dohod.ru: 13.38</td>
+</tr>
+<tr>
+  <td>⚠️</td>
+  <td class="ticker">LKOH</td>
+  <td>nd_ebitda</td>
+  <td>21.4%</td>
+  <td class="source-vals">T-Bank: -0.25 | smart-lab: -0.31</td>
+</tr>
+<tr>
+  <td>⚠️</td>
+  <td class="ticker">NLMK</td>
+  <td>high_52w</td>
+  <td>21.8%</td>
+  <td class="source-vals">T-Bank: 132.70 | Tradernet: 165.16</td>
+</tr>
+<tr>
+  <td>⚠️</td>
+  <td class="ticker">NLMK</td>
+  <td>low_52w</td>
+  <td>29.4%</td>
+  <td class="source-vals">T-Bank: 70.70 | Tradernet: 95.04</td>
+</tr>
+<tr>
+  <td>⚠️</td>
+  <td class="ticker">VK</td>
+  <td>roe</td>
+  <td>11.5pp</td>
+  <td class="source-vals">T-Bank: -28.10 | smart-lab: -16.60</td>
+</tr>
+<tr>
+  <td>⚠️</td>
+  <td class="ticker">YDEX</td>
+  <td>pe</td>
+  <td>31.2%</td>
+  <td class="source-vals">T-Bank: 13.22 | smart-lab: 9.65</td>
+</tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SOURCES TAB ═══ -->
+  <div class="tab-content" id="tab-sources">
+    <div class="section">
+      <div class="section-header" onclick="toggleSection(this)">
+        <span class="section-title">🔌 Source Health</span>
+        <span class="section-toggle">▼</span>
+      </div>
+      <div class="section-body">
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap:12px;">
+          <div class="source-detail" style="border-left: 3px solid var(--blue);">
+            <h3>T-Bank Invest API <span style="font-size:11px;color:var(--blue);font-weight:400;">PRIMARY</span></h3>
+            <p class="detail-meta">Licensed broker · P/E, P/BV, P/S, ROE, Revenue, Net Income, EPS, Dividends, Beta, Growth</p>
+            <p style="margin-top:8px;">18 OK / 2 failed</p>
+          </div>
+          <div class="source-detail">
+            <h3>MOEX ISS API</h3>
+            <p class="detail-meta">Official exchange · Prices, market cap, dividends (trailing 12m), 52w range</p>
+            <p style="margin-top:8px;">20 OK / 0 failed</p>
+          </div>
+          <div class="source-detail">
+            <h3>smart-lab.ru</h3>
+            <p class="detail-meta">Cross-check · IFRS annual fundamentals · FY2025 reports</p>
+            <p style="margin-top:8px;">20 OK / 0 failed</p>
+          </div>
+          <div class="source-detail">
+            <h3>Tradernet (Freedom Finance)</h3>
+            <p class="detail-meta">Cross-check · Price, 52-week range · Real-time</p>
+            <p style="margin-top:8px;">20 OK / 0 failed</p>
+          </div>
+          <div class="source-detail">
+            <h3>dohod.ru</h3>
+            <p class="detail-meta">Cross-check · Dividend yield, DSI, payout ratio, forecasts</p>
+            <p style="margin-top:8px;">18 OK / 2 failed</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header" onclick="toggleSection(this)">
+        <span class="section-title">📋 Data Period</span>
+        <span class="section-toggle">▼</span>
+      </div>
+      <div class="section-body">
+        <ul class="notes-list">
+          <li><strong>Fundamentals</strong>: T-Bank Invest API (TTM), cross-checked with smart-lab.ru (FY2025 IFRS)</li>
+          <li><strong>Growth</strong>: T-Bank (1Y revenue growth) + smart-lab (FY2025 vs FY2024)</li>
+          <li><strong>Prices</strong>: MOEX TQBR (primary), cross-checked with Tradernet + T-Bank</li>
+          <li><strong>Dividends</strong>: T-Bank + MOEX trailing 12m + smart-lab + dohod.ru (4 sources)</li>
+          <li><strong>Valuation</strong>: T-Bank TTM (primary), smart-lab LTM (cross-check)</li>
+          <li><strong>52-week range</strong>: MOEX historical + T-Bank + Tradernet (3 sources)</li>
+          <li><strong>Dashboard generated</strong>: 2026-06-14 09:02:00 MSK</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header" onclick="toggleSection(this)">
+        <span class="section-title">⚠️ Notes & Warnings</span>
+        <span class="section-toggle">▼</span>
+      </div>
+      <div class="section-body">
+        <ul class="notes-list">
+          <li><strong>TCSG</strong>: [dohod] HTTP 404</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  Generated 2026-06-14 09:02:00 MSK · Fundamentals: FY2025 · 5 sources · T-Bank primary + cross-validated
+</div>
+
+<script>
+function switchTab(el, tabId) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('tab-' + tabId).classList.add('active');
+}
+function toggleSection(header) {
+  header.parentElement.classList.toggle('collapsed');
+}
+function toggleTheme() {
+  const html = document.documentElement;
+  const current = html.getAttribute('data-theme');
+  if (current === 'dark') html.setAttribute('data-theme', 'light');
+  else if (current === 'light') html.removeAttribute('data-theme');
+  else html.setAttribute('data-theme', 'dark');
+}
+document.querySelectorAll('.sortable th').forEach(th => {
+  th.addEventListener('click', function() {
+    const table = this.closest('table');
+    const tbody = table.querySelector('tbody');
+    const rows = Array.from(tbody.querySelectorAll('tr'));
+    const idx = Array.from(this.parentElement.children).indexOf(this);
+    const isAsc = this.classList.contains('sort-asc');
+    this.parentElement.querySelectorAll('th').forEach(h => h.classList.remove('sort-asc', 'sort-desc'));
+    this.classList.add(isAsc ? 'sort-desc' : 'sort-asc');
+    rows.sort((a, b) => {
+      let aT = a.children[idx]?.textContent?.trim() || '';
+      let bT = b.children[idx]?.textContent?.trim() || '';
+      let aM = 1, bM = 1;
+      if (aT.includes('T')) aM = 1e12; else if (aT.includes('B')) aM = 1e9; else if (aT.includes('M')) aM = 1e6;
+      if (bT.includes('T')) bM = 1e12; else if (bT.includes('B')) bM = 1e9; else if (bT.includes('M')) bM = 1e6;
+      let aN = parseFloat(aT.replace(/[₽,%xTBM+\s]/g, '').replace(/,/g, ''));
+      let bN = parseFloat(bT.replace(/[₽,%xTBM+\s]/g, '').replace(/,/g, ''));
+      if (aM > 1) aN *= aM; if (bM > 1) bN *= bM;
+      if (!isNaN(aN) && !isNaN(bN)) return isAsc ? bN - aN : aN - bN;
+      return isAsc ? bT.localeCompare(aT) : aT.localeCompare(bT);
+    });
+    rows.forEach(r => tbody.appendChild(r));
+  });
+});
+</script>
+</body>
+</html>
