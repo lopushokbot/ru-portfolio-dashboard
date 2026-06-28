@@ -33,7 +33,7 @@ _ZERO_MEANS_MISSING = {
     # Valuation — 0 P/E, P/S, P/BV means T-Bank hasn't computed it (not a real zero)
     "peRatioTtm", "priceToFreeCashFlowTtm", "priceToSalesTtm", "priceToBookTtm",
     # Quality — 0 margin/ROE means T-Bank hasn't computed it (banks especially)
-    "netMarginMrq", "netInterestMarginMrq",
+    "netMarginMrq", "netInterestMarginMrq", "roe", "roa",
     # Dividends — 0 means no dividend
     "dividendRateTtm", "dividendsPerShare",
     # Growth — T-Bank returns 0 when not computed
