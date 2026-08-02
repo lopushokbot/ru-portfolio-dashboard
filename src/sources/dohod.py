@@ -16,7 +16,7 @@ DOHOD_BASE = "https://dohod.ru/ik/analytics/dividend"
 
 # dohod.ru uses lowercase MOEX tickers in URL
 DOHOD_TICKER = {
-    "TCSG": "tcsg",    # dohod.ru still uses the old pre-rebrand ticker; /t returns HTTP 404 (confirmed 2026-06-07)
+    "TCSG": "t",       # dohod.ru migrated to new MOEX ticker; /tcsg returns HTTP 404 (confirmed 2026-08-02)
     "X5": "x5",
     "YDEX": "ydex",
     "LKOH": "lkoh",
