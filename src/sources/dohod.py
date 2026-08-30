@@ -16,7 +16,7 @@ DOHOD_BASE = "https://dohod.ru/ik/analytics/dividend"
 
 # dohod.ru uses lowercase MOEX tickers in URL
 DOHOD_TICKER = {
-    "TCSG": "t",       # dohod.ru migrated to new MOEX ticker; /tcsg returns HTTP 404 (confirmed 2026-08-02)
+    "TCSG": "t",       # dohod.ru alternates between /t and /tcsg — see DOHOD_TICKER_FALLBACK
     "X5": "x5",
     "YDEX": "ydex",
     "LKOH": "lkoh",
@@ -36,6 +36,11 @@ DOHOD_TICKER = {
     "MGNT": "mgnt",
     "OZON": "ozon",
     "VK": "vk",
+}
+
+# dohod.ru flips TCSG between /t and /tcsg; try primary, fall back to this on HTTP 404
+DOHOD_TICKER_FALLBACK = {
+    "TCSG": "tcsg",
 }
 
 
@@ -72,6 +77,9 @@ def fetch_ticker(ticker: str) -> Dict[str, Any]:
 
     try:
         resp = requests.get(url, headers=HEADERS, timeout=10)
+        if resp.status_code == 404 and ticker in DOHOD_TICKER_FALLBACK:
+            fallback_ticker = DOHOD_TICKER_FALLBACK[ticker]
+            resp = requests.get(f"{DOHOD_BASE}/{fallback_ticker}", headers=HEADERS, timeout=10)
         if resp.status_code != 200:
             result["notes"].append(f"HTTP {resp.status_code}")
             return result

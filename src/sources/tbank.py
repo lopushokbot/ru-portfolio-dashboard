@@ -70,16 +70,23 @@ def _tbank_ticker(ticker: str) -> str:
 
 def _api_call(endpoint: str, body: dict, token: str) -> dict:
     url = f"{TBANK_BASE}/{endpoint}"
-    resp = requests.post(
-        url,
-        json=body,
-        headers={
-            "Authorization": f"Bearer {token}",
-            "Content-Type": "application/json",
-            "Accept": "application/json",
-        },
-        timeout=10,
-    )
+    try:
+        resp = requests.post(
+            url,
+            json=body,
+            headers={
+                "Authorization": f"Bearer {token}",
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+            },
+            timeout=10,
+        )
+    except requests.exceptions.SSLError:
+        return {"_error": "network (SSLError)"}
+    except requests.exceptions.Timeout:
+        return {"_error": "network (Timeout)"}
+    except requests.exceptions.RequestException as e:
+        return {"_error": f"network ({type(e).__name__})"}
     if resp.status_code != 200:
         return {"_error": f"HTTP {resp.status_code}"}
     return resp.json()
