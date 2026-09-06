@@ -69,6 +69,19 @@ def _calc_yoy(vals: List[Optional[float]]) -> Optional[float]:
     return None
 
 
+def _get_with_retry(url: str, headers: dict, timeouts=(12, 25)) -> requests.Response:
+    """GET with retry on timeout. Raises last exception if all attempts fail."""
+    last_exc: Exception = Exception("no attempts")
+    for i, t in enumerate(timeouts):
+        try:
+            return requests.get(url, headers=headers, timeout=t)
+        except requests.exceptions.Timeout as e:
+            last_exc = e
+            if i < len(timeouts) - 1:
+                time.sleep(2)
+    raise last_exc
+
+
 def fetch_ticker(ticker: str) -> Dict[str, Any]:
     """Scrape smart-lab.ru for fundamental metrics of a single ticker."""
     sl_ticker = _sl_ticker(ticker)
@@ -89,7 +102,7 @@ def fetch_ticker(ticker: str) -> Dict[str, Any]:
     }
 
     try:
-        resp = requests.get(url, headers=HEADERS, timeout=12)
+        resp = _get_with_retry(url, HEADERS)
         if resp.status_code != 200:
             result["notes"].append(f"HTTP {resp.status_code}")
             return result
