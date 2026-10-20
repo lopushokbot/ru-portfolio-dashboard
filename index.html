@@ -223,7 +223,7 @@ sup.fn { font-size: 10px; color: var(--accent); font-weight: 600; cursor: help; 
 .sw-band { width: 16px; height: 8px; border-radius: 4px; background: var(--accent-soft); border: 1px solid var(--accent); }
 .sw-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--accent); }
 .hist { display: flex; flex-direction: column; }
-.hrow { display: grid; grid-template-columns: 56px 1fr 176px; align-items: center; gap: 16px; padding: 9px 0; border-bottom: 1px solid var(--hairline); font-size: 13.5px; }
+.hrow { display: grid; grid-template-columns: 84px 1fr 176px; align-items: center; gap: 16px; padding: 9px 0; border-bottom: 1px solid var(--hairline); font-size: 13.5px; }
 .hrow:last-child { border-bottom: none; }
 .hrow .ht { font-weight: 600; }
 .hrow .hv { text-align: right; font-variant-numeric: tabular-nums; color: var(--ink-2); white-space: nowrap; }
@@ -237,7 +237,7 @@ sup.fn { font-size: 10px; color: var(--accent); font-weight: 600; cursor: help; 
 .track .dot { position: absolute; top: 7px; width: 12px; height: 12px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 2px var(--card); transform: translateX(-50%); }
 .track .dot.out { background: var(--bad); }
 .hrow.na .track { color: var(--muted); font-size: 12.5px; display: flex; align-items: center; }
-@media (max-width: 640px) { .hrow { grid-template-columns: 48px 1fr 96px; gap: 10px; } .track .lo, .track .hi { display: none; } .hrow .hv { white-space: normal; } .hrow .hv .pos { white-space: normal; } .peer { flex-direction: column; align-items: flex-start; gap: 4px; } .peer .pv { text-align: left; white-space: normal; } }
+@media (max-width: 640px) { .hrow { grid-template-columns: 72px 1fr 96px; gap: 10px; } .track .lo, .track .hi { display: none; } .hrow .hv { white-space: normal; } .hrow .hv .pos { white-space: normal; } .peer { flex-direction: column; align-items: flex-start; gap: 4px; } .peer .pv { text-align: left; white-space: normal; } }
 
 /* ---------- Footnotes & methodology ---------- */
 .notes { font-size: 13.5px; color: var(--muted); line-height: 1.7; }
@@ -257,6 +257,14 @@ footer { padding: 48px 0 64px; text-align: center; font-size: 13px; color: var(-
 .stack .eps { white-space: nowrap; }
 .peer .pl .pm + .pm { margin-top: 2px; font-style: italic; }
 .tile .label { display: flex; justify-content: space-between; }
+.grp td { padding: 22px 0 8px; border-bottom: 1px solid var(--hairline); text-align: left; white-space: normal; }
+tbody tr.grp:first-child td { padding-top: 6px; }
+tbody tr.grp:hover { background: none; }
+.grp .gname { font-family: "New York", Georgia, serif; font-size: 17px; font-weight: 600; color: var(--ink); margin-right: 12px; }
+.grp .gbench { font-size: 12.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.grp .gbench b { color: var(--ink-2); font-weight: 600; }
+.hgrp { font-size: 11.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); padding: 18px 0 4px; border-bottom: 1px solid var(--hairline); }
+.hgrp:first-child { padding-top: 0; }
 </style>
 </head>
 <body>
@@ -280,10 +288,10 @@ footer { padding: 48px 0 64px; text-align: center; font-size: 13px; color: var(-
   <section class="fade">
     <div class="card">
       <h2 class="section-title">Trailing P/E</h2>
-      <p class="section-sub">Price ÷ last twelve months' IFRS earnings per share. Marker shows the peer-group median.</p>
+      <p class="section-sub">Price ÷ last twelve months' IFRS earnings per share. Marker shows the sector median.</p>
       <div class="legend">
         <span><span class="sw-bar"></span>Holding</span>
-        <span><span class="sw-tick"></span>Peer median</span>
+        <span><span class="sw-tick"></span>Sector median</span>
         <span><span class="sw-ref"></span>MOEX Russia · <span id="ref-ttm"></span></span>
       </div>
       <div class="chart-scroll"><svg id="chart-ttm" class="chart-svg" role="img" aria-label="Trailing P/E by holding with peer median markers"></svg></div>
@@ -292,10 +300,10 @@ footer { padding: 48px 0 64px; text-align: center; font-size: 13px; color: var(-
 
     <div class="card">
       <h2 class="section-title">Forward P/E</h2>
-      <p class="section-sub">Price ÷ next twelve months' forecast earnings per share (dohod.ru). Marker shows the peer-group median.</p>
+      <p class="section-sub">Price ÷ next twelve months' forecast earnings per share (dohod.ru). Marker shows the sector median.</p>
       <div class="legend">
         <span><span class="sw-bar"></span>Holding</span>
-        <span><span class="sw-tick"></span>Peer median</span>
+        <span><span class="sw-tick"></span>Sector median</span>
         <span><span class="sw-ref"></span>MOEX Russia · <span id="ref-fwd"></span></span>
       </div>
       <div class="chart-scroll"><svg id="chart-fwd" class="chart-svg" role="img" aria-label="Forward P/E by holding with peer median markers"></svg></div>
@@ -303,8 +311,19 @@ footer { padding: 48px 0 64px; text-align: center; font-size: 13px; color: var(-
     </div>
 
     <div class="card">
+      <h2 class="section-title">Banks · Price-to-book</h2>
+      <p class="section-sub">Price ÷ book value per share (IFRS equity, latest quarter). Marker shows the median of Russian listed banks.</p>
+      <div class="legend">
+        <span><span class="sw-bar"></span>Holding</span>
+        <span><span class="sw-tick"></span>Bank median</span>
+      </div>
+      <div class="chart-scroll"><svg id="chart-pb" class="chart-svg" role="img" aria-label="Price-to-book of bank holdings with bank median marker"></svg></div>
+      <p class="chart-note" id="note-pb"></p>
+    </div>
+
+    <div class="card">
       <h2 class="section-title">Versus its own history</h2>
-      <p class="section-sub">Where today's trailing P/E sits inside each stock's 5-year range (quarterly, loss quarters excluded). Band = low to high, tick = median, dot = today.</p>
+      <p class="section-sub">Where today's multiple sits inside each stock's 5-year range — trailing P/E, or P/B for banks (quarterly, loss quarters excluded). Band = low to high, tick = median, dot = today.</p>
       <div class="legend">
         <span><span class="sw-band"></span>5-year range</span>
         <span><span class="sw-tick"></span>5-year median</span>
@@ -318,7 +337,7 @@ footer { padding: 48px 0 64px; text-align: center; font-size: 13px; color: var(-
   <section class="fade">
     <div class="card">
       <h2 class="section-title">Holdings</h2>
-      <p class="section-sub">Every multiple is today's price divided by the per-share figure beneath it — trailing-twelve-month IFRS EPS, next-twelve-months forecast EPS, or dividends paid over the last year. Numbers refresh every morning. Click a column to sort.</p>
+      <p class="section-sub">Grouped by sector. Every multiple is today's price divided by the per-share figure beneath it — trailing-twelve-month IFRS EPS, next-twelve-months forecast EPS, or book value per share for the banks. Numbers refresh every morning. Click a column to sort within each sector.</p>
       <div class="table-scroll">
         <table id="holdings">
           <thead>
@@ -328,9 +347,9 @@ footer { padding: 48px 0 64px; text-align: center; font-size: 13px; color: var(-
               <th data-k="ttmPe" title="Price ÷ trailing-twelve-month IFRS EPS">Trailing<span class="arrow">▾</span></th>
               <th data-k="fwdPe" title="Price ÷ next-twelve-months forecast EPS (dohod.ru)">Forward<span class="arrow">▾</span></th>
               <th data-k="dy" title="Dividends with a record date in the last 12 months ÷ price">Div yield<span class="arrow">▾</span></th>
-              <th data-k="secT" title="Peer median, trailing">Peers T<span class="arrow">▾</span></th>
-              <th data-k="secF" title="Peer median, forward">Peers F<span class="arrow">▾</span></th>
-              <th data-k="delta" title="Forward P/E vs the peer median (trailing where no forward)">vs Peers<span class="arrow">▾</span></th>
+              <th data-k="secT" title="Sector median — trailing P/E (P/B for banks)">Peers T<span class="arrow">▾</span></th>
+              <th data-k="secF" title="Sector median — forward P/E">Peers F<span class="arrow">▾</span></th>
+              <th data-k="delta" title="Forward P/E vs the sector median (trailing where no forward; P/B for banks)">vs Peers<span class="arrow">▾</span></th>
               <th data-k="upside" title="Analyst consensus 12-month target price (T-Investments) and upside from today's price">Target<span class="arrow">▾</span></th>
               <th data-k="nextTs" title="Next IFRS report (top) · last report (bottom)">Next report<span class="arrow">▾</span></th>
             </tr>
@@ -371,7 +390,7 @@ footer { padding: 48px 0 64px; text-align: center; font-size: 13px; color: var(-
   <section class="fade">
     <div class="card method">
       <h3>Methodology &amp; sources</h3>
-      <p><b>Prices</b> are the official closing prices of the Moscow Exchange main session (MOEX ISS), refreshed every morning at 8:00 Dubai. <b>Trailing EPS</b> is IFRS earnings per share over the last twelve months — the last four quarters, or the last two half-years for semi-annual reporters (LUKOIL, NOVATEK, Tatneft, Norilsk Nickel) — from smart-lab.ru, cross-checked against T-Investments (T-Bank) fundamentals; disagreements above 25% are flagged in the Notes. <b>Forward EPS</b> is dohod.ru's forecast of net income over the next twelve months, divided by the same share count as trailing EPS so both multiples are like-for-like.</p>
+      <p><b>Prices</b> are the official closing prices of the Moscow Exchange main session (MOEX ISS), refreshed every morning at 8:00 Dubai. <b>Trailing EPS</b> is IFRS earnings per share over the last twelve months — the last four quarters, or the last two half-years for semi-annual reporters (LUKOIL, NOVATEK, Tatneft, Norilsk Nickel) — from smart-lab.ru, cross-checked against T-Investments (T-Bank) fundamentals; disagreements above 25% are flagged in the Notes. <b>Forward EPS</b> is dohod.ru's forecast of net income over the next twelve months, divided by the same share count as trailing EPS so both multiples are like-for-like. <b>Banks</b> (Sberbank, T-Technologies) are valued on <b>P/B</b> = price ÷ book value per share (IFRS equity ÷ ordinary + preferred shares, latest quarter, smart-lab) against the median P/B of Russian listed banks — the same treatment as Nubank on the US dashboard.</p>
       <p><b>Index multiples</b> are rebuilt from scratch on every run: P/E = 1 ÷ Σ weight × (EPS ÷ price) over all MOEX Russia Index constituents at their published free-float weights — equivalent to Σ float-adjusted market cap ÷ Σ float-adjusted earnings. Loss-makers are included, as index providers do; the tile also shows the figure without them. Ordinary and preferred shares (SBER/SBERP, TATN/TATNP, SNGS/SNGSP) each carry their own weight and price against the same company EPS.</p>
       <p><b>Dividend yield</b> = dividends with a record date in the last twelve months ÷ today's price (T-Investments dividend register); <b>next dividend</b> = the next declared or board-recommended payment. <b>Target</b> = T-Investments analyst consensus 12-month target price. <b>Yield gap</b> = the index earnings yield (1 ÷ P/E) minus the 10-year OFZ zero-coupon yield (MOEX G-curve). <b>History bands</b> = smart-lab quarterly trailing P/E over five years. No Yahoo Finance data is used — its Russian quotes and share counts have been unreliable since 2022. Numbers are for reference only — not investment advice.</p>
     </div>
@@ -385,7 +404,7 @@ footer { padding: 48px 0 64px; text-align: center; font-size: 13px; color: var(-
 <script>
 /* ================= Helpers ================= */
 const fx = (v, dp = 1) => v == null ? null : v.toFixed(dp);
-const mult = v => v == null ? `<span class="nm-flag">N/M</span>` : `${fx(v)}×`;
+const mult = (v, dp = 1) => v == null ? `<span class="nm-flag">N/M</span>` : `${fx(v, dp)}×`;
 const rub = (v, dp) => {
   if (v == null) return "—";
   const a = Math.abs(v), d = dp ?? (a >= 1000 ? 0 : a >= 10 ? 2 : a >= 1 ? 2 : 3);
@@ -405,33 +424,45 @@ const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": 
 let DATA, ALL = {}, rows = [], IDX, FN = {}, HIDDEN = [];
 const TODAY = new Date().toISOString().slice(0, 10);
 
+function isPbStock(s) { return s && s.metric === "pb"; }
 function multiples(s) {
   if (!s) return { ttmPe: null, fwdPe: null };
+  if (isPbStock(s)) return { ttmPe: s.price && s.bvps > 0 ? s.price / s.bvps : null, fwdPe: null, pe: s.price && s.ttmEps > 0 ? s.price / s.ttmEps : null, fpe: s.price && s.fwdEps > 0 ? s.price / s.fwdEps : null };
   return {
     ttmPe: s.price && s.ttmEps > 0 ? s.price / s.ttmEps : null,
     fwdPe: s.price && s.fwdEps > 0 ? s.price / s.fwdEps : null,
   };
 }
 
-/* Peer benchmark = median of members' positive multiples (loss-makers are N/M and drop out) */
+/* Peer benchmark = median of members' positive multiples (loss-makers are N/M and drop out); banks on P/B */
 function groupStats(key) {
   const g = DATA.groups[key];
   const ms = g.members.map(m => multiples(ALL[m]));
+  const pb = g.metric === "pb";
   return {
-    t: median(ms.map(m => m.ttmPe)), f: median(ms.map(m => m.fwdPe)),
-    tMean: mean(ms.map(m => m.ttmPe)), fMean: mean(ms.map(m => m.fwdPe)),
+    t: median(ms.map(m => m.ttmPe)), f: pb ? null : median(ms.map(m => m.fwdPe)),
+    tMean: mean(ms.map(m => m.ttmPe)), fMean: pb ? null : mean(ms.map(m => m.fwdPe)),
+    pe: pb ? median(ms.map(m => m.pe)) : null,
   };
 }
 
 function derive(s) {
   const m = multiples(s), gm = groupStats(s.group), g = DATA.groups[s.group];
-  const delta = m.fwdPe && gm.f ? m.fwdPe / gm.f - 1 : (m.ttmPe && gm.t ? m.ttmPe / gm.t - 1 : null);
+  const isPb = isPbStock(s);
+  const delta = isPb ? (m.ttmPe && gm.t ? m.ttmPe / gm.t - 1 : null)
+    : m.fwdPe && gm.f ? m.fwdPe / gm.f - 1 : (m.ttmPe && gm.t ? m.ttmPe / gm.t - 1 : null);
   const dy = s.price && s.divTtm != null ? (s.divTtm / s.price) * 100 : null;
   const upside = s.target?.consensus && s.price ? s.target.consensus / s.price - 1 : null;
   const e = s.earnings || {};
   const pending = !!e.pendingSince;
-  return { ...s, ...m, secT: gm.t, secF: gm.f, delta, deltaBasis: m.fwdPe && gm.f ? "fwd" : "ttm", dy, upside,
+  return { ...s, ...m, isPb, secT: gm.t, secF: gm.f, delta, deltaBasis: isPb ? "pb" : m.fwdPe && gm.f ? "fwd" : "ttm", dy, upside,
     groupShort: g.short, groupLabel: g.label, nextTs: e.next ? Date.parse(e.next) : null, pending };
+}
+
+/* sector order = order of groups in config; rows keep their sector, sorting happens inside each sector */
+const GROUP_ORDER = () => Object.keys(DATA.groups);
+function bySector(list) {
+  return GROUP_ORDER().map(k => ({ key: k, g: DATA.groups[k], items: list.filter(r => r.group === k) })).filter(x => x.items.length);
 }
 
 /* ================= Dates ================= */
@@ -514,19 +545,26 @@ function deltaCell(r) {
   if (r.delta == null) return `<span class="nm-flag">—</span>`;
   const p = Math.round(r.delta * 100);
   const basis = r.deltaBasis === "ttm" ? `<sup class="fn" title="No forward forecast — compared on trailing P/E">T</sup>` : "";
-  if (p === 0) return `<span class="val-muted">0%</span>${basis}`;
-  return `<span class="${p < 0 ? "delta-neg" : "delta-pos"}">${p > 0 ? "+" : "−"}${Math.abs(p)}%</span>${basis}`;
+  const t = r.deltaBasis === "pb" ? ` title="Price-to-book vs the Russian-bank median"` : "";
+  if (p === 0) return `<span class="val-muted"${t}>0%</span>${basis}`;
+  return `<span class="${p < 0 ? "delta-neg" : "delta-pos"}"${t}>${p > 0 ? "+" : "−"}${Math.abs(p)}%</span>${basis}`;
 }
-function stackCell(v, eps, title) {
-  if (eps == null) return mult(v);
-  return `<span class="stack">${mult(v)}<span class="eps" title="${title}">EPS ${rub(eps)}</span></span>`;
+function stackCell(v, eps, title, lbl = "EPS") {
+  const dp = lbl === "BV" ? 2 : 1;
+  if (eps == null) return mult(v, dp);
+  return `<span class="stack">${mult(v, dp)}<span class="eps" title="${title}">${lbl} ${rub(eps)}</span></span>`;
 }
+const dash = (tip = "") => `<span class="nm-flag"${tip ? ` title="${tip}"` : ""}>—</span>`;
 function fwdCell(r) {
-  if (r.fwdEps == null) return `<span class="nm-flag" title="No dohod.ru forecast published">—</span>`;
+  if (r.isPb) return dash("Banks are valued on price-to-book");
+  if (r.fwdEps == null) return dash("No dohod.ru forecast published");
   const f = r.fwd || {};
-  const tip = [f.fy0 && `FY${f.fy0.year} ${rub(f.fy0.eps)}`, f.fy1 && `FY${f.fy1.year} ${rub(f.fy1.eps)}`].filter(Boolean).join(" · ");
-  const t = `Next-twelve-months forecast EPS — net income ${f.netIncome != null ? rub(f.netIncome, 1) + " bn" : "—"}${tip ? " · " + tip : ""}${f.source ? " · " + f.source : ""}${f.stale ? " · kept from an earlier run" : ""}`;
+  const t = `Next-twelve-months forecast EPS — net income ${f.netIncome != null ? rub(f.netIncome, 1) + " bn" : "—"}${f.source ? " · " + f.source : ""}${f.stale ? " · kept from an earlier run" : ""}`;
   return stackCell(r.fwdPe, r.fwdEps, esc(t));
+}
+function trailCell(r) {
+  if (r.isPb) return stackCell(r.ttmPe, r.bvps, esc(`Book value per share (IFRS equity ÷ shares, latest quarter)${r.pe ? ` · on earnings: ${fx(r.pe)}× trailing${r.fpe ? `, ${fx(r.fpe)}× forward` : ""}` : ""}`), "BV");
+  return stackCell(r.ttmPe, r.ttmEps, `IFRS EPS, last twelve months (${r.ttmSrc || "—"})${r.ttmCheck != null ? ` · T-Bank TTM ${rub(r.ttmCheck)}` : ""}`);
 }
 function dyCell(r) {
   if (r.dy == null) return `<span class="nm-flag">—</span>`;
@@ -553,20 +591,25 @@ function earnCell(r) {
   const bottom = e.lastReported ? `<span class="ls" title="Twelve-month figures include the report of ${longDate(e.lastReported)}">last ${shortDate(e.lastReported)}</span>` : "";
   return `<span class="earn">${top}${bottom}</span>`;
 }
+function sectorHead(sec, ncol) {
+  const gm = groupStats(sec.key), pb = sec.g.metric === "pb";
+  const bench = pb ? `median P/B <b>${fx(gm.t, 2) ?? "—"}×</b>` : `median P/E <b>${fx(gm.t) ?? "—"}×</b> trailing · <b>${fx(gm.f) ?? "—"}×</b> forward`;
+  return `<tr class="grp"><td colspan="${ncol}"><span class="gname">${sec.g.label}</span><span class="gbench">${sec.g.members.length} companies · ${bench}</span></td></tr>`;
+}
 function renderTable() {
-  document.querySelector("#holdings tbody").innerHTML = rows.map(r => `
+  document.querySelector("#holdings tbody").innerHTML = bySector(rows).map(sec => sectorHead(sec, 10) + sec.items.map(r => `
     <tr>
-      <td><div class="co"><span class="tk">${r.t}${fnSup(FN[r.t])}</span><span class="nm">${esc(r.name)} · ${r.groupShort}</span></div></td>
+      <td><div class="co"><span class="tk">${r.t}${r.isPb ? '<span class="badge">P/B</span>' : ""}${fnSup(FN[r.t])}</span><span class="nm">${esc(r.name)}</span></div></td>
       <td class="price">${rub(r.price, r.price >= 1000 ? 1 : 2)}</td>
-      <td class="val-strong">${stackCell(r.ttmPe, r.ttmEps, `IFRS EPS, last twelve months (${r.ttmSrc || "—"})${r.ttmCheck != null ? ` · T-Bank TTM ${rub(r.ttmCheck)}` : ""}`)}</td>
+      <td class="val-strong">${trailCell(r)}</td>
       <td class="val-strong">${fwdCell(r)}</td>
       <td>${dyCell(r)}</td>
-      <td class="val-muted">${mult(r.secT)}</td>
-      <td class="val-muted">${mult(r.secF)}</td>
+      <td class="val-muted">${r.isPb ? `${fx(r.secT, 2) ?? "—"}×` : mult(r.secT)}</td>
+      <td class="val-muted">${r.isPb ? dash() : mult(r.secF)}</td>
       <td>${deltaCell(r)}</td>
       <td>${targetCell(r)}</td>
       <td>${earnCell(r)}</td>
-    </tr>`).join("");
+    </tr>`).join("")).join("");
 }
 
 let sortKey = null, sortDir = 1;
@@ -576,6 +619,7 @@ function bindSorting() {
       const k = th.dataset.k;
       sortDir = (sortKey === k) ? -sortDir : (k === "t" ? 1 : -1);
       sortKey = k;
+      /* multiples of different kinds (P/B vs P/E) are only compared inside their own sector */
       rows = [...rows].sort((a, b) => {
         const av = a[k], bv = b[k];
         if (k === "t") return String(av).localeCompare(String(bv)) * sortDir;
@@ -593,19 +637,21 @@ function bindSorting() {
 }
 
 function renderPeers() {
-  const used = new Set(rows.map(r => r.group));
-  document.getElementById("peers").innerHTML = Object.entries(DATA.groups).filter(([k]) => used.has(k)).map(([key, g]) => {
-    const gm = groupStats(key);
+  document.getElementById("peers").innerHTML = bySector(rows).map(({ key, g }) => {
+    const gm = groupStats(key), pb = g.metric === "pb";
     const memberStr = g.members.map(m => {
       const s = ALL[m], x = multiples(s);
       if (!s) return `<span>${m} —</span>`;
-      const v = `${x.ttmPe ? fx(x.ttmPe) : "N/M"} / ${x.fwdPe ? fx(x.fwdPe) : s.fwdEps == null ? "—" : "N/M"}×`;
-      const tip = `${s.name}: ${rub(s.price)} ÷ TTM EPS ${rub(s.ttmEps)}${s.fwdEps != null ? ` · ÷ NTM EPS ${rub(s.fwdEps)}` : " · no forecast"}`;
+      const v = pb ? `${x.ttmPe ? fx(x.ttmPe, 2) : "N/M"}×` : `${x.ttmPe ? fx(x.ttmPe) : "N/M"} / ${x.fwdPe ? fx(x.fwdPe) : s.fwdEps == null ? "—" : "N/M"}×`;
+      const tip = pb ? `${s.name}: ${rub(s.price)} ÷ book value/share ${rub(s.bvps)}${x.pe ? ` · P/E ${fx(x.pe)}×` : ""}`
+        : `${s.name}: ${rub(s.price)} ÷ TTM EPS ${rub(s.ttmEps)}${s.fwdEps != null ? ` · ÷ NTM EPS ${rub(s.fwdEps)}` : " · no forecast"}`;
       return `<span title="${esc(tip)}">${m} ${v}</span>`;
     }).join(" · ");
     const who = rows.filter(r => r.group === key).map(r => r.t).join(", ");
-    return `<div class="peer"><div class="pl"><span class="pn">${g.label}</span><span class="pm">${memberStr}</span><span class="pm">for ${who}</span></div>
-      <div class="pv"><b>${fx(gm.t) ?? "—"}×</b> trail · <b>${fx(gm.f) ?? "—"}×</b> fwd median<br><span class="pm">mean ${fx(gm.tMean) ?? "—"}× · ${fx(gm.fMean) ?? "—"}×</span></div></div>`;
+    const val = pb
+      ? `<b>${fx(gm.t, 2) ?? "—"}×</b> P/B median<br><span class="pm">mean ${fx(gm.tMean, 2) ?? "—"}× · P/E median ${fx(gm.pe) ?? "—"}×</span>`
+      : `<b>${fx(gm.t) ?? "—"}×</b> trail · <b>${fx(gm.f) ?? "—"}×</b> fwd median<br><span class="pm">mean ${fx(gm.tMean) ?? "—"}× · ${fx(gm.fMean) ?? "—"}×</span>`;
+    return `<div class="peer"><div class="pl"><span class="pn">${g.label}${pb ? ' <span class="badge">P/B</span>' : ""}</span><span class="pm">${memberStr}</span><span class="pm">for ${who}</span></div><div class="pv">${val}</div></div>`;
   }).join("");
 }
 
@@ -615,33 +661,37 @@ function renderHistory() {
   const L = narrow ? 0 : 44, R = narrow ? 0 : 44;
   const usable = h => h && h.min != null && h.max != null && h.quarters >= 4;
   const posOf = r => usable(r.hist) && r.ttmPe != null ? (r.ttmPe - r.hist.min) / Math.max(r.hist.max - r.hist.min, 0.01) : -Infinity;
-  const order = [...rows].sort((a, b) => posOf(b) - posOf(a) || a.t.localeCompare(b.t));
-  document.getElementById("hist").innerHTML = order.map(r => {
-    const h = r.hist, cur = r.ttmPe;
+  const dp = r => r.isPb ? 2 : 1;
+  const row = r => {
+    const h = r.hist, cur = r.ttmPe, metric = r.isPb ? "P/B" : "P/E", d = dp(r);
+    const badge = r.isPb ? ' <span class="badge">P/B</span>' : "";
     if (!usable(h)) {
-      return `<div class="hrow na"><span class="ht">${r.t}</span><div class="track">Insufficient history — fewer than 4 profitable quarters on record</div><div class="hv"><b>${cur != null ? fx(cur) + "×" : "N/M"}</b> today</div></div>`;
+      return `<div class="hrow na"><span class="ht">${r.t}${badge}</span><div class="track">Insufficient history — fewer than 4 usable quarters on record</div><div class="hv"><b>${cur != null ? fx(cur, d) + "×" : "N/M"}</b> today</div></div>`;
     }
     const span = Math.max(h.max - h.min, 0.01);
     const p = v => Math.min(1, Math.max(0, (v - h.min) / span));
     const pos = v => `calc(${L}px + (100% - ${L + R}px) * ${p(v).toFixed(4)})`;
     const inRange = cur != null && cur >= h.min && cur <= h.max;
     const where = cur == null ? "" : cur > h.max ? "above its 5-yr high" : cur < h.min ? "below its 5-yr low" : cur > h.median ? "above median" : "below median";
-    const tip = `${r.name}: P/E today ${cur != null ? fx(cur) + "×" : "N/M"} · 5-yr low ${fx(h.min)}× · median ${fx(h.median)}× · high ${fx(h.max)}× · ${h.quarters} quarters ${h.from}–${h.to}${h.excluded ? ` (${h.excluded} loss or >100× quarters excluded)` : ""}`;
+    const tip = `${r.name}: ${metric} today ${cur != null ? fx(cur, d) + "×" : "N/M"} · 5-yr low ${fx(h.min, d)}× · median ${fx(h.median, d)}× · high ${fx(h.max, d)}× · ${h.quarters} quarters ${h.from}–${h.to}${h.excluded ? ` (${h.excluded} quarters excluded)` : ""}`;
     return `<div class="hrow" title="${esc(tip)}">
-      <span class="ht">${r.t}</span>
+      <span class="ht">${r.t}${badge}</span>
       <div class="track">
-        <span class="lo">${fx(h.min)}×</span>
+        <span class="lo">${fx(h.min, d)}×</span>
         <span class="band" style="left:${L}px; right:${R}px"></span>
         <span class="med" style="left:${pos(h.median)}"></span>
         ${cur != null ? `<span class="dot${inRange ? "" : " out"}" style="left:${pos(cur)}"></span>` : ""}
-        <span class="hi">${fx(h.max)}×</span>
+        <span class="hi">${fx(h.max, d)}×</span>
       </div>
-      <div class="hv"><b>${cur != null ? fx(cur) + "×" : "N/M"}</b> today<span class="pos">${where}${cur == null ? "" : " · median " + fx(h.median) + "×"}</span></div>
+      <div class="hv"><b>${cur != null ? fx(cur, d) + "×" : "N/M"}</b> today<span class="pos">${where}${cur == null ? "" : " · median " + fx(h.median, d) + "×"}</span></div>
     </div>`;
-  }).join("");
+  };
+  document.getElementById("hist").innerHTML = bySector(rows).map(sec =>
+    `<div class="hgrp">${sec.g.label}</div>` + [...sec.items].sort((a, b) => posOf(b) - posOf(a) || a.t.localeCompare(b.t)).map(row).join("")).join("");
   const froms = rows.filter(r => r.hist?.from).map(r => r.hist.from).sort();
+  const banks = rows.filter(r => r.isPb).map(r => r.t);
   document.getElementById("note-hist").textContent =
-    `Quarterly trailing P/E from smart-lab, ${froms.length ? froms[0].slice(0, 4) : "last five years"}–${TODAY.slice(0, 4)}. Several companies stopped publishing IFRS in 2022, so those quarters are missing. A highlighted dot means today is outside the five-year range.`;
+    `Quarterly figures from smart-lab, ${froms.length ? froms[0].slice(0, 4) : "last five years"}–${TODAY.slice(0, 4)}${banks.length ? `; ${banks.join(" and ")} on price-to-book` : ""}. Several companies stopped publishing IFRS in 2022, so those quarters are missing. A highlighted dot means today is outside the five-year range.`;
 }
 
 /* ================= Calendar ================= */
@@ -697,7 +747,9 @@ function renderNotes() {
 
   add(`<b>Forward earnings.</b> There is no free analyst consensus for Russian stocks (the only true multi-broker consensus, Cbonds, is a paid service), so forward EPS is dohod.ru's own forecast of net income over the next twelve months — one research team's view, not an average of brokers. It covers almost the whole market, including ${(DATA.indexWeights || []).filter(x => ALL[x.t]?.fwdEps != null).length} of ${(DATA.indexWeights || []).length} index members. Where no forecast exists the forward column is blank and the peer comparison falls back to trailing P/E (marked T).`);
   add(`<b>Dividends.</b> Yield counts dividends whose record date fell in the last twelve months, so special payouts (X5, CIAN) inflate it until they roll out of the window; hover a cell for each payment. Upcoming record dates in the calendar are those declared or recommended by the board.`);
-  add(`<b>Banks.</b> Sberbank and T-Technologies are shown on P/E like the rest of the market (Russian banks are usually priced on earnings and payout). Book value per share: ${rows.filter(r => r.group === "banks" && r.bvps).map(r => `${r.t} ${rub(r.bvps)} → ${fx(r.price / r.bvps, 2)}× P/B`).join(", ") || "—"}.`, rows.filter(r => r.group === "banks").map(r => r.t));
+  for (const r of rows.filter(r => r.isPb)) {
+    add(`<b>${r.t} — price-to-book.</b> As a bank, ${esc(r.name)} is valued on P/B: price ÷ book value per share of ${rub(r.bvps)} (IFRS equity, latest quarter), against the median P/B of ${DATA.groups[r.group].members.length} Russian listed banks.${r.pe ? ` On earnings it trades at ${fx(r.pe)}× trailing${r.fpe ? ` and ${fx(r.fpe)}× forward` : ""} (bank median ${fx(groupStats(r.group).pe)}× trailing).` : ""}`, [r.t]);
+  }
   if (HIDDEN.length) add(`<b>Not shown.</b> ${HIDDEN.map(r => r.t).join(", ")} — negative trailing or forward earnings, so P/E can't be computed. ${HIDDEN.length > 1 ? "They return" : "It returns"} automatically once earnings turn positive.`);
 
   document.getElementById("notes").innerHTML = notes.map(n => `<li>${n}</li>`).join("");
@@ -717,60 +769,82 @@ function showTT(html, e) {
 function hideTT() { tt.style.opacity = 0; }
 
 function drawChart(svgId, kind) {
-  const vKey = kind === "ttm" ? "ttmPe" : "fwdPe", pKey = kind === "ttm" ? "secT" : "secF";
-  const ref = kind === "ttm" ? IDX.t : IDX.f;
-  const data = rows.filter(r => r[vKey] != null).sort((a, b) => b[vKey] - a[vKey]);
+  const isPbChart = kind === "pb";
+  const vKey = kind === "fwd" ? "fwdPe" : "ttmPe", pKey = kind === "fwd" ? "secF" : "secT";
+  const ref = kind === "ttm" ? IDX.t : kind === "fwd" ? IDX.f : null;
+  const d = isPbChart ? 2 : 1;
+  const eligible = rows.filter(r => r.isPb === isPbChart && r[vKey] != null);
+  const secs = bySector(eligible).map(s => ({ ...s, items: [...s.items].sort((a, b) => b[vKey] - a[vKey]) }));
   const card = document.getElementById(svgId).closest(".card");
-  if (!data.length) { card.style.display = "none"; return; }
+  if (!eligible.length) { card.style.display = "none"; return; }
   card.style.display = "";
-  const rowH = 40, mL = 56, mR = 56, mT = 8, mB = 30;
-  const W = 980, H = mT + data.length * rowH + mB;
+  const rowH = 40, headH = 30, mL = 56, mR = 56, mT = 4, mB = 30;
+  const W = 980, H = mT + (isPbChart ? 0 : secs.length * headH) + eligible.length * rowH + mB;
   const plotW = W - mL - mR;
-  const max = Math.max(...data.map(d => Math.max(d[vKey], d[pKey] || 0)), ref || 0) * 1.06;
+  const max = Math.max(...eligible.map(r => Math.max(r[vKey], r[pKey] || 0)), ref || 0) * 1.08;
   const x = v => mL + (v / max) * plotW;
   const css = getComputedStyle(document.documentElement);
   const C = p => css.getPropertyValue(p).trim();
   let svg = "";
-  const step = max > 40 ? 10 : max > 16 ? 5 : 2;
-  for (let g = 0; g <= max; g += step) {
+  const step = isPbChart ? (max > 2 ? 0.5 : 0.25) : max > 40 ? 10 : max > 16 ? 5 : 2;
+  for (let g = 0; g <= max + 1e-9; g += step) {
     svg += `<line x1="${x(g)}" y1="${mT}" x2="${x(g)}" y2="${H - mB}" stroke="${C("--grid")}" stroke-width="1"/>`;
-    svg += `<text x="${x(g)}" y="${H - mB + 18}" font-size="11" fill="${C("--muted")}" text-anchor="middle">${g}×</text>`;
+    svg += `<text x="${x(g)}" y="${H - mB + 18}" font-size="11" fill="${C("--muted")}" text-anchor="middle">${isPbChart ? g.toFixed(step < 0.5 ? 2 : 1) : g}×</text>`;
   }
   if (ref) svg += `<line x1="${x(ref)}" y1="${mT}" x2="${x(ref)}" y2="${H - mB}" stroke="${C("--muted")}" stroke-width="1.5" stroke-dasharray="4 4"/>`;
-  data.forEach((d, i) => {
-    const y = mT + i * rowH, cy = y + rowH / 2;
-    const v = d[vKey], p = d[pKey];
-    const bw = Math.max(x(v) - mL, 2);
-    const tickRight = p != null && x(p) > x(v) && x(p) - x(v) < 44;
-    const labelX = x(v) + (tickRight ? (x(p) - x(v)) + 12 : 8);
-    svg += `<g class="crow" data-i="${i}">
-      <rect class="row-hit" x="0" y="${y}" width="${W}" height="${rowH}"/>
-      <text x="${mL - 10}" y="${cy + 4}" font-size="12.5" font-weight="600" fill="${C("--ink")}" text-anchor="end">${d.t}</text>
-      <rect class="bar" x="${mL}" y="${cy - 9}" width="${bw}" height="18" rx="4" fill="${C("--accent")}"/>
-      ${p != null ? `<rect x="${x(p) - 1.5}" y="${cy - 13}" width="3" height="26" rx="1.5" fill="${C("--tick")}"/>` : ""}
-      <text x="${labelX}" y="${cy + 4}" font-size="12" font-weight="500" fill="${C("--ink-2")}">${fx(v)}×</text>
-    </g>`;
-  });
+  const flat = [];
+  let y = mT;
+  for (const sec of secs) {
+    if (!isPbChart) {
+      svg += `<rect x="0" y="${y + 6}" width="${W}" height="${headH - 8}" fill="${C("--card")}"/>`;
+      svg += `<text x="0" y="${y + headH - 8}" font-size="11" font-weight="600" letter-spacing="0.06em" fill="${C("--muted")}">${sec.g.label.toUpperCase()}</text>`;
+      y += headH;
+    }
+    for (const r of sec.items) {
+      const i = flat.push(r) - 1, cy = y + rowH / 2;
+      const v = r[vKey], p = r[pKey];
+      const bw = Math.max(x(v) - mL, 2);
+      const tickRight = p != null && x(p) > x(v) && x(p) - x(v) < 44;
+      const labelX = x(v) + (tickRight ? (x(p) - x(v)) + 12 : 8);
+      svg += `<g class="crow" data-i="${i}">
+        <rect class="row-hit" x="0" y="${y}" width="${W}" height="${rowH}"/>
+        <text x="${mL - 10}" y="${cy + 4}" font-size="12.5" font-weight="600" fill="${C("--ink")}" text-anchor="end">${r.t}</text>
+        <rect class="bar" x="${mL}" y="${cy - 9}" width="${bw}" height="18" rx="4" fill="${C("--accent")}"/>
+        ${p != null ? `<rect x="${x(p) - 1.5}" y="${cy - 13}" width="3" height="26" rx="1.5" fill="${C("--tick")}"/>` : ""}
+        <text x="${labelX}" y="${cy + 4}" font-size="12" font-weight="500" fill="${C("--ink-2")}">${fx(v, d)}×</text>
+      </g>`;
+      y += rowH;
+    }
+  }
   const el = document.getElementById(svgId);
   el.setAttribute("viewBox", `0 0 ${W} ${H}`);
   el.innerHTML = svg;
   el.querySelectorAll(".crow").forEach(g => {
-    const d = data[+g.dataset.i];
-    const v = d[vKey], p = d[pKey];
+    const r = flat[+g.dataset.i];
+    const v = r[vKey], p = r[pKey];
     const rel = p == null ? "" : (v <= p ? `${Math.abs(Math.round((v / p - 1) * 100))}% discount` : `+${Math.round((v / p - 1) * 100)}% premium`);
-    const eps = kind === "ttm" ? d.ttmEps : d.fwdEps;
-    const html = `<div class="tt-title">${esc(d.name)} (${d.t})</div>
-      <div class="tt-line">${kind === "ttm" ? "Trailing" : "Forward"} P/E <b>${fx(v)}×</b></div>
-      <div class="tt-line">${rub(d.price)} ÷ ${kind === "ttm" ? "IFRS LTM" : "NTM forecast"} EPS ${rub(eps)}</div>
-      <div class="tt-line">${d.groupShort} median ${p != null ? fx(p) + "× → " + rel : "n/a"}</div>`;
+    const line = isPbChart ? `${rub(r.price)} ÷ book value/share ${rub(r.bvps)}`
+      : `${rub(r.price)} ÷ ${kind === "ttm" ? "IFRS LTM" : "NTM forecast"} EPS ${rub(kind === "ttm" ? r.ttmEps : r.fwdEps)}`;
+    const html = `<div class="tt-title">${esc(r.name)} (${r.t})</div>
+      <div class="tt-line">${isPbChart ? "Price-to-book" : kind === "ttm" ? "Trailing P/E" : "Forward P/E"} <b>${fx(v, d)}×</b></div>
+      <div class="tt-line">${line}</div>
+      <div class="tt-line">${r.groupShort} median ${p != null ? fx(p, d) + "× → " + rel : "n/a"}</div>`;
     g.addEventListener("mousemove", e => showTT(html, e));
     g.addEventListener("mouseleave", hideTT);
   });
-  const excluded = rows.filter(r => r[vKey] == null).map(r => r.t);
-  document.getElementById(kind === "ttm" ? "note-ttm" : "note-fwd").textContent =
-    excluded.length ? `${excluded.join(", ")} not shown — ${kind === "ttm" ? "no positive trailing earnings" : "no dohod.ru forecast"}.` : "";
+  if (!isPbChart) {
+    const excluded = rows.filter(r => !r.isPb && r[vKey] == null).map(r => r.t);
+    const banks = rows.filter(r => r.isPb).map(r => r.t);
+    const parts = [];
+    if (excluded.length) parts.push(`${excluded.join(", ")} not shown — ${kind === "ttm" ? "no positive trailing earnings" : "no dohod.ru forecast"}.`);
+    if (banks.length) parts.push(`${banks.join(" and ")} are valued on price-to-book — see the bank chart below.`);
+    document.getElementById(kind === "ttm" ? "note-ttm" : "note-fwd").textContent = parts.join(" ");
+  } else {
+    const gm = groupStats("banks");
+    document.getElementById("note-pb").textContent = `Russian-bank median ${fx(gm.t, 2)}× book across ${DATA.groups.banks.members.length} listed banks; on earnings the same group trades at a median ${fx(gm.pe)}× trailing.`;
+  }
 }
-function drawAll() { drawChart("chart-ttm", "ttm"); drawChart("chart-fwd", "fwd"); }
+function drawAll() { drawChart("chart-ttm", "ttm"); drawChart("chart-fwd", "fwd"); drawChart("chart-pb", "pb"); }
 
 /* ================= Boot ================= */
 async function init() {
@@ -786,7 +860,7 @@ async function init() {
   [...DATA.stocks, ...DATA.peers, ...(DATA.universe || [])].forEach(s => { ALL[s.t] = s; });
   /* same rule as the US dashboard: only holdings whose P/E can be computed are shown */
   const all = DATA.stocks.map(derive);
-  HIDDEN = all.filter(r => r.ttmPe == null || (r.fwdEps != null && r.fwdPe == null));
+  HIDDEN = all.filter(r => !r.isPb && (r.ttmPe == null || (r.fwdEps != null && r.fwdPe == null)));
   rows = all.filter(r => !HIDDEN.includes(r));
   const ix = DATA.indices[0], it = indexPe(ix, "trailing"), ifw = indexPe(ix, "forward");
   IDX = { t: it?.live ?? null, f: ifw?.live ?? null };

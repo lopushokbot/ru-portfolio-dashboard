@@ -148,6 +148,7 @@ function build(t, meta = {}) {
   const px = closes[t];
   const rec = { t, name: meta.name || prev.name || ix.members.find(m => m.t === t)?.name || t };
   if (meta.group) rec.group = meta.group;
+  if (Object.values(CFG.groups).some(g => g.metric === "pb" && g.members.includes(t))) rec.metric = "pb";
   rec.price = px?.price ?? prev.price ?? null;
   rec.priceDate = px?.date ?? prev.priceDate ?? null;
   if (!px) warnings.push(`stale price ${t}`);
@@ -201,12 +202,13 @@ const universeRecs = universe.filter(t => !holdings.includes(t) && !peers.includ
 const cutoff = `${new Date().getUTCFullYear() - 5}Q${Math.floor(new Date().getUTCMonth() / 3) + 1}`;
 for (const s of stocks) {
   try {
-    const h = (await L.smartlabPeHistory(slOf(s.t))).filter(x => x.q >= cutoff);
-    const ok = h.filter(x => x.pe > 0 && x.pe <= 100);
+    const pb = CFG.groups[s.group]?.metric === "pb";
+    const h = (await L.smartlabPeHistory(slOf(s.t), pb ? "p_b" : "p_e")).filter(x => x.q >= cutoff);
+    const ok = h.filter(x => x.pe > 0 && x.pe <= (pb ? 20 : 100));
     const vals = ok.map(x => x.pe).sort((a, b) => a - b);
     s.hist = vals.length ? {
       min: vals[0], max: vals.at(-1), median: L.median(vals), quarters: vals.length, excluded: h.length - ok.length,
-      from: ok[0].q, to: ok.at(-1).q, source: "smart-lab",
+      from: ok[0].q, to: ok.at(-1).q, source: "smart-lab", metric: pb ? "pb" : "pe",
     } : { quarters: 0 };
   } catch (e) { s.hist = prevOf(s.t).hist ?? null; L.log(`  history ${s.t}: ${e.message}`); }
   await L.sleep(900);

@@ -216,8 +216,8 @@ export async function smartlabReportCalendar() {
 }
 
 /** Quarterly trailing P/E history (smart-lab chart data, back to ~2014). */
-export async function smartlabPeHistory(slTicker) {
-  const html = await getText(`https://smart-lab.ru/q/${slTicker}/MSFO/p_e/`);
+export async function smartlabPeHistory(slTicker, field = "p_e") {
+  const html = await getText(`https://smart-lab.ru/q/${slTicker}/MSFO/${field}/`);
   const m = /var aQuarterData = \{\s*'diagram' : (\{[\s\S]*?\}),\s*\n\s*'change_diagram'/.exec(html);
   if (!m) return [];
   const d = JSON.parse(m[1]);

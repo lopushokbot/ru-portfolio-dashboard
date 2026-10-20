@@ -1,6 +1,6 @@
 {
  "meta": {
-  "builtAt": "2026-10-20T11:21:33.586Z",
+  "builtAt": "2026-10-20T12:40:07.533Z",
   "pricesAsOf": "2026-10-19",
   "earningsAsOf": "2026-10-20",
   "forwardSource": "dohod.ru next-12-months net income forecast (Dohod's own analysts — not a multi-broker consensus)",
@@ -53,9 +53,9 @@
   },
   "ofz": {
    "date": "2026-10-20",
-   "y1": 13.8628,
-   "y5": 16.3408,
-   "y10": 16.4916
+   "y1": 13.8835,
+   "y5": 16.3525,
+   "y10": 16.5218
   },
   "usdrub": {
    "rate": 82.8504,
@@ -75,7 +75,8 @@
     "SVCB",
     "DOMRF",
     "MBNK"
-   ]
+   ],
+   "metric": "pb"
   },
   "oil": {
    "label": "Oil & gas",
@@ -132,6 +133,7 @@
    "t": "SBER",
    "name": "Sberbank",
    "group": "banks",
+   "metric": "pb",
    "price": 287.5,
    "priceDate": "2026-10-19",
    "ttmEps": 86.6,
@@ -168,20 +170,22 @@
     "n": 13
    },
    "hist": {
-    "min": 3.70458540168,
-    "max": 13.6078305685,
-    "median": 4.33055200388,
-    "quarters": 15,
-    "excluded": 1,
+    "min": 0.5485074733,
+    "max": 1.17141061514,
+    "median": 0.9154146765385001,
+    "quarters": 16,
+    "excluded": 0,
     "from": "2021Q4",
     "to": "2026Q2",
-    "source": "smart-lab"
+    "source": "smart-lab",
+    "metric": "pb"
    }
   },
   {
    "t": "T",
    "name": "T-Technologies",
    "group": "banks",
+   "metric": "pb",
    "price": 270.82,
    "priceDate": "2026-10-19",
    "ttmEps": 68.7,
@@ -230,14 +234,15 @@
     "n": 13
    },
    "hist": {
-    "min": 3.94430463792,
-    "max": 24.494673913,
-    "median": 7.25509987336,
-    "quarters": 19,
-    "excluded": 0,
+    "min": 0.960798837209,
+    "max": 6.86844971591,
+    "median": 2.00571815878,
+    "quarters": 17,
+    "excluded": 2,
     "from": "2021Q4",
     "to": "2026Q2",
-    "source": "smart-lab"
+    "source": "smart-lab",
+    "metric": "pb"
    }
   },
   {
@@ -296,7 +301,8 @@
     "excluded": 1,
     "from": "2021Q4",
     "to": "2026Q3",
-    "source": "smart-lab"
+    "source": "smart-lab",
+    "metric": "pe"
    }
   },
   {
@@ -350,7 +356,8 @@
     "excluded": 1,
     "from": "2021Q4",
     "to": "2026Q3",
-    "source": "smart-lab"
+    "source": "smart-lab",
+    "metric": "pe"
    }
   },
   {
@@ -408,7 +415,8 @@
     "excluded": 0,
     "from": "2021Q4",
     "to": "2026Q2",
-    "source": "smart-lab"
+    "source": "smart-lab",
+    "metric": "pe"
    }
   },
   {
@@ -458,7 +466,8 @@
     "excluded": 0,
     "from": "2021Q4",
     "to": "2026Q2",
-    "source": "smart-lab"
+    "source": "smart-lab",
+    "metric": "pe"
    }
   },
   {
@@ -512,7 +521,8 @@
     "excluded": 2,
     "from": "2021Q4",
     "to": "2026Q3",
-    "source": "smart-lab"
+    "source": "smart-lab",
+    "metric": "pe"
    }
   },
   {
@@ -566,7 +576,8 @@
     "excluded": 2,
     "from": "2022Q2",
     "to": "2026Q2",
-    "source": "smart-lab"
+    "source": "smart-lab",
+    "metric": "pe"
    }
   },
   {
@@ -620,7 +631,8 @@
     "excluded": 0,
     "from": "2021Q4",
     "to": "2026Q2",
-    "source": "smart-lab"
+    "source": "smart-lab",
+    "metric": "pe"
    }
   },
   {
@@ -674,7 +686,8 @@
     "excluded": 4,
     "from": "2022Q4",
     "to": "2026Q2",
-    "source": "smart-lab"
+    "source": "smart-lab",
+    "metric": "pe"
    }
   }
  ],
@@ -682,6 +695,7 @@
   {
    "t": "VTBR",
    "name": "VTB",
+   "metric": "pb",
    "price": 56.105,
    "priceDate": "2026-10-19",
    "ttmEps": 32.8,
@@ -721,6 +735,7 @@
   {
    "t": "BSPB",
    "name": "Bank St. Petersburg",
+   "metric": "pb",
    "price": 256.4,
    "priceDate": "2026-10-19",
    "ttmEps": 66.6,
@@ -758,6 +773,7 @@
   {
    "t": "CBOM",
    "name": "Credit Bank of Moscow",
+   "metric": "pb",
    "price": 10.25,
    "priceDate": "2026-10-19",
    "ttmEps": 0.94,
@@ -791,6 +807,7 @@
   {
    "t": "SVCB",
    "name": "Sovcombank",
+   "metric": "pb",
    "price": 10.105,
    "priceDate": "2026-10-19",
    "ttmEps": 3.39,
@@ -830,6 +847,7 @@
   {
    "t": "DOMRF",
    "name": "DOM.RF",
+   "metric": "pb",
    "price": 2088.7,
    "priceDate": "2026-10-19",
    "ttmEps": 593.7,
@@ -869,6 +887,7 @@
   {
    "t": "MBNK",
    "name": "MTS Bank",
+   "metric": "pb",
    "price": 948.5,
    "priceDate": "2026-10-19",
    "ttmEps": 485,

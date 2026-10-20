@@ -55,7 +55,8 @@ T-Bank serves `invest-public-api.tbank.ru` (and the old tinkoff.ru host) with a 
 - Index P/E = 1 ÷ Σ wᵢ·EPSᵢ/Pᵢ over IMOEX members at published weights (= Σ float cap ÷ Σ float earnings); loss-makers included, ex-loss also shown; ordinary + preferred classes each weighted with the same company EPS. Kept from the previous run if coverage < 95% (trailing) / 85% (forward).
 - Peer benchmark = median of members' positive multiples (mean shown too). Groups: banks, oil & gas, metals, food retail, internet (config.json).
 - Hidden rule (as US): holdings with negative trailing or forward EPS are hidden and listed under the table; they return automatically.
-- Banks on P/E (Russian convention), P/B in Notes.
+- **Banks (SBER, T) on P/B** (Sema, 2026-10-20) = price ÷ IFRS book value per share (smart-lab "Капитал" ÷ ordinary + preferred shares), vs median P/B of the 8 Russian banks in `groups.banks` (`metric: "pb"` in config.json). Forward column "—"; own P/E shown in Notes/tooltip; separate "Banks · Price-to-book" chart; history band uses smart-lab `p_b`. Exempt from the hidden rule. Same treatment as NU on the US page.
+- **Sector grouping** (Sema, 2026-10-20): table, P/E charts, history bands and peer panel are grouped by sector in `config.json → groups` order (banks, oil & gas, metals, food retail, internet), each with a header showing the sector median; column sorting works within each sector.
 - Index trailing ≈ 4× is genuine: GAZP + SNGS (FX revaluation) ≈ 40% of index earnings — explained in Notes.
 
 ## Rules
