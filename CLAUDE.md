@@ -1,85 +1,66 @@
-# Russian Portfolio Dashboard v2
+# Russian Portfolio Valuation Dashboard (v3)
 
-## Overview
-Weekly auto-updating Russian stock portfolio dashboard. Tracks 10 stocks + 10 benchmark peers across 5 sectors. Fetches fundamentals from 5 Russian data sources with cross-validation, generates a self-contained HTML dashboard, auto-deploys to GitHub Pages every Sunday.
+Apple-style static dashboard of trailing and forward P/E for Sema's 10 Russian holdings versus hand-picked peer groups and a bottom-up MOEX Russia Index, plus dividend yields, analyst target prices, report/dividend calendar and the equity–OFZ yield gap. Same format and design system as the US Portfolio Valuation Dashboard (`~/Documents/ppppp/workspace/us-portfolio-dashboard`). Static `index.html` + `data.json`, no build step.
 
-## Live URLs
-| Environment | URL |
-|-------------|-----|
-| Live | https://lopushokbot.github.io/ru-portfolio-dashboard/ |
-| GitHub | https://github.com/lopushokbot/ru-portfolio-dashboard |
-| Local path | `/Users/iibot/Documents/ppppp/workspace/ru-portfolio-dashboard/` |
+## Live / paths
 
-## Tech Stack
-- Python 3 with `requests`, `beautifulsoup4`, `lxml`
-- Dependencies in `requirements.txt`
-- macOS LaunchAgent for weekly automation
-- Static HTML output (single file, self-contained)
+| | |
+|---|---|
+| Live | https://lopushokbot.github.io/ru-portfolio-dashboard/ (GitHub Pages, branch `main`, root) |
+| GitHub | https://github.com/lopushokbot/ru-portfolio-dashboard (public — data.json holds only public market data) |
+| Local (canonical) | `/Users/iibot/ru-portfolio-dashboard/` — outside `~/Documents` because macOS TCC blocks launchd there. Symlink at `~/Documents/ppppp/workspace/ru-portfolio-dashboard`. |
+| Schedule | LaunchAgent `com.lopushokbot.ru-dashboard` (plist copy in repo) → `run.sh`: daily 08:00 Dubai + hourly catch-up until 22:59, one success/day |
+| v2 backup | `~/ru-portfolio-dashboard-v2-backup/` (old Python 5-source generator, incl. its uncommitted local edits) |
 
-## Architecture
+## Why it runs locally, not in GitHub Actions
+
+The T-Bank (T-Investments) token must never leave the Mac (`.env`, chmod 600, gitignored). Russian sites may also block foreign CI IPs.
+
+## Files
+
 ```
-archive/portfolio-dashboard-v2/
-├── src/
-│   ├── config.py              # Portfolio tickers, sectors, names, thresholds
-│   ├── dashboard.py           # Main orchestrator — fetches, validates, renders
-│   ├── sources/
-│   │   ├── tbank.py           # T-Bank Invest API (PRIMARY for fundamentals)
-│   │   ├── moex.py            # MOEX ISS API (prices, market cap, dividends)
-│   │   ├── smartlab.py        # smart-lab.ru scraper (IFRS cross-check)
-│   │   ├── tradernet.py       # Tradernet API (price cross-check)
-│   │   ├── dohod.py           # dohod.ru scraper (dividend cross-check)
-│   │   ├── finrange.py        # (unused — was planned, not implemented)
-│   │   └── yahoo_ru.py        # (unused — Yahoo data is wrong post-sanctions)
-│   ├── engine/
-│   │   └── validator.py       # Cross-validation engine (5-source comparison)
-│   └── render/
-│       └── html_builder.py    # HTML generation with Apple-style design
-├── output/                    # Generated HTML output
-├── logs/                      # Execution logs
-├── .env                       # T-Bank API token (local only, gitignored, chmod 600)
-└── scripts/                   # Utility scripts
+index.html          — the page (CSS + JS); fetches data.json, derives every ratio client-side
+data.json           — written by scripts/update.mjs; notes[] is the only hand-edited part
+config.json         — holdings, peers, peer groups (edit here)
+scripts/lib.mjs      — MOEX ISS, CBR, T-Bank (scoped CA), smart-lab parsers
+scripts/update.mjs   — daily orchestrator (~3 min)
+scripts/forward.mjs  — forward EPS (dohod.ru); the place to plug in a paid consensus (Cbonds)
+certs/russian_trusted_root_ca.pem — Минцифры root, trusted for T-Bank requests ONLY
+run.sh              — LaunchAgent wrapper (guards, caffeinate, network wait, commit + push)
+assets/fonts/       — New York Large + Inter, bundled
 ```
 
-## Data Sources
-| # | Source | Type | Auth | Primary Use |
-|---|--------|------|------|------------|
-| 1 | **T-Bank Invest API** | REST | Bearer token (`.env`) | PRIMARY — P/E, P/BV, P/S, ROE, Revenue, Net Income, EPS, Dividends, Beta, 52w range |
-| 2 | **MOEX ISS API** | REST | None | Prices, market cap, dividends (trailing 12m), 52w historical candles |
-| 3 | **smart-lab.ru** | HTML scraping | None | IFRS annual fundamentals cross-check, balance sheet, YoY growth |
-| 4 | **Tradernet** | REST | None | Price cross-check, 52w range |
-| 5 | **dohod.ru** | HTML scraping | None | Dividend yield cross-check, DSI, forecasts |
+## Data sources (no Yahoo — wrong for Russian stocks since 2022)
 
-**DO NOT use Yahoo Finance** for Russian stocks — post-sanctions data is wrong (prices off 30-130%).
+| Data | Source | Notes |
+|---|---|---|
+| Prices | MOEX ISS history, TQBR `LEGALCLOSEPRICE` | last completed main session |
+| Index level, composition, weights | MOEX ISS `statistics/.../analytics/IMOEX` | 44 members |
+| Trailing EPS (primary) | smart-lab.ru `/q/<T>/f/q/MSFO/` LTM column | IFRS; handles half-year reporters (LKOH, NVTK, TATN, GMKN) |
+| Trailing EPS (cross-check) | T-Bank `GetAssetFundamentals.epsTtm` | per-share junk for some banks (BSPB/VTBR ≈ 46,000 ₽) — sanity-filtered; >25% gaps auto-flagged in Notes |
+| Forward EPS | dohod.ru "Прогноз прибыли в след. 12m" | Dohod's house forecast, NOT a consensus; ÷ smart-lab share base. No free consensus exists (researched 2026-10-20); Cbonds is the paid consensus |
+| Dividends | T-Bank `GetDividends` | TTM by record date + next declared |
+| Report dates | smart-lab calendar → T-Bank `GetAssetReports` → last year + 364 d (est.) | |
+| Analyst target | T-Bank `GetForecastBy` consensus | |
+| P/E history | smart-lab `/q/<T>/MSFO/p_e/` embedded chart data | quarterly since 2014 |
+| Key rate / USD/RUB / OFZ curve | cbr.ru, cbr-xml-daily, MOEX zcyc | |
 
-## Portfolio
-| Ticker | Name | Sector |
-|--------|------|--------|
-| YDEX | Yandex | Tech |
-| TCSG | T-Technologies | Banks/Fintech |
-| LKOH | LUKOIL | Oil & Gas |
-| HEAD | HeadHunter | Tech |
-| SBER | Sberbank | Banks/Fintech |
-| X5 | X5 Group | Retail |
-| NVTK | NOVATEK | Oil & Gas |
-| GMKN | Norilsk Nickel | Metals & Mining |
-| CNRU | CIAN | Tech |
-| TATN | Tatneft | Oil & Gas |
+## T-Bank API gotcha (the "T-Bank not working" bug, fixed 2026-10-20)
 
-Peers: ROSN, GAZP, VTBR, BSPB, NLMK, MAGN, CHMF, MGNT, OZON, VK
+T-Bank serves `invest-public-api.tbank.ru` (and the old tinkoff.ru host) with a certificate from the Russian state CA ("Russian Trusted Root CA", Минцифры). No OS/Python/Node trusts it, so every call failed TLS and retried into timeouts (runs took 30+ min, 0/20 fundamentals since ~Oct 2026). Fix: the pinned root in `certs/`, passed as `ca` to T-Bank requests only. Also: the bulk `Shares` list takes 80+ s — use per-ticker `ShareBy`.
 
-## Deployment
-- **Automated**: macOS LaunchAgent at `~/Library/LaunchAgents/com.lopushokbot.ru-dashboard.plist`
-- **Schedule**: Every Sunday 9:00 AM Dubai time
-- **Process**: Runs locally on Mac, pushes generated HTML to GitHub Pages
-- **Why local, not cloud**: T-Bank token stays on the machine, no cloud exposure
+## Methodology (keep consistent)
 
-## Environment Variables
-| Variable | Purpose | Where stored |
-|----------|---------|-------------|
-| `TBANK_TOKEN` | T-Bank Invest API read-only token | `.env` file (chmod 600, gitignored) |
+- Trailing P/E = MOEX close ÷ smart-lab IFRS LTM EPS. Forward P/E = close ÷ dohod NTM EPS.
+- Index P/E = 1 ÷ Σ wᵢ·EPSᵢ/Pᵢ over IMOEX members at published weights (= Σ float cap ÷ Σ float earnings); loss-makers included, ex-loss also shown; ordinary + preferred classes each weighted with the same company EPS. Kept from the previous run if coverage < 95% (trailing) / 85% (forward).
+- Peer benchmark = median of members' positive multiples (mean shown too). Groups: banks, oil & gas, metals, food retail, internet (config.json).
+- Hidden rule (as US): holdings with negative trailing or forward EPS are hidden and listed under the table; they return automatically.
+- Banks on P/E (Russian convention), P/B in Notes.
+- Index trailing ≈ 4× is genuine: GAZP + SNGS (FX revaluation) ≈ 40% of index earnings — explained in Notes.
 
-## Known Issues & Gotchas
-- **MOEX ticker mapping**: TCSG = `T` on MOEX, VK = `VKCO` — mapped in `config.py`
-- **smart-lab.ru scraping**: LTM row sometimes duplicates last fiscal year; TCSG listed as "T"; occasional timeouts (especially MGNT)
-- **Cross-validation thresholds**: 35% ratio, 15pp percentage, 30% absolute — widened because T-Bank TTM vs smart-lab annual IFRS always differ
-- **Security**: `html.escape()` on all external data; error messages show only exception type, never `str(e)`; dependencies pinned
+## Rules
+
+- Never commit `.env`; never send the token anywhere but T-Bank.
+- Don't hardcode numbers in index.html — everything comes from data.json.
+- Weekly Claude review routine "Russian Portfolio Dashboard Review" (Sundays) checks the live page — keep its prompt in sync if the structure changes.
+- Update RUNBOOK.md log after changes.

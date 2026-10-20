@@ -1,0 +1,1854 @@
+{
+ "meta": {
+  "builtAt": "2026-10-20T11:17:18.612Z",
+  "pricesAsOf": "2026-10-19",
+  "earningsAsOf": "2026-10-20",
+  "forwardSource": "dohod.ru next-12-months net income forecast (Dohod's own analysts — not a multi-broker consensus)",
+  "sources": {
+   "smartlab": 47,
+   "tbank": 50,
+   "forward": 47,
+   "universe": 50
+  },
+  "warnings": []
+ },
+ "indices": [
+  {
+   "key": "imoex",
+   "name": "MOEX Russia Index",
+   "secid": "IMOEX",
+   "price": 2455.22,
+   "priceDate": "2026-10-19",
+   "members": 44,
+   "trailing": {
+    "pe": 3.976067055847745,
+    "exLoss": 3.739241452863183,
+    "n": 44,
+    "losers": 6,
+    "coverage": 0.9997,
+    "level": 2455.22,
+    "date": "2026-10-19"
+   },
+   "forward": {
+    "pe": 3.725783578962619,
+    "exLoss": 3.725783578962619,
+    "n": 42,
+    "losers": 0,
+    "coverage": 0.9948000000000002,
+    "level": 2455.22,
+    "date": "2026-10-19"
+   },
+   "divYield": {
+    "pct": 8.493718100475025,
+    "n": 44,
+    "coverage": 0.9997,
+    "date": "2026-10-19"
+   }
+  }
+ ],
+ "macro": {
+  "keyRate": {
+   "rate": 14,
+   "date": "2026-10-20"
+  },
+  "ofz": {
+   "date": "2026-10-20",
+   "y1": 13.8658,
+   "y5": 16.3417,
+   "y10": 16.4942
+  },
+  "usdrub": {
+   "rate": 82.8504,
+   "date": "2026-10-20"
+  }
+ },
+ "groups": {
+  "banks": {
+   "label": "Russian banks",
+   "short": "Banks",
+   "members": [
+    "SBER",
+    "T",
+    "VTBR",
+    "BSPB",
+    "CBOM",
+    "SVCB",
+    "DOMRF",
+    "MBNK"
+   ]
+  },
+  "oil": {
+   "label": "Oil & gas",
+   "short": "Oil & gas",
+   "members": [
+    "LKOH",
+    "ROSN",
+    "TATN",
+    "SIBN",
+    "SNGS",
+    "NVTK",
+    "GAZP"
+   ]
+  },
+  "metals": {
+   "label": "Metals & mining",
+   "short": "Metals",
+   "members": [
+    "GMKN",
+    "NLMK",
+    "MAGN",
+    "CHMF",
+    "RUAL",
+    "PLZL",
+    "ALRS"
+   ]
+  },
+  "retail": {
+   "label": "Food retail",
+   "short": "Retail",
+   "members": [
+    "X5",
+    "MGNT",
+    "LENT",
+    "FIXR"
+   ]
+  },
+  "internet": {
+   "label": "Internet & software",
+   "short": "Internet",
+   "members": [
+    "YDEX",
+    "HEAD",
+    "CNRU",
+    "OZON",
+    "VKCO",
+    "POSI",
+    "ASTR"
+   ]
+  }
+ },
+ "stocks": [
+  {
+   "t": "SBER",
+   "name": "Sberbank",
+   "group": "banks",
+   "price": 287.5,
+   "priceDate": "2026-10-19",
+   "ttmEps": 86.6,
+   "ttmSrc": "smart-lab",
+   "ttmCheck": 85.28,
+   "bvps": 377.9607738964891,
+   "fwdEps": 93.19977441626538,
+   "fwd": {
+    "eps": 93.19977441626538,
+    "netIncome": 2011.43624,
+    "source": "dohod.ru",
+    "basis": "ntm"
+   },
+   "divTtm": 37.64,
+   "divPast": [
+    {
+     "record": "2026-07-20",
+     "amt": 37.64
+    }
+   ],
+   "earnings": {
+    "lastReported": "2026-07-29",
+    "lastPeriod": "Q2 2026",
+    "next": "2026-10-28",
+    "nextPeriod": "Q3 2026",
+    "nextConfirmed": true,
+    "pendingSince": null
+   },
+   "target": {
+    "consensus": 379.4,
+    "min": 320,
+    "max": 430,
+    "rec": "buy",
+    "n": 13
+   },
+   "hist": {
+    "min": 3.70458540168,
+    "max": 13.6078305685,
+    "median": 4.33055200388,
+    "quarters": 15,
+    "excluded": 1,
+    "from": "2021Q4",
+    "to": "2026Q2",
+    "source": "smart-lab"
+   }
+  },
+  {
+   "t": "T",
+   "name": "T-Technologies",
+   "group": "banks",
+   "price": 270.82,
+   "priceDate": "2026-10-19",
+   "ttmEps": 68.7,
+   "ttmSrc": "smart-lab",
+   "ttmCheck": 74.09,
+   "bvps": 282.07230711889673,
+   "fwdEps": 97.2412212689805,
+   "fwd": {
+    "eps": 97.2412212689805,
+    "netIncome": 261.00846,
+    "source": "dohod.ru",
+    "basis": "ntm"
+   },
+   "divTtm": 17.400000000000002,
+   "divPast": [
+    {
+     "record": "2026-10-12",
+     "amt": 4.7
+    },
+    {
+     "record": "2026-08-10",
+     "amt": 4.6
+    },
+    {
+     "record": "2026-05-25",
+     "amt": 4.5
+    },
+    {
+     "record": "2026-01-08",
+     "amt": 3.6
+    }
+   ],
+   "earnings": {
+    "lastReported": "2026-08-11",
+    "lastPeriod": "Q2 2026",
+    "next": "2026-11-10",
+    "nextPeriod": "Q3 2026",
+    "nextConfirmed": true,
+    "pendingSince": null
+   },
+   "target": {
+    "consensus": 404.24,
+    "min": 320,
+    "max": 500,
+    "rec": "buy",
+    "n": 13
+   },
+   "hist": {
+    "min": 3.94430463792,
+    "max": 24.494673913,
+    "median": 7.25509987336,
+    "quarters": 19,
+    "excluded": 0,
+    "from": "2021Q4",
+    "to": "2026Q2",
+    "source": "smart-lab"
+   }
+  },
+  {
+   "t": "LKOH",
+   "name": "LUKOIL",
+   "group": "oil",
+   "price": 6029.5,
+   "priceDate": "2026-10-19",
+   "ttmEps": 629.1,
+   "ttmSrc": "smart-lab",
+   "ttmCheck": -1451.7,
+   "bvps": null,
+   "fwdEps": 1243.779711782519,
+   "fwd": {
+    "eps": 1243.779711782519,
+    "netIncome": 861.80826,
+    "source": "dohod.ru",
+    "basis": "ntm"
+   },
+   "divTtm": 675,
+   "nextDiv": {
+    "record": "2026-12-09",
+    "lastBuy": "2026-12-08",
+    "amt": 535
+   },
+   "divPast": [
+    {
+     "record": "2026-05-04",
+     "amt": 278
+    },
+    {
+     "record": "2026-01-12",
+     "amt": 397
+    }
+   ],
+   "earnings": {
+    "lastReported": "2026-08-28",
+    "lastPeriod": null,
+    "next": "2027-03-19",
+    "nextPeriod": null,
+    "nextConfirmed": false,
+    "pendingSince": null
+   },
+   "target": {
+    "consensus": 6348.5,
+    "min": 5600,
+    "max": 7100,
+    "rec": "buy",
+    "n": 13
+   },
+   "hist": {
+    "min": 4.055129452,
+    "max": 44.0332704312,
+    "median": 6.2442104713,
+    "quarters": 17,
+    "excluded": 1,
+    "from": "2021Q4",
+    "to": "2026Q3",
+    "source": "smart-lab"
+   }
+  },
+  {
+   "t": "NVTK",
+   "name": "NOVATEK",
+   "group": "oil",
+   "price": 1133.4,
+   "priceDate": "2026-10-19",
+   "ttmEps": 58,
+   "ttmSrc": "smart-lab",
+   "ttmCheck": 59.2,
+   "bvps": null,
+   "fwdEps": 185.84566295454545,
+   "fwd": {
+    "eps": 185.84566295454545,
+    "netIncome": 563.9454599999999,
+    "source": "dohod.ru",
+    "basis": "ntm"
+   },
+   "divTtm": 82.72999999999999,
+   "divPast": [
+    {
+     "record": "2026-10-12",
+     "amt": 35.5
+    },
+    {
+     "record": "2026-04-13",
+     "amt": 47.23
+    }
+   ],
+   "earnings": {
+    "lastReported": "2026-07-24",
+    "lastPeriod": null,
+    "next": "2027-02-10",
+    "nextPeriod": null,
+    "nextConfirmed": false,
+    "pendingSince": null
+   },
+   "target": {
+    "consensus": 1437.8,
+    "min": 1100,
+    "max": 1650,
+    "rec": "buy",
+    "n": 11
+   },
+   "hist": {
+    "min": 5.03015161052,
+    "max": 37.6188181485,
+    "median": 14.74046318005,
+    "quarters": 16,
+    "excluded": 1,
+    "from": "2021Q4",
+    "to": "2026Q3",
+    "source": "smart-lab"
+   }
+  },
+  {
+   "t": "TATN",
+   "name": "Tatneft",
+   "group": "oil",
+   "price": 620,
+   "priceDate": "2026-10-19",
+   "ttmEps": 122,
+   "ttmSrc": "smart-lab",
+   "ttmCheck": 116.34,
+   "bvps": null,
+   "fwdEps": 124.28423656884877,
+   "fwd": {
+    "eps": 124.28423656884877,
+    "netIncome": 270.77664,
+    "source": "dohod.ru",
+    "basis": "ntm"
+   },
+   "divTtm": 52.620000000000005,
+   "divPast": [
+    {
+     "record": "2026-10-13",
+     "amt": 32.88
+    },
+    {
+     "record": "2026-07-15",
+     "amt": 11.61
+    },
+    {
+     "record": "2026-01-11",
+     "amt": 8.13
+    }
+   ],
+   "earnings": {
+    "lastReported": "2026-08-31",
+    "lastPeriod": null,
+    "next": "2027-03-24",
+    "nextPeriod": null,
+    "nextConfirmed": false,
+    "pendingSince": null
+   },
+   "target": {
+    "consensus": 742.97,
+    "min": 615,
+    "max": 965,
+    "rec": "buy",
+    "n": 11
+   },
+   "hist": {
+    "min": 2.84069868585,
+    "max": 8.48409039061,
+    "median": 5.195982838555,
+    "quarters": 14,
+    "excluded": 0,
+    "from": "2021Q4",
+    "to": "2026Q2",
+    "source": "smart-lab"
+   }
+  },
+  {
+   "t": "GMKN",
+   "name": "Norilsk Nickel",
+   "group": "metals",
+   "price": 115.44,
+   "priceDate": "2026-10-19",
+   "ttmEps": 14.7,
+   "ttmSrc": "smart-lab",
+   "ttmCheck": 14.67,
+   "bvps": null,
+   "fwdEps": 11.826692234611954,
+   "fwd": {
+    "eps": 11.826692234611954,
+    "netIncome": 180.37717,
+    "source": "dohod.ru",
+    "basis": "ntm"
+   },
+   "divTtm": 1.85,
+   "divPast": [
+    {
+     "record": "2026-10-12",
+     "amt": 1.85
+    }
+   ],
+   "earnings": {
+    "lastReported": "2026-07-31",
+    "lastPeriod": "Q2 2026",
+    "next": "2027-02-10",
+    "nextPeriod": "Q4 2026",
+    "nextConfirmed": false,
+    "pendingSince": null
+   },
+   "target": {
+    "consensus": 156,
+    "min": 121,
+    "max": 195,
+    "rec": "buy",
+    "n": 10
+   },
+   "hist": {
+    "min": 3.36627615219,
+    "max": 23.3153970522,
+    "median": 10.4888255815,
+    "quarters": 17,
+    "excluded": 0,
+    "from": "2021Q4",
+    "to": "2026Q2",
+    "source": "smart-lab"
+   }
+  },
+  {
+   "t": "X5",
+   "name": "X5 Group",
+   "group": "retail",
+   "price": 2155.5,
+   "priceDate": "2026-10-19",
+   "ttmEps": 298.8,
+   "ttmSrc": "smart-lab",
+   "ttmCheck": 331.68,
+   "bvps": null,
+   "fwdEps": 194.0094048768473,
+   "fwd": {
+    "eps": 194.0094048768473,
+    "netIncome": 52.72277,
+    "source": "dohod.ru",
+    "basis": "ntm"
+   },
+   "divTtm": 613,
+   "divPast": [
+    {
+     "record": "2026-07-07",
+     "amt": 245
+    },
+    {
+     "record": "2026-01-06",
+     "amt": 368
+    }
+   ],
+   "earnings": {
+    "lastReported": "2026-08-13",
+    "lastPeriod": "Q2 2026",
+    "next": "2026-10-29",
+    "nextPeriod": "Q3 2026",
+    "nextConfirmed": true,
+    "pendingSince": null
+   },
+   "target": {
+    "consensus": 2815.15,
+    "min": 2160,
+    "max": 3305,
+    "rec": "buy",
+    "n": 13
+   },
+   "hist": {
+    "min": 5.24484953243,
+    "max": 12.0908523543,
+    "median": 7.81730742703,
+    "quarters": 18,
+    "excluded": 2,
+    "from": "2021Q4",
+    "to": "2026Q3",
+    "source": "smart-lab"
+   }
+  },
+  {
+   "t": "YDEX",
+   "name": "Yandex",
+   "group": "internet",
+   "price": 3436.5,
+   "priceDate": "2026-10-19",
+   "ttmEps": 457,
+   "ttmSrc": "smart-lab",
+   "ttmCheck": 424.44,
+   "bvps": null,
+   "fwdEps": 425.501787700831,
+   "fwd": {
+    "eps": 425.501787700831,
+    "netIncome": 168.05924,
+    "source": "dohod.ru",
+    "basis": "ntm"
+   },
+   "divTtm": 220,
+   "divPast": [
+    {
+     "record": "2026-09-21",
+     "amt": 110
+    },
+    {
+     "record": "2026-04-27",
+     "amt": 110
+    }
+   ],
+   "earnings": {
+    "lastReported": "2026-07-29",
+    "lastPeriod": "Q2 2026",
+    "next": "2026-10-29",
+    "nextPeriod": "Q3 2026",
+    "nextConfirmed": true,
+    "pendingSince": null
+   },
+   "target": {
+    "consensus": 5516.44,
+    "min": 4978,
+    "max": 6500,
+    "rec": "buy",
+    "n": 9
+   },
+   "hist": {
+    "min": 8.04378043213,
+    "max": 60.9129909893,
+    "median": 19.1034903072,
+    "quarters": 17,
+    "excluded": 2,
+    "from": "2022Q2",
+    "to": "2026Q2",
+    "source": "smart-lab"
+   }
+  },
+  {
+   "t": "HEAD",
+   "name": "HeadHunter",
+   "group": "internet",
+   "price": 2721,
+   "priceDate": "2026-10-19",
+   "ttmEps": 405,
+   "ttmSrc": "smart-lab",
+   "ttmCheck": 391.2,
+   "bvps": null,
+   "fwdEps": 368.14006097560974,
+   "fwd": {
+    "eps": 368.14006097560974,
+    "netIncome": 18.63425,
+    "source": "dohod.ru",
+    "basis": "ntm"
+   },
+   "divTtm": 433,
+   "divPast": [
+    {
+     "record": "2026-09-28",
+     "amt": 200
+    },
+    {
+     "record": "2026-05-12",
+     "amt": 233
+    }
+   ],
+   "earnings": {
+    "lastReported": "2026-08-14",
+    "lastPeriod": "Q2 2026",
+    "next": "2026-11-13",
+    "nextPeriod": "Q3 2026",
+    "nextConfirmed": true,
+    "pendingSince": null
+   },
+   "target": {
+    "consensus": 3897.16,
+    "min": 2900,
+    "max": 4620,
+    "rec": "buy",
+    "n": 12
+   },
+   "hist": {
+    "min": 6.45446529478,
+    "max": 31.7030695922,
+    "median": 10.0059493472,
+    "quarters": 19,
+    "excluded": 0,
+    "from": "2021Q4",
+    "to": "2026Q2",
+    "source": "smart-lab"
+   }
+  },
+  {
+   "t": "CNRU",
+   "name": "CIAN",
+   "group": "internet",
+   "price": 668.2,
+   "priceDate": "2026-10-19",
+   "ttmEps": 47.2,
+   "ttmSrc": "smart-lab",
+   "ttmCheck": 50.21,
+   "bvps": null,
+   "fwdEps": 48.79258201634878,
+   "fwd": {
+    "eps": 48.79258201634878,
+    "netIncome": 3.79383,
+    "source": "dohod.ru",
+    "basis": "ntm"
+   },
+   "divTtm": 157,
+   "divPast": [
+    {
+     "record": "2026-06-22",
+     "amt": 53
+    },
+    {
+     "record": "2025-12-12",
+     "amt": 104
+    }
+   ],
+   "earnings": {
+    "lastReported": "2026-08-19",
+    "lastPeriod": "Q2 2026",
+    "next": "2026-11-24",
+    "nextPeriod": "Q3 2026",
+    "nextConfirmed": false,
+    "pendingSince": null
+   },
+   "target": {
+    "consensus": 811.17,
+    "min": 700,
+    "max": 1020,
+    "rec": "buy",
+    "n": 10
+   },
+   "hist": {
+    "min": 10.6227326247,
+    "max": 52.6449,
+    "median": 23.7150122449,
+    "quarters": 15,
+    "excluded": 4,
+    "from": "2022Q4",
+    "to": "2026Q2",
+    "source": "smart-lab"
+   }
+  }
+ ],
+ "peers": [
+  {
+   "t": "VTBR",
+   "name": "VTB",
+   "price": 56.105,
+   "priceDate": "2026-10-19",
+   "ttmEps": 32.8,
+   "ttmSrc": "smart-lab",
+   "ttmCheck": null,
+   "bvps": 214.26361386138615,
+   "fwdEps": 31.60217310051911,
+   "fwd": {
+    "eps": 31.60217310051911,
+    "netIncome": 408.3232,
+    "source": "dohod.ru",
+    "basis": "ntm"
+   },
+   "divTtm": 9.71,
+   "divPast": [
+    {
+     "record": "2026-07-20",
+     "amt": 9.71
+    }
+   ],
+   "earnings": {
+    "lastReported": "2026-07-28",
+    "lastPeriod": "Q2 2026",
+    "next": "2026-10-30",
+    "nextPeriod": "Q3 2026",
+    "nextConfirmed": true,
+    "pendingSince": null
+   },
+   "target": {
+    "consensus": 89.55,
+    "min": 65,
+    "max": 125,
+    "rec": "buy",
+    "n": 9
+   }
+  },
+  {
+   "t": "BSPB",
+   "name": "Bank St. Petersburg",
+   "price": 256.4,
+   "priceDate": "2026-10-19",
+   "ttmEps": 66.6,
+   "ttmSrc": "smart-lab",
+   "ttmCheck": null,
+   "bvps": 469.17293233082705,
+   "fwdEps": 75.56142242424241,
+   "fwd": {
+    "eps": 75.56142242424241,
+    "netIncome": 33.69631,
+    "source": "dohod.ru",
+    "basis": "ntm"
+   },
+   "divTtm": 45.400000000000006,
+   "divPast": [
+    {
+     "record": "2026-10-05",
+     "amt": 19.17
+    },
+    {
+     "record": "2026-05-12",
+     "amt": 26.23
+    }
+   ],
+   "earnings": {
+    "lastReported": "2026-08-21",
+    "lastPeriod": "Q2 2026",
+    "next": "2026-11-20",
+    "nextPeriod": "Q3 2026",
+    "nextConfirmed": true,
+    "pendingSince": null
+   },
+   "target": null
+  },
+  {
+   "t": "CBOM",
+   "name": "Credit Bank of Moscow",
+   "price": 10.25,
+   "priceDate": "2026-10-19",
+   "ttmEps": 0.94,
+   "ttmSrc": "smart-lab",
+   "ttmCheck": 0.94,
+   "bvps": 11.624289560275201,
+   "fwdEps": 0.9679510351437699,
+   "fwd": {
+    "eps": 0.9679510351437699,
+    "netIncome": 32.23071,
+    "source": "dohod.ru",
+    "basis": "ntm"
+   },
+   "divTtm": 0,
+   "earnings": {
+    "lastReported": "2026-08-28",
+    "lastPeriod": null,
+    "next": "2026-11-27",
+    "nextPeriod": null,
+    "nextConfirmed": false,
+    "pendingSince": null
+   },
+   "target": {
+    "consensus": 6,
+    "min": 6,
+    "max": 6,
+    "rec": "sell",
+    "n": 1
+   }
+  },
+  {
+   "t": "SVCB",
+   "name": "Sovcombank",
+   "price": 10.105,
+   "priceDate": "2026-10-19",
+   "ttmEps": 3.39,
+   "ttmSrc": "smart-lab",
+   "ttmCheck": 3.36,
+   "bvps": 19.785930005329543,
+   "fwdEps": 4.389501565445026,
+   "fwd": {
+    "eps": 4.389501565445026,
+    "netIncome": 98.92564,
+    "source": "dohod.ru",
+    "basis": "ntm"
+   },
+   "divTtm": 0.35,
+   "divPast": [
+    {
+     "record": "2026-07-13",
+     "amt": 0.35
+    }
+   ],
+   "earnings": {
+    "lastReported": "2026-08-14",
+    "lastPeriod": "Q2 2026",
+    "next": "2026-11-13",
+    "nextPeriod": "Q3 2026",
+    "nextConfirmed": true,
+    "pendingSince": null
+   },
+   "target": {
+    "consensus": 16.66,
+    "min": 14,
+    "max": 20,
+    "rec": "buy",
+    "n": 12
+   }
+  },
+  {
+   "t": "DOMRF",
+   "name": "DOM.RF",
+   "price": 2088.7,
+   "priceDate": "2026-10-19",
+   "ttmEps": 593.7,
+   "ttmSrc": "smart-lab",
+   "ttmCheck": 584.91,
+   "bvps": 2672.5958866036685,
+   "fwdEps": 664.2300590730338,
+   "fwd": {
+    "eps": 664.2300590730338,
+    "netIncome": 119.48757,
+    "source": "dohod.ru",
+    "basis": "ntm"
+   },
+   "divTtm": 246.88,
+   "divPast": [
+    {
+     "record": "2026-07-20",
+     "amt": 246.88
+    }
+   ],
+   "earnings": {
+    "lastReported": "2026-07-30",
+    "lastPeriod": "Q2 2026",
+    "next": "2026-10-29",
+    "nextPeriod": "Q3 2026",
+    "nextConfirmed": true,
+    "pendingSince": null
+   },
+   "target": {
+    "consensus": 2813.23,
+    "min": 2500,
+    "max": 3350,
+    "rec": "buy",
+    "n": 13
+   }
+  },
+  {
+   "t": "MBNK",
+   "name": "MTS Bank",
+   "price": 948.5,
+   "priceDate": "2026-10-19",
+   "ttmEps": 485,
+   "ttmSrc": "smart-lab",
+   "ttmCheck": 423.12,
+   "bvps": 3365.243593504173,
+   "fwdEps": 416.16437637362634,
+   "fwd": {
+    "eps": 416.16437637362634,
+    "netIncome": 15.61689,
+    "source": "dohod.ru",
+    "basis": "ntm"
+   },
+   "divTtm": 96.12,
+   "divPast": [
+    {
+     "record": "2026-07-10",
+     "amt": 96.12
+    }
+   ],
+   "earnings": {
+    "lastReported": "2026-08-25",
+    "lastPeriod": "Q2 2026",
+    "next": "2026-11-19",
+    "nextPeriod": "Q3 2026",
+    "nextConfirmed": true,
+    "pendingSince": null
+   },
+   "target": {
+    "consensus": 1465.42,
+    "min": 1250,
+    "max": 1800,
+    "rec": "buy",
+    "n": 7
+   }
+  },
+  {
+   "t": "ROSN",
+   "name": "Rosneft",
+   "price": 380.8,
+   "priceDate": "2026-10-19",
+   "ttmEps": 23.4,
+   "ttmSrc": "smart-lab",
+   "ttmCheck": 38.59,
+   "bvps": null,
+   "fwdEps": 58.805294516129024,
+   "fwd": {
+    "eps": 58.805294516129024,
+    "netIncome": 623.2356,
+    "source": "dohod.ru",
+    "basis": "ntm"
+   },
+   "divTtm": 13.83,
+   "divPast": [
+    {
+     "record": "2026-07-09",
+     "amt": 2.27
+    },
+    {
+     "record": "2026-01-12",
+     "amt": 11.56
+    }
+   ],
+   "earnings": {
+    "lastReported": "2026-08-31",
+    "lastPeriod": "Q1 2026",
+    "next": "2027-03-26",
+    "nextPeriod": "Q4 2026",
+    "nextConfirmed": false,
+    "pendingSince": null
+   },
+   "target": {
+    "consensus": 467.7,
+    "min": 380,
+    "max": 560,
+    "rec": "hold",
+    "n": 12
+   }
+  },
+  {
+   "t": "SIBN",
+   "name": "Gazprom Neft",
+   "price": 570,
+   "priceDate": "2026-10-19",
+   "ttmEps": 80.5,
+   "ttmSrc": "smart-lab",
+   "ttmCheck": 79.47,
+   "bvps": null,
+   "fwdEps": 100.41533274777136,
+   "fwd": {
+    "eps": 100.41533274777136,
+    "netIncome": 475.75662,
+    "source": "dohod.ru",
+    "basis": "ntm"
+   },
+   "divTtm": 70.62,
+   "divPast": [
+    {
+     "record": "2026-10-13",
+     "amt": 42.51
+    },
+    {
+     "record": "2026-07-06",
+     "amt": 28.11
+    }
+   ],
+   "earnings": {
+    "lastReported": "2026-08-28",
+    "lastPeriod": "Q1 2026",
+    "next": "2027-05-28",
+    "nextPeriod": "Q1 2027",
+    "nextConfirmed": false,
+    "pendingSince": null
+   },
+   "target": {
+    "consensus": 576.8,
+    "min": 484,
+    "max": 680,
+    "rec": "hold",
+    "n": 11
+   }
+  },
+  {
+   "t": "SNGS",
+   "name": "Surgutneftegas",
+   "price": 17.09,
+   "priceDate": "2026-10-19",
+   "ttmEps": 37,
+   "ttmSrc": "smart-lab",
+   "ttmCheck": 37.01,
+   "bvps": null,
+   "fwdEps": 18.845306278366113,
+   "fwd": {
+    "eps": 18.845306278366113,
+    "netIncome": 673.3376999999999,
+    "source": "dohod.ru",
+    "basis": "ntm"
+   },
+   "divTtm": 0.85,
+   "divPast": [
+    {
+     "record": "2026-07-16",
+     "amt": 0.85
+    }
+   ],
+   "earnings": {
+    "lastReported": "2024-04-27",
+    "lastPeriod": null,
+    "next": null,
+    "nextPeriod": null,
+    "nextConfirmed": false,
+    "pendingSince": null
+   },
+   "target": {
+    "consensus": 22.94,
+    "min": 20,
+    "max": 26,
+    "rec": "buy",
+    "n": 7
+   }
+  },
+  {
+   "t": "GAZP",
+   "name": "Gazprom",
+   "price": 109.09,
+   "priceDate": "2026-10-19",
+   "ttmEps": 61.1,
+   "ttmSrc": "smart-lab",
+   "ttmCheck": 47.32,
+   "bvps": null,
+   "fwdEps": 54.176685477178424,
+   "fwd": {
+    "eps": 54.176685477178424,
+    "netIncome": 1282.152,
+    "source": "dohod.ru",
+    "basis": "ntm"
+   },
+   "divTtm": 0,
+   "earnings": {
+    "lastReported": "2026-08-28",
+    "lastPeriod": "Q1 2026",
+    "next": "2027-05-28",
+    "nextPeriod": "Q1 2027",
+    "nextConfirmed": false,
+    "pendingSince": null
+   },
+   "target": {
+    "consensus": 140.9,
+    "min": 110,
+    "max": 183.4,
+    "rec": "hold",
+    "n": 12
+   }
+  },
+  {
+   "t": "NLMK",
+   "name": "NLMK",
+   "price": 76.86,
+   "priceDate": "2026-10-19",
+   "ttmEps": 6.46,
+   "ttmSrc": "smart-lab",
+   "ttmCheck": 6.46,
+   "bvps": null,
+   "fwdEps": 9.560177369509043,
+   "fwd": {
+    "eps": 9.560177369509043,
+    "netIncome": 57.27227,
+    "source": "dohod.ru",
+    "basis": "ntm"
+   },
+   "divTtm": 0,
+   "earnings": {
+    "lastReported": "2026-07-30",
+    "lastPeriod": null,
+    "next": "2027-03-25",
+    "nextPeriod": null,
+    "nextConfirmed": false,
+    "pendingSince": null
+   },
+   "target": {
+    "consensus": 88.28,
+    "min": 70,
+    "max": 109,
+    "rec": "hold",
+    "n": 12
+   }
+  },
+  {
+   "t": "MAGN",
+   "name": "MMK",
+   "price": 22.93,
+   "priceDate": "2026-10-19",
+   "ttmEps": -3.46,
+   "ttmSrc": "smart-lab",
+   "ttmCheck": -3.46,
+   "bvps": null,
+   "fwdEps": 0.99437192207497,
+   "fwd": {
+    "eps": 0.99437192207497,
+    "netIncome": 11.11144,
+    "source": "dohod.ru",
+    "basis": "ntm"
+   },
+   "divTtm": 0,
+   "earnings": {
+    "lastReported": "2026-07-23",
+    "lastPeriod": null,
+    "next": "2026-10-22",
+    "nextPeriod": null,
+    "nextConfirmed": false,
+    "pendingSince": null
+   },
+   "target": {
+    "consensus": 26.48,
+    "min": 20,
+    "max": 30.2,
+    "rec": "buy",
+    "n": 12
+   }
+  },
+  {
+   "t": "CHMF",
+   "name": "Severstal",
+   "price": 726,
+   "priceDate": "2026-10-19",
+   "ttmEps": -0.76,
+   "ttmSrc": "smart-lab",
+   "ttmCheck": -0.78,
+   "bvps": null,
+   "fwdEps": 137.9779878718426,
+   "fwd": {
+    "eps": 137.9779878718426,
+    "netIncome": 115.58691999999999,
+    "source": "dohod.ru",
+    "basis": "ntm"
+   },
+   "divTtm": 0,
+   "earnings": {
+    "lastReported": "2026-07-20",
+    "lastPeriod": "Q2 2026",
+    "next": "2026-10-20",
+    "nextPeriod": "Q3 2026",
+    "nextConfirmed": true,
+    "pendingSince": null
+   },
+   "target": {
+    "consensus": 774.41,
+    "min": 655,
+    "max": 940,
+    "rec": "hold",
+    "n": 12
+   }
+  },
+  {
+   "t": "RUAL",
+   "name": "Rusal",
+   "price": 25.31,
+   "priceDate": "2026-10-19",
+   "ttmEps": -2.24,
+   "ttmSrc": "smart-lab",
+   "ttmCheck": 0.17,
+   "bvps": null,
+   "fwdEps": 2.8141270228874986,
+   "fwd": {
+    "eps": 2.8141270228874986,
+    "netIncome": 42.75506,
+    "source": "dohod.ru",
+    "basis": "ntm"
+   },
+   "divTtm": 0,
+   "earnings": {
+    "lastReported": "2026-08-19",
+    "lastPeriod": null,
+    "next": "2027-03-17",
+    "nextPeriod": null,
+    "nextConfirmed": false,
+    "pendingSince": null
+   },
+   "target": {
+    "consensus": 39.7,
+    "min": 26,
+    "max": 65,
+    "rec": "hold",
+    "n": 9
+   }
+  },
+  {
+   "t": "PLZL",
+   "name": "Polyus",
+   "price": 1161.2,
+   "priceDate": "2026-10-19",
+   "ttmEps": 149.1,
+   "ttmSrc": "smart-lab",
+   "ttmCheck": 213,
+   "bvps": null,
+   "fwdEps": 252.85480267126664,
+   "fwd": {
+    "eps": 252.85480267126664,
+    "netIncome": 344.09282,
+    "source": "dohod.ru",
+    "basis": "ntm"
+   },
+   "divTtm": 121.85,
+   "divPast": [
+    {
+     "record": "2026-07-13",
+     "amt": 29.05
+    },
+    {
+     "record": "2026-05-18",
+     "amt": 56.8
+    },
+    {
+     "record": "2025-12-22",
+     "amt": 36
+    }
+   ],
+   "earnings": {
+    "lastReported": "2026-08-31",
+    "lastPeriod": "Q4 2025",
+    "next": "2027-03-15",
+    "nextPeriod": "Q4 2026",
+    "nextConfirmed": false,
+    "pendingSince": null
+   },
+   "target": {
+    "consensus": 1393.8,
+    "min": 1000,
+    "max": 1700,
+    "rec": "hold",
+    "n": 8
+   }
+  },
+  {
+   "t": "ALRS",
+   "name": "ALROSA",
+   "price": 20.95,
+   "priceDate": "2026-10-19",
+   "ttmEps": -1.89,
+   "ttmSrc": "smart-lab",
+   "ttmCheck": -2.07,
+   "bvps": null,
+   "fwdEps": 1.3689057796569437,
+   "fwd": {
+    "eps": 1.3689057796569437,
+    "netIncome": 10.08195,
+    "source": "dohod.ru",
+    "basis": "ntm"
+   },
+   "divTtm": 0,
+   "earnings": {
+    "lastReported": "2026-08-27",
+    "lastPeriod": null,
+    "next": "2027-02-26",
+    "nextPeriod": null,
+    "nextConfirmed": false,
+    "pendingSince": null
+   },
+   "target": {
+    "consensus": 26.83,
+    "min": 18,
+    "max": 36,
+    "rec": "hold",
+    "n": 6
+   }
+  },
+  {
+   "t": "MGNT",
+   "name": "Magnit",
+   "price": 1744.5,
+   "priceDate": "2026-10-19",
+   "ttmEps": -400.6,
+   "ttmSrc": "smart-lab",
+   "ttmCheck": -368.92,
+   "bvps": null,
+   "fwdEps": null,
+   "divTtm": 0,
+   "earnings": {
+    "lastReported": "2026-08-28",
+    "lastPeriod": null,
+    "next": "2027-04-29",
+    "nextPeriod": null,
+    "nextConfirmed": false,
+    "pendingSince": null
+   },
+   "target": {
+    "consensus": 2506.66,
+    "min": 1500,
+    "max": 4000,
+    "rec": "hold",
+    "n": 9
+   }
+  },
+  {
+   "t": "LENT",
+   "name": "Lenta",
+   "price": 1760,
+   "priceDate": "2026-10-19",
+   "ttmEps": 305.3,
+   "ttmSrc": "smart-lab",
+   "ttmCheck": 269.05,
+   "bvps": null,
+   "fwdEps": 162.18191446327685,
+   "fwd": {
+    "eps": 162.18191446327685,
+    "netIncome": 18.80524,
+    "source": "dohod.ru",
+    "basis": "ntm"
+   },
+   "divTtm": 0,
+   "earnings": {
+    "lastReported": "2026-08-03",
+    "lastPeriod": null,
+    "next": "2026-10-30",
+    "nextPeriod": null,
+    "nextConfirmed": false,
+    "pendingSince": null
+   },
+   "target": {
+    "consensus": 2373.33,
+    "min": 2000,
+    "max": 2600,
+    "rec": "buy",
+    "n": 9
+   }
+  },
+  {
+   "t": "FIXR",
+   "name": "Fix Price",
+   "price": 0.4074,
+   "priceDate": "2026-10-19",
+   "ttmEps": 0.1,
+   "ttmSrc": "smart-lab",
+   "ttmCheck": 0.1,
+   "bvps": null,
+   "fwdEps": 0.14312663316582916,
+   "fwd": {
+    "eps": 0.14312663316582916,
+    "netIncome": 14.241100000000001,
+    "source": "dohod.ru",
+    "basis": "ntm"
+   },
+   "divTtm": 0.11,
+   "divPast": [
+    {
+     "record": "2026-05-19",
+     "amt": 0.11
+    }
+   ],
+   "earnings": {
+    "lastReported": "2026-08-27",
+    "lastPeriod": "Q2 2026",
+    "next": "2026-10-29",
+    "nextPeriod": "Q3 2026",
+    "nextConfirmed": true,
+    "pendingSince": null
+   },
+   "target": null
+  },
+  {
+   "t": "OZON",
+   "name": "Ozon",
+   "price": 3519,
+   "priceDate": "2026-10-19",
+   "ttmEps": 98.1,
+   "ttmSrc": "smart-lab",
+   "ttmCheck": 99.73,
+   "bvps": null,
+   "fwdEps": 162.3794697169811,
+   "fwd": {
+    "eps": 162.3794697169811,
+    "netIncome": 35.09118,
+    "source": "dohod.ru",
+    "basis": "ntm"
+   },
+   "divTtm": 213.55,
+   "divPast": [
+    {
+     "record": "2026-05-26",
+     "amt": 70
+    },
+    {
+     "record": "2025-12-22",
+     "amt": 143.55
+    }
+   ],
+   "earnings": {
+    "lastReported": "2026-07-30",
+    "lastPeriod": "Q2 2026",
+    "next": "2026-10-28",
+    "nextPeriod": "Q3 2026",
+    "nextConfirmed": true,
+    "pendingSince": null
+   },
+   "target": {
+    "consensus": 5430,
+    "min": 4700,
+    "max": 6800,
+    "rec": "buy",
+    "n": 9
+   }
+  },
+  {
+   "t": "VKCO",
+   "name": "VK",
+   "price": 134.25,
+   "priceDate": "2026-10-19",
+   "ttmEps": -21.8,
+   "ttmSrc": "smart-lab",
+   "ttmCheck": -28.17,
+   "bvps": null,
+   "fwdEps": null,
+   "divTtm": 0,
+   "earnings": {
+    "lastReported": "2026-08-13",
+    "lastPeriod": "Q2 2026",
+    "next": "2026-11-19",
+    "nextPeriod": "Q3 2026",
+    "nextConfirmed": false,
+    "pendingSince": null
+   },
+   "target": {
+    "consensus": 243.57,
+    "min": 150,
+    "max": 345,
+    "rec": "buy",
+    "n": 7
+   }
+  },
+  {
+   "t": "POSI",
+   "name": "Positive Technologies",
+   "price": 1151.6,
+   "priceDate": "2026-10-19",
+   "ttmEps": 153.6,
+   "ttmSrc": "smart-lab",
+   "ttmCheck": 153.42,
+   "bvps": null,
+   "fwdEps": 110.92188770642201,
+   "fwd": {
+    "eps": 110.92188770642201,
+    "netIncome": 7.87141,
+    "source": "dohod.ru",
+    "basis": "ntm"
+   },
+   "divTtm": 28.08,
+   "divPast": [
+    {
+     "record": "2026-05-17",
+     "amt": 28.08
+    }
+   ],
+   "earnings": {
+    "lastReported": "2026-07-27",
+    "lastPeriod": "Q2 2026",
+    "next": "2026-11-10",
+    "nextPeriod": "Q3 2026",
+    "nextConfirmed": true,
+    "pendingSince": null
+   },
+   "target": {
+    "consensus": 1469,
+    "min": 920,
+    "max": 2000,
+    "rec": "buy",
+    "n": 10
+   }
+  },
+  {
+   "t": "ASTR",
+   "name": "Astra Group",
+   "price": 219.65,
+   "priceDate": "2026-10-19",
+   "ttmEps": 32.8,
+   "ttmSrc": "smart-lab",
+   "ttmCheck": 30.9,
+   "bvps": null,
+   "fwdEps": 33.513352325581394,
+   "fwd": {
+    "eps": 33.513352325581394,
+    "netIncome": 7.02963,
+    "source": "dohod.ru",
+    "basis": "ntm"
+   },
+   "divTtm": 4.676532246,
+   "divPast": [
+    {
+     "record": "2026-06-01",
+     "amt": 4.676532246
+    }
+   ],
+   "earnings": {
+    "lastReported": "2026-08-26",
+    "lastPeriod": "Q2 2026",
+    "next": "2026-11-26",
+    "nextPeriod": "Q3 2026",
+    "nextConfirmed": false,
+    "pendingSince": null
+   },
+   "target": {
+    "consensus": 325,
+    "min": 250,
+    "max": 500,
+    "rec": "buy",
+    "n": 9
+   }
+  }
+ ],
+ "universe": [
+  {
+   "t": "AFKS",
+   "name": "Система ао",
+   "price": 7.922,
+   "ttmEps": -16.9,
+   "fwdEps": null,
+   "divTtm": 0,
+   "ttmSrc": "smart-lab"
+  },
+  {
+   "t": "AFLT",
+   "name": "Аэрофлот",
+   "price": 35.87,
+   "ttmEps": 4.72,
+   "fwdEps": 10.201684978723405,
+   "divTtm": 5.29,
+   "ttmSrc": "smart-lab"
+  },
+  {
+   "t": "ENPG",
+   "name": "ЭН+ГРУП ао",
+   "price": 316.05,
+   "ttmEps": 91.9,
+   "fwdEps": 118.36615105621804,
+   "divTtm": 0,
+   "ttmSrc": "smart-lab"
+  },
+  {
+   "t": "FLOT",
+   "name": "Совкомфлот",
+   "price": 87.71,
+   "ttmEps": 2.13,
+   "fwdEps": 15.041592747035573,
+   "divTtm": 4.87,
+   "ttmSrc": "smart-lab"
+  },
+  {
+   "t": "IRAO",
+   "name": "ИнтерРАОао",
+   "price": 2.598,
+   "ttmEps": 1.11,
+   "fwdEps": 1.1649367635893013,
+   "divTtm": 0.321425305,
+   "ttmSrc": "smart-lab"
+  },
+  {
+   "t": "MDMG",
+   "name": "MDMG-ао",
+   "price": 1306.8,
+   "ttmEps": 146.5,
+   "fwdEps": 156.90229909090908,
+   "divTtm": 85,
+   "ttmSrc": "smart-lab"
+  },
+  {
+   "t": "MOEX",
+   "name": "МосБиржа",
+   "price": 154.59,
+   "ttmEps": 28.1,
+   "fwdEps": 29.22776425665102,
+   "divTtm": 19.57,
+   "ttmSrc": "smart-lab"
+  },
+  {
+   "t": "MTSS",
+   "name": "МТС-ао",
+   "price": 176.25,
+   "ttmEps": 27.2,
+   "fwdEps": 38.6581,
+   "divTtm": 35,
+   "ttmSrc": "smart-lab"
+  },
+  {
+   "t": "PHOR",
+   "name": "ФосАгро ао",
+   "price": 5790,
+   "ttmEps": 461.9,
+   "fwdEps": 480.2973688628762,
+   "divTtm": 0,
+   "ttmSrc": "smart-lab"
+  },
+  {
+   "t": "RAGR",
+   "name": "Русагро",
+   "price": 73.1,
+   "ttmEps": 12,
+   "fwdEps": 23.605147826086956,
+   "divTtm": 16.48,
+   "ttmSrc": "smart-lab"
+  },
+  {
+   "t": "RENI",
+   "name": "Ренессанс",
+   "price": 71.52,
+   "ttmEps": 9.05,
+   "fwdEps": 8.934684325396827,
+   "divTtm": 4.1,
+   "ttmSrc": "smart-lab"
+  },
+  {
+   "t": "RTKM",
+   "name": "Ростел -ао",
+   "price": 43.04,
+   "ttmEps": 3.11,
+   "fwdEps": 7.655359519607843,
+   "divTtm": 2.71,
+   "ttmSrc": "smart-lab"
+  },
+  {
+   "t": "SBERP",
+   "name": "Сбербанк-п",
+   "price": 287.55,
+   "ttmEps": 86.6,
+   "fwdEps": 93.19977441626538,
+   "divTtm": 37.64,
+   "ttmSrc": "smart-lab"
+  },
+  {
+   "t": "SNGSP",
+   "name": "Сургнфгз-п",
+   "price": 41,
+   "ttmEps": 37,
+   "fwdEps": 18.845306278366113,
+   "divTtm": 0.85,
+   "ttmSrc": "smart-lab"
+  },
+  {
+   "t": "TATNP",
+   "name": "Татнфт 3ап",
+   "price": 601,
+   "ttmEps": 122,
+   "fwdEps": 124.28423656884877,
+   "divTtm": 52.620000000000005,
+   "ttmSrc": "smart-lab"
+  },
+  {
+   "t": "TRNFP",
+   "name": "Транснф ап",
+   "price": 1070,
+   "ttmEps": 388.1,
+   "fwdEps": 446.2950506063349,
+   "divTtm": 204.17,
+   "ttmSrc": "smart-lab"
+  },
+  {
+   "t": "UGLD",
+   "name": "ЮГК",
+   "price": 0.732,
+   "ttmEps": 0.1,
+   "fwdEps": 0.13750214592274676,
+   "divTtm": 0,
+   "ttmSrc": "smart-lab"
+  }
+ ],
+ "indexWeights": [
+  {
+   "t": "AFKS",
+   "w": 0.0026
+  },
+  {
+   "t": "AFLT",
+   "w": 0.0047
+  },
+  {
+   "t": "ALRS",
+   "w": 0.0034
+  },
+  {
+   "t": "BSPB",
+   "w": 0.0039
+  },
+  {
+   "t": "CBOM",
+   "w": 0.0086
+  },
+  {
+   "t": "CHMF",
+   "w": 0.0093
+  },
+  {
+   "t": "CNRU",
+   "w": 0.0034
+  },
+  {
+   "t": "DOMRF",
+   "w": 0.0062
+  },
+  {
+   "t": "ENPG",
+   "w": 0.0044
+  },
+  {
+   "t": "FLOT",
+   "w": 0.0038
+  },
+  {
+   "t": "GAZP",
+   "w": 0.1011
+  },
+  {
+   "t": "GMKN",
+   "w": 0.0386
+  },
+  {
+   "t": "HEAD",
+   "w": 0.0112
+  },
+  {
+   "t": "IRAO",
+   "w": 0.0099
+  },
+  {
+   "t": "LKOH",
+   "w": 0.1721
+  },
+  {
+   "t": "MAGN",
+   "w": 0.0051
+  },
+  {
+   "t": "MDMG",
+   "w": 0.0039
+  },
+  {
+   "t": "MOEX",
+   "w": 0.0107
+  },
+  {
+   "t": "MTSS",
+   "w": 0.0094
+  },
+  {
+   "t": "NLMK",
+   "w": 0.008
+  },
+  {
+   "t": "NVTK",
+   "w": 0.0477
+  },
+  {
+   "t": "OZON",
+   "w": 0.0326
+  },
+  {
+   "t": "PHOR",
+   "w": 0.0071
+  },
+  {
+   "t": "PLZL",
+   "w": 0.0231
+  },
+  {
+   "t": "POSI",
+   "w": 0.0036
+  },
+  {
+   "t": "RAGR",
+   "w": 0.0023
+  },
+  {
+   "t": "RENI",
+   "w": 0.0021
+  },
+  {
+   "t": "ROSN",
+   "w": 0.0293
+  },
+  {
+   "t": "RTKM",
+   "w": 0.0047
+  },
+  {
+   "t": "RUAL",
+   "w": 0.008
+  },
+  {
+   "t": "SBER",
+   "w": 0.1178
+  },
+  {
+   "t": "SBERP",
+   "w": 0.0227
+  },
+  {
+   "t": "SNGS",
+   "w": 0.0178
+  },
+  {
+   "t": "SNGSP",
+   "w": 0.0189
+  },
+  {
+   "t": "SVCB",
+   "w": 0.0064
+  },
+  {
+   "t": "T",
+   "w": 0.0488
+  },
+  {
+   "t": "TATN",
+   "w": 0.0545
+  },
+  {
+   "t": "TATNP",
+   "w": 0.0115
+  },
+  {
+   "t": "TRNFP",
+   "w": 0.0047
+  },
+  {
+   "t": "UGLD",
+   "w": 0.0029
+  },
+  {
+   "t": "VKCO",
+   "w": 0.0023
+  },
+  {
+   "t": "VTBR",
+   "w": 0.024
+  },
+  {
+   "t": "X5",
+   "w": 0.0281
+  },
+  {
+   "t": "YDEX",
+   "w": 0.0585
+  }
+ ],
+ "notes": []
+}

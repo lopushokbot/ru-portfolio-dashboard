@@ -1,5 +1,4 @@
 .env
-__pycache__/
-*.pyc
-output/
 logs/
+node_modules/
+.DS_Store

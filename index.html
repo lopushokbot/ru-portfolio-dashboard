@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Russian Portfolio · Valuation Dashboard</title>
+<meta name="description" content="Trailing and forward P/E for a 10-stock Russian portfolio versus peer groups and a bottom-up MOEX Russia Index, with dividend yields, analyst targets and the equity–OFZ yield gap. Refreshes every morning from MOEX, smart-lab and T-Investments.">
+<meta property="og:title" content="Russian Portfolio · Valuation Dashboard">
+<meta property="og:description" content="Trailing &amp; forward P/E vs peers and the MOEX Russia Index, dividends, analyst targets, yield gap vs OFZ. Refreshes daily.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://lopushokbot.github.io/ru-portfolio-dashboard/">
+<link rel="canonical" href="https://lopushokbot.github.io/ru-portfolio-dashboard/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230071e3'/%3E%3Crect x='12' y='34' width='9' height='18' rx='2' fill='white'/%3E%3Crect x='27' y='22' width='9' height='30' rx='2' fill='white'/%3E%3Crect x='42' y='12' width='9' height='40' rx='2' fill='white'/%3E%3C/svg%3E">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="RU Valuation">
+<meta name="theme-color" content="#f5f5f7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<style>
+/* ---------- Fonts ---------- */
+@font-face { font-family: "New York"; src: url("assets/fonts/NewYorkLarge-Regular.otf") format("opentype"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "New York"; src: url("assets/fonts/NewYorkLarge-Medium.otf") format("opentype"); font-weight: 500; font-style: normal; font-display: swap; }
+@font-face { font-family: "New York"; src: url("assets/fonts/NewYorkLarge-Semibold.otf") format("opentype"); font-weight: 600; font-style: normal; font-display: swap; }
+@font-face { font-family: "New York"; src: url("assets/fonts/NewYorkLarge-Bold.otf") format("opentype"); font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: "Inter"; src: url("assets/fonts/InterVariable.woff2") format("woff2"); font-weight: 100 900; font-style: normal; font-display: swap; }
+
+/* ---------- Tokens ---------- */
+:root {
+  color-scheme: light dark;
+  --page: #f5f5f7;
+  --card: #ffffff;
+  --ink: #1d1d1f;
+  --ink-2: #52514e;
+  --muted: #86868b;
+  --hairline: rgba(0,0,0,0.08);
+  --grid: #e8e8ed;
+  --accent: #0071e3;
+  --accent-soft: rgba(0,113,227,0.10);
+  --good: #006300;
+  --bad: #b04a17;
+  --tick: #1d1d1f;
+  --shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --page: #000000;
+    --card: #1c1c1e;
+    --ink: #f5f5f7;
+    --ink-2: #c3c2b7;
+    --muted: #98989d;
+    --hairline: rgba(255,255,255,0.12);
+    --grid: #2c2c2e;
+    --accent: #2997ff;
+    --accent-soft: rgba(41,151,255,0.14);
+    --good: #30d158;
+    --bad: #ff9f0a;
+    --tick: #f5f5f7;
+    --shadow: none;
+  }
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: "Inter", -apple-system, system-ui, sans-serif;
+  background: var(--page);
+  color: var(--ink);
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+/* ---------- Hero ---------- */
+header { padding: 80px 0 48px; text-align: center; }
+.eyebrow {
+  font-size: 13px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 16px;
+}
+h1 {
+  font-family: "New York", Georgia, serif;
+  font-size: clamp(36px, 6vw, 56px);
+  font-weight: 700; letter-spacing: -0.015em; line-height: 1.1;
+  margin-bottom: 16px;
+}
+.sub { font-size: 18px; color: var(--muted); max-width: 640px; margin: 0 auto; font-weight: 400; }
+.sub strong { color: var(--ink-2); font-weight: 500; }
+.stamp { font-size: 13px; color: var(--muted); margin-top: 14px; }
+.stamp .warn { color: var(--bad); }
+
+/* ---------- Sections ---------- */
+section { padding: 32px 0; }
+.section-title {
+  font-family: "New York", Georgia, serif;
+  font-size: 28px; font-weight: 600; letter-spacing: -0.01em; margin-bottom: 6px;
+}
+.section-sub { font-size: 15px; color: var(--muted); margin-bottom: 24px; }
+
+/* ---------- Benchmark tiles ---------- */
+.tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+@media (max-width: 860px) { .tiles { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) { .tiles { grid-template-columns: 1fr; } .tile { padding: 24px 20px; } }
+.tile {
+  background: var(--card); border-radius: 16px; padding: 28px 24px;
+  box-shadow: var(--shadow); border: 1px solid var(--hairline);
+}
+.tile .label { font-size: 13px; font-weight: 600; color: var(--muted); letter-spacing: 0.04em; text-transform: uppercase; }
+.tile .index-name { font-size: 15px; font-weight: 600; color: var(--ink-2); margin-top: 2px; }
+.tile .value {
+  font-size: 44px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.15;
+  margin: 10px 0 6px;
+}
+.tile .value small { font-size: 22px; font-weight: 500; color: var(--muted); }
+.tile .context { font-size: 13px; color: var(--muted); }
+.tile .kv { margin: 14px 0 12px; padding-top: 12px; border-top: 1px solid var(--hairline); font-size: 13px; line-height: 1.5; }
+.tile .kv div { display: flex; justify-content: space-between; gap: 12px; }
+.tile .kv dt { color: var(--muted); white-space: nowrap; }
+.tile .kv dd { color: var(--ink); font-weight: 500; font-variant-numeric: tabular-nums; text-align: right; }
+.tile .kv .src dd { color: var(--ink-2); font-weight: 400; }
+
+/* ---------- Cards ---------- */
+.card {
+  background: var(--card); border-radius: 16px; padding: 32px;
+  box-shadow: var(--shadow); border: 1px solid var(--hairline);
+}
+@media (max-width: 640px) { .card { padding: 20px 16px; } }
+.card + .card { margin-top: 24px; }
+
+/* ---------- Chart ---------- */
+.legend { display: flex; flex-wrap: wrap; gap: 20px; font-size: 13px; color: var(--ink-2); margin-bottom: 20px; }
+.legend span { display: inline-flex; align-items: center; gap: 7px; }
+.sw-bar { width: 14px; height: 8px; border-radius: 3px; background: var(--accent); }
+.sw-tick { width: 3px; height: 14px; border-radius: 1.5px; background: var(--tick); }
+.sw-ref { width: 16px; height: 0; border-top: 2px dashed var(--muted); }
+.chart-scroll { overflow-x: auto; }
+.chart-svg { display: block; width: 100%; min-width: 720px; height: auto; font-family: "Inter", system-ui, sans-serif; }
+.chart-svg .row-hit { fill: transparent; cursor: default; }
+.chart-svg g:hover rect.bar { fill-opacity: 0.85; }
+.chart-note { font-size: 13px; color: var(--muted); margin-top: 16px; }
+
+.tooltip {
+  position: fixed; pointer-events: none; z-index: 50; opacity: 0;
+  transition: opacity 0.15s ease;
+  background: var(--card); color: var(--ink);
+  border: 1px solid var(--hairline); border-radius: 12px;
+  padding: 10px 14px; font-size: 13px; line-height: 1.5;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.16); max-width: 280px;
+}
+.tooltip .tt-title { font-weight: 600; margin-bottom: 2px; }
+.tooltip .tt-line { color: var(--ink-2); }
+
+/* ---------- Table ---------- */
+.table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+table { width: 100%; border-collapse: collapse; font-size: 14.5px; min-width: 960px; }
+tbody td:first-child { max-width: 190px; }
+.co .nm { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+thead th {
+  font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--muted); text-align: right; padding: 0 8px 12px;
+  border-bottom: 1px solid var(--hairline); white-space: nowrap;
+  cursor: pointer; user-select: none;
+}
+thead th:first-child { text-align: left; padding-left: 0; }
+thead th .arrow { font-size: 10px; opacity: 0; margin-left: 3px; }
+thead th.sorted .arrow { opacity: 1; }
+tbody td {
+  padding: 14px 8px; text-align: right; border-bottom: 1px solid var(--hairline);
+  font-variant-numeric: tabular-nums; white-space: nowrap;
+}
+tbody tr:last-child td { border-bottom: none; }
+tbody td:first-child { text-align: left; padding-left: 0; }
+tbody tr { transition: background 0.2s ease; }
+tbody tr:hover { background: var(--accent-soft); }
+.co { display: flex; flex-direction: column; line-height: 1.35; }
+.co .tk { font-weight: 600; font-size: 15px; }
+.co .nm { font-size: 12.5px; color: var(--muted); }
+.val-strong { font-weight: 600; }
+.stack { display: inline-flex; flex-direction: column; align-items: flex-end; line-height: 1.3; }
+.stack .eps { font-size: 12px; font-weight: 400; color: var(--muted); }
+.price { font-weight: 500; }
+.val-muted { color: var(--muted); }
+.nm-flag { color: var(--muted); font-weight: 400; }
+.badge {
+  display: inline-block; font-size: 10.5px; font-weight: 700; letter-spacing: 0.05em;
+  color: var(--accent); background: var(--accent-soft);
+  border-radius: 6px; padding: 1.5px 6px; margin-left: 7px; vertical-align: middle;
+}
+.delta-neg { color: var(--good); font-weight: 500; }
+.delta-pos { color: var(--bad); font-weight: 500; }
+sup.fn { font-size: 10px; color: var(--accent); font-weight: 600; cursor: help; }
+
+/* ---------- Earnings cell + calendar ---------- */
+.earn { display: inline-flex; flex-direction: column; align-items: flex-end; line-height: 1.3; font-size: 13.5px; }
+.earn .nx { font-weight: 500; }
+.earn .nx.soon { color: var(--accent); font-weight: 600; }
+.earn .ls { font-size: 12px; color: var(--muted); }
+.earn .pend { color: var(--bad); font-weight: 500; }
+.earn .est { font-size: 11px; color: var(--muted); font-weight: 400; }
+.cal { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 40px; }
+@media (max-width: 720px) { .cal { grid-template-columns: 1fr; gap: 24px; } }
+.cal-h { font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+.ce { display: grid; grid-template-columns: 92px 56px 1fr auto; gap: 12px; align-items: baseline; padding: 10px 0; border-bottom: 1px solid var(--hairline); font-size: 14px; }
+.ce:last-child { border-bottom: none; }
+.ce .cd { font-variant-numeric: tabular-nums; color: var(--ink-2); }
+.ce .ct { font-weight: 600; }
+.ce .cn { color: var(--muted); font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ce .cs { font-size: 12px; color: var(--muted); white-space: nowrap; }
+.ce .cs.ok { color: var(--good); }
+.ce.soon .cd { color: var(--accent); font-weight: 600; }
+.cal-empty { font-size: 13.5px; color: var(--muted); padding: 10px 0; }
+@media (max-width: 480px) { .ce { grid-template-columns: 96px 1fr auto; } .ce .cn { display: none; } }
+
+/* ---------- Peer groups ---------- */
+.peers { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px 32px; }
+@media (max-width: 720px) { .peers { grid-template-columns: 1fr; } }
+.peer { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--hairline); font-size: 14.5px; }
+.peer .pl { display: flex; flex-direction: column; line-height: 1.35; }
+.peer .pl .pn { font-weight: 600; }
+.peer .pl .pm { font-size: 12.5px; color: var(--muted); }
+.peer .pv { font-variant-numeric: tabular-nums; white-space: nowrap; color: var(--ink-2); text-align: right; line-height: 1.35; }
+.peer .pv b { color: var(--ink); font-weight: 600; }
+
+/* ---------- History bands ---------- */
+.sw-band { width: 16px; height: 8px; border-radius: 4px; background: var(--accent-soft); border: 1px solid var(--accent); }
+.sw-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--accent); }
+.hist { display: flex; flex-direction: column; }
+.hrow { display: grid; grid-template-columns: 56px 1fr 176px; align-items: center; gap: 16px; padding: 9px 0; border-bottom: 1px solid var(--hairline); font-size: 13.5px; }
+.hrow:last-child { border-bottom: none; }
+.hrow .ht { font-weight: 600; }
+.hrow .hv { text-align: right; font-variant-numeric: tabular-nums; color: var(--ink-2); white-space: nowrap; }
+.hrow .hv b { color: var(--ink); font-weight: 600; }
+.hrow .hv .pos { display: block; font-size: 12px; color: var(--muted); }
+.track { position: relative; height: 26px; }
+.track .lo, .track .hi { position: absolute; top: 50%; transform: translateY(-50%); font-size: 11.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.track .lo { left: 0; } .track .hi { right: 0; }
+.track .band { position: absolute; top: 9px; height: 8px; border-radius: 4px; background: var(--accent-soft); }
+.track .med { position: absolute; top: 5px; width: 2px; height: 16px; border-radius: 1px; background: var(--tick); }
+.track .dot { position: absolute; top: 7px; width: 12px; height: 12px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 2px var(--card); transform: translateX(-50%); }
+.track .dot.out { background: var(--bad); }
+.hrow.na .track { color: var(--muted); font-size: 12.5px; display: flex; align-items: center; }
+@media (max-width: 640px) { .hrow { grid-template-columns: 48px 1fr 96px; gap: 10px; } .track .lo, .track .hi { display: none; } .hrow .hv { white-space: normal; } .hrow .hv .pos { white-space: normal; } .peer { flex-direction: column; align-items: flex-start; gap: 4px; } .peer .pv { text-align: left; white-space: normal; } }
+
+/* ---------- Footnotes & methodology ---------- */
+.notes { font-size: 13.5px; color: var(--muted); line-height: 1.7; }
+.notes li { margin-bottom: 8px; margin-left: 18px; }
+.notes b { color: var(--ink-2); font-weight: 600; }
+.method h3 { font-family: "New York", Georgia, serif; font-size: 20px; font-weight: 600; margin-bottom: 10px; }
+.method p { font-size: 14px; color: var(--muted); margin-bottom: 10px; }
+
+footer { padding: 48px 0 64px; text-align: center; font-size: 13px; color: var(--muted); }
+
+/* ---------- Fade-in ---------- */
+.fade { opacity: 0; transform: translateY(14px); transition: opacity 0.55s ease, transform 0.55s ease; }
+.fade.in { opacity: 1; transform: none; }
+
+/* ---------- Loading / error ---------- */
+#loading { text-align: center; color: var(--muted); padding: 40px 0; font-size: 15px; }
+.stack .eps { white-space: nowrap; }
+.peer .pl .pm + .pm { margin-top: 2px; font-style: italic; }
+.tile .label { display: flex; justify-content: space-between; }
+</style>
+</head>
+<body>
+
+<header class="wrap">
+  <div class="eyebrow" id="eyebrow">Portfolio</div>
+  <h1>Russian Equity Valuation</h1>
+  <p class="sub">Trailing and forward multiples for every holding, measured against its peer group and the MOEX Russia Index.</p>
+  <p class="stamp" id="stamp">Loading latest prices…</p>
+</header>
+
+<main class="wrap">
+  <div id="loading"></div>
+
+  <section class="fade">
+    <h2 class="section-title">Market benchmarks</h2>
+    <p class="section-sub">The MOEX Russia Index rebuilt bottom-up from all of its constituents at their index weights, with the same earnings definitions as the stocks below — and set against the risk-free rate.</p>
+    <div class="tiles" id="tiles"></div>
+  </section>
+
+  <section class="fade">
+    <div class="card">
+      <h2 class="section-title">Trailing P/E</h2>
+      <p class="section-sub">Price ÷ last twelve months' IFRS earnings per share. Marker shows the peer-group median.</p>
+      <div class="legend">
+        <span><span class="sw-bar"></span>Holding</span>
+        <span><span class="sw-tick"></span>Peer median</span>
+        <span><span class="sw-ref"></span>MOEX Russia · <span id="ref-ttm"></span></span>
+      </div>
+      <div class="chart-scroll"><svg id="chart-ttm" class="chart-svg" role="img" aria-label="Trailing P/E by holding with peer median markers"></svg></div>
+      <p class="chart-note" id="note-ttm"></p>
+    </div>
+
+    <div class="card">
+      <h2 class="section-title">Forward P/E</h2>
+      <p class="section-sub">Price ÷ next twelve months' forecast earnings per share (dohod.ru). Marker shows the peer-group median.</p>
+      <div class="legend">
+        <span><span class="sw-bar"></span>Holding</span>
+        <span><span class="sw-tick"></span>Peer median</span>
+        <span><span class="sw-ref"></span>MOEX Russia · <span id="ref-fwd"></span></span>
+      </div>
+      <div class="chart-scroll"><svg id="chart-fwd" class="chart-svg" role="img" aria-label="Forward P/E by holding with peer median markers"></svg></div>
+      <p class="chart-note" id="note-fwd"></p>
+    </div>
+
+    <div class="card">
+      <h2 class="section-title">Versus its own history</h2>
+      <p class="section-sub">Where today's trailing P/E sits inside each stock's 5-year range (quarterly, loss quarters excluded). Band = low to high, tick = median, dot = today.</p>
+      <div class="legend">
+        <span><span class="sw-band"></span>5-year range</span>
+        <span><span class="sw-tick"></span>5-year median</span>
+        <span><span class="sw-dot"></span>Today</span>
+      </div>
+      <div class="hist" id="hist"></div>
+      <p class="chart-note" id="note-hist"></p>
+    </div>
+  </section>
+
+  <section class="fade">
+    <div class="card">
+      <h2 class="section-title">Holdings</h2>
+      <p class="section-sub">Every multiple is today's price divided by the per-share figure beneath it — trailing-twelve-month IFRS EPS, next-twelve-months forecast EPS, or dividends paid over the last year. Numbers refresh every morning. Click a column to sort.</p>
+      <div class="table-scroll">
+        <table id="holdings">
+          <thead>
+            <tr>
+              <th data-k="t">Company<span class="arrow">▾</span></th>
+              <th data-k="price" id="th-price" title="Last official MOEX close — used for every multiple in the row">Price<span class="arrow">▾</span></th>
+              <th data-k="ttmPe" title="Price ÷ trailing-twelve-month IFRS EPS">Trailing<span class="arrow">▾</span></th>
+              <th data-k="fwdPe" title="Price ÷ next-twelve-months forecast EPS (dohod.ru)">Forward<span class="arrow">▾</span></th>
+              <th data-k="dy" title="Dividends with a record date in the last 12 months ÷ price">Div yield<span class="arrow">▾</span></th>
+              <th data-k="secT" title="Peer median, trailing">Peers T<span class="arrow">▾</span></th>
+              <th data-k="secF" title="Peer median, forward">Peers F<span class="arrow">▾</span></th>
+              <th data-k="delta" title="Forward P/E vs the peer median (trailing where no forward)">vs Peers<span class="arrow">▾</span></th>
+              <th data-k="upside" title="Analyst consensus 12-month target price (T-Investments) and upside from today's price">Target<span class="arrow">▾</span></th>
+              <th data-k="nextTs" title="Next IFRS report (top) · last report (bottom)">Next report<span class="arrow">▾</span></th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <p class="chart-note" id="note-hidden"></p>
+    </div>
+  </section>
+
+  <section class="fade">
+    <div class="card">
+      <h2 class="section-title">Reports &amp; dividends</h2>
+      <p class="section-sub">The dashboard re-reads every company's numbers each morning at 8:00 Dubai, so a new report or a dividend decision is in the table by the next morning.</p>
+      <div class="cal">
+        <div><h4 class="cal-h">Upcoming</h4><div id="cal-next"></div></div>
+        <div><h4 class="cal-h">Recently reported</h4><div id="cal-last"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="fade">
+    <div class="card">
+      <h2 class="section-title">Peer groups</h2>
+      <p class="section-sub">Each benchmark is the median of its members' own multiples at today's prices (mean for reference) — loss-makers are left out of the median. Hover a ticker for its price and earnings.</p>
+      <div class="peers" id="peers"></div>
+    </div>
+  </section>
+
+  <section class="fade">
+    <div class="card method">
+      <h3>Notes</h3>
+      <ol class="notes" id="notes"></ol>
+    </div>
+  </section>
+
+  <section class="fade">
+    <div class="card method">
+      <h3>Methodology &amp; sources</h3>
+      <p><b>Prices</b> are the official closing prices of the Moscow Exchange main session (MOEX ISS), refreshed every morning at 8:00 Dubai. <b>Trailing EPS</b> is IFRS earnings per share over the last twelve months — the last four quarters, or the last two half-years for semi-annual reporters (LUKOIL, NOVATEK, Tatneft, Norilsk Nickel) — from smart-lab.ru, cross-checked against T-Investments (T-Bank) fundamentals; disagreements above 25% are flagged in the Notes. <b>Forward EPS</b> is dohod.ru's forecast of net income over the next twelve months, divided by the same share count as trailing EPS so both multiples are like-for-like.</p>
+      <p><b>Index multiples</b> are rebuilt from scratch on every run: P/E = 1 ÷ Σ weight × (EPS ÷ price) over all MOEX Russia Index constituents at their published free-float weights — equivalent to Σ float-adjusted market cap ÷ Σ float-adjusted earnings. Loss-makers are included, as index providers do; the tile also shows the figure without them. Ordinary and preferred shares (SBER/SBERP, TATN/TATNP, SNGS/SNGSP) each carry their own weight and price against the same company EPS.</p>
+      <p><b>Dividend yield</b> = dividends with a record date in the last twelve months ÷ today's price (T-Investments dividend register); <b>next dividend</b> = the next declared or board-recommended payment. <b>Target</b> = T-Investments analyst consensus 12-month target price. <b>Yield gap</b> = the index earnings yield (1 ÷ P/E) minus the 10-year OFZ zero-coupon yield (MOEX G-curve). <b>History bands</b> = smart-lab quarterly trailing P/E over five years. No Yahoo Finance data is used — its Russian quotes and share counts have been unreliable since 2022. Numbers are for reference only — not investment advice.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="wrap" id="footer">Russian Portfolio Valuation Dashboard</footer>
+
+<div class="tooltip" id="tt"></div>
+<script>
+/* ================= Helpers ================= */
+const fx = (v, dp = 1) => v == null ? null : v.toFixed(dp);
+const mult = v => v == null ? `<span class="nm-flag">N/M</span>` : `${fx(v)}×`;
+const rub = (v, dp) => {
+  if (v == null) return "—";
+  const a = Math.abs(v), d = dp ?? (a >= 1000 ? 0 : a >= 10 ? 2 : a >= 1 ? 2 : 3);
+  return `${v < 0 ? "−" : ""}₽${a.toLocaleString("en-US", { minimumFractionDigits: d, maximumFractionDigits: d })}`;
+};
+const pct = (v, dp = 1) => v == null ? "—" : `${v.toFixed(dp)}%`;
+const fnSup = f => f && f.length ? `<sup class="fn">${f.join(",")}</sup>` : "";
+const mean = a => { const v = a.filter(x => x != null); return v.length ? v.reduce((p, c) => p + c, 0) / v.length : null; };
+const median = a => {
+  const v = a.filter(x => x != null).sort((p, q) => p - q);
+  if (!v.length) return null;
+  const h = v.length >> 1;
+  return v.length % 2 ? v[h] : (v[h - 1] + v[h]) / 2;
+};
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+let DATA, ALL = {}, rows = [], IDX, FN = {}, HIDDEN = [];
+const TODAY = new Date().toISOString().slice(0, 10);
+
+function multiples(s) {
+  if (!s) return { ttmPe: null, fwdPe: null };
+  return {
+    ttmPe: s.price && s.ttmEps > 0 ? s.price / s.ttmEps : null,
+    fwdPe: s.price && s.fwdEps > 0 ? s.price / s.fwdEps : null,
+  };
+}
+
+/* Peer benchmark = median of members' positive multiples (loss-makers are N/M and drop out) */
+function groupStats(key) {
+  const g = DATA.groups[key];
+  const ms = g.members.map(m => multiples(ALL[m]));
+  return {
+    t: median(ms.map(m => m.ttmPe)), f: median(ms.map(m => m.fwdPe)),
+    tMean: mean(ms.map(m => m.ttmPe)), fMean: mean(ms.map(m => m.fwdPe)),
+  };
+}
+
+function derive(s) {
+  const m = multiples(s), gm = groupStats(s.group), g = DATA.groups[s.group];
+  const delta = m.fwdPe && gm.f ? m.fwdPe / gm.f - 1 : (m.ttmPe && gm.t ? m.ttmPe / gm.t - 1 : null);
+  const dy = s.price && s.divTtm != null ? (s.divTtm / s.price) * 100 : null;
+  const upside = s.target?.consensus && s.price ? s.target.consensus / s.price - 1 : null;
+  const e = s.earnings || {};
+  const pending = !!e.pendingSince;
+  return { ...s, ...m, secT: gm.t, secF: gm.f, delta, deltaBasis: m.fwdPe && gm.f ? "fwd" : "ttm", dy, upside,
+    groupShort: g.short, groupLabel: g.label, nextTs: e.next ? Date.parse(e.next) : null, pending };
+}
+
+/* ================= Dates ================= */
+const shortDate = iso => new Date(iso + "T12:00:00Z").toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" });
+const longDate = iso => iso ? new Date(String(iso).slice(0, 10) + "T12:00:00Z").toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric", timeZone: "UTC" }) : "—";
+const wkDate = iso => new Date(iso + "T12:00:00Z").toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric", timeZone: "UTC" });
+const lvl = v => v.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const daysTo = iso => Math.round((Date.parse(iso) - Date.parse(TODAY)) / 864e5);
+
+/* ================= Renderers ================= */
+function renderStamp() {
+  const m = DATA.meta;
+  const warn = (m.warnings || []).length ? ` · <span class="warn" title="${esc(m.warnings.join(" · "))}">${m.warnings.length} data warning${m.warnings.length > 1 ? "s" : ""}</span>` : "";
+  const built = new Date(m.builtAt).toLocaleString("en-GB", { timeZone: "Asia/Dubai", day: "numeric", month: "long", hour: "2-digit", minute: "2-digit", hourCycle: "h23" });
+  document.getElementById("stamp").innerHTML =
+    `<strong>Prices: MOEX close ${longDate(m.pricesAsOf)}</strong> · earnings checked ${built} Dubai · refreshes every morning${warn}`;
+  document.getElementById("footer").textContent = `Russian Portfolio Valuation Dashboard · Prices ${longDate(m.pricesAsOf)} · Updated ${built} Dubai`;
+}
+
+function indexPe(ix, kind) {
+  const b = ix[kind];
+  if (!b || !b.pe) return null;
+  const eps = b.level / b.pe;
+  return { ...b, eps, live: ix.price / eps, liveEx: b.exLoss ? b.exLoss * ix.price / b.level : null };
+}
+function renderTiles() {
+  const ix = DATA.indices[0], mac = DATA.macro || {};
+  const tiles = [];
+  for (const kind of ["trailing", "forward"]) {
+    const m = indexPe(ix, kind);
+    if (!m) { tiles.push(`<div class="tile"><div class="label">${kind === "trailing" ? "Trailing" : "Forward"} P/E</div><div class="index-name">${ix.name}</div><div class="value"><span class="nm-flag">—</span></div><div class="context">Not enough data yet</div></div>`); continue; }
+    const repriced = Math.abs(ix.price - m.level) > 0.005;
+    tiles.push(`
+    <div class="tile" title="${kind === "trailing" ? "IFRS LTM" : "dohod.ru NTM forecast"} · ${m.n} of ${ix.members} companies, ${(m.coverage * 100).toFixed(0)}% of index weight · ${m.pe.toFixed(2)}× at ${lvl(m.level)} → implied index EPS ${lvl(m.eps)}">
+      <div class="label">${kind === "trailing" ? "Trailing P/E" : "Forward P/E"}</div>
+      <div class="index-name">${ix.name}</div>
+      <div class="value">${m.live.toFixed(1)}<small>×</small></div>
+      <dl class="kv">
+        <div><dt>Index</dt><dd>${lvl(ix.price)}</dd></div>
+        <div><dt>${kind === "trailing" ? "TTM" : "NTM"} EPS</dt><dd>${lvl(m.eps)}</dd></div>
+        <div class="src"><dt>Companies</dt><dd>${m.n}${m.coverage < 0.995 ? ` · ${(m.coverage * 100).toFixed(0)}% wt` : ""}</dd></div>
+        ${m.liveEx && m.losers > 0 ? `<div class="src"><dt>Ex ${m.losers} loss-maker${m.losers === 1 ? "" : "s"}</dt><dd>${m.liveEx.toFixed(1)}×</dd></div>` : ""}
+        ${repriced ? `<div class="src"><dt>Built ${shortDate(m.date)}</dt><dd>${m.pe.toFixed(1)}× at ${lvl(m.level)}</dd></div>` : ""}
+      </dl>
+      <div class="context">${kind === "trailing" ? "IFRS" : "Forecast"} · bottom-up · close ${shortDate(m.date)}</div>
+    </div>`);
+  }
+  const dy = ix.divYield;
+  tiles.push(`
+    <div class="tile" title="Dividends with a record date in the last 12 months ÷ price, weighted by index weight">
+      <div class="label">Dividend yield</div>
+      <div class="index-name">${ix.name}</div>
+      <div class="value">${dy ? dy.pct.toFixed(1) : "—"}<small>%</small></div>
+      <dl class="kv">
+        <div><dt>Key rate (CBR)</dt><dd>${mac.keyRate ? pct(mac.keyRate.rate, 2) : "—"}</dd></div>
+        <div><dt>OFZ 1-year</dt><dd>${mac.ofz?.y1 != null ? pct(mac.ofz.y1, 2) : "—"}</dd></div>
+        <div class="src"><dt>Companies</dt><dd>${dy ? dy.n : "—"}</dd></div>
+      </dl>
+      <div class="context">Trailing 12 months · close ${dy ? shortDate(dy.date) : "—"}</div>
+    </div>`);
+  const t = indexPe(ix, "trailing"), f = indexPe(ix, "forward"), ofz10 = mac.ofz?.y10;
+  const eyT = t ? 100 / t.live : null, eyF = f ? 100 / f.live : null;
+  const gap = (f ? eyF : eyT) != null && ofz10 != null ? (f ? eyF : eyT) - ofz10 : null;
+  tiles.push(`
+    <div class="tile" title="Index earnings yield (1 ÷ P/E) minus the 10-year OFZ zero-coupon yield — the extra return equities offer over government bonds">
+      <div class="label">Yield gap</div>
+      <div class="index-name">Equities vs 10-yr OFZ</div>
+      <div class="value">${gap == null ? "—" : `${gap >= 0 ? "+" : "−"}${Math.abs(gap).toFixed(1)}`}<small>pp</small></div>
+      <dl class="kv">
+        <div><dt>Earnings yield${f ? " (fwd)" : ""}</dt><dd>${pct(f ? eyF : eyT)}</dd></div>
+        <div><dt>OFZ 10-year</dt><dd>${ofz10 != null ? pct(ofz10, 2) : "—"}</dd></div>
+        <div class="src"><dt>USD/RUB (CBR)</dt><dd>${mac.usdrub ? mac.usdrub.rate.toFixed(2) : "—"}</dd></div>
+      </dl>
+      <div class="context">G-curve ${mac.ofz?.date ? shortDate(mac.ofz.date) : "—"}</div>
+    </div>`);
+  document.getElementById("tiles").innerHTML = tiles.join("");
+}
+
+function deltaCell(r) {
+  if (r.delta == null) return `<span class="nm-flag">—</span>`;
+  const p = Math.round(r.delta * 100);
+  const basis = r.deltaBasis === "ttm" ? `<sup class="fn" title="No forward forecast — compared on trailing P/E">T</sup>` : "";
+  if (p === 0) return `<span class="val-muted">0%</span>${basis}`;
+  return `<span class="${p < 0 ? "delta-neg" : "delta-pos"}">${p > 0 ? "+" : "−"}${Math.abs(p)}%</span>${basis}`;
+}
+function stackCell(v, eps, title) {
+  if (eps == null) return mult(v);
+  return `<span class="stack">${mult(v)}<span class="eps" title="${title}">EPS ${rub(eps)}</span></span>`;
+}
+function fwdCell(r) {
+  if (r.fwdEps == null) return `<span class="nm-flag" title="No dohod.ru forecast published">—</span>`;
+  const f = r.fwd || {};
+  const tip = [f.fy0 && `FY${f.fy0.year} ${rub(f.fy0.eps)}`, f.fy1 && `FY${f.fy1.year} ${rub(f.fy1.eps)}`].filter(Boolean).join(" · ");
+  const t = `Next-twelve-months forecast EPS — net income ${f.netIncome != null ? rub(f.netIncome, 1) + " bn" : "—"}${tip ? " · " + tip : ""}${f.source ? " · " + f.source : ""}${f.stale ? " · kept from an earlier run" : ""}`;
+  return stackCell(r.fwdPe, r.fwdEps, esc(t));
+}
+function dyCell(r) {
+  if (r.dy == null) return `<span class="nm-flag">—</span>`;
+  const nd = r.nextDiv;
+  const sub = r.divTtm > 0 ? `DPS ${rub(r.divTtm)}` : "none paid";
+  const past = (r.divPast || []).map(d => `${d.record}: ${rub(d.amt)}`).join(" · ");
+  const tip = `${past ? "Last 12 months — " + past : "No dividend with a record date in the last 12 months"}${nd ? ` · Next: ${rub(nd.amt)} (record ${longDate(nd.record)})` : ""}`;
+  return `<span class="stack" title="${esc(tip)}"><span>${r.dy === 0 ? "0%" : pct(r.dy)}</span><span class="eps">${sub}</span></span>`;
+}
+function targetCell(r) {
+  const t = r.target;
+  if (!t?.consensus || r.upside == null) return `<span class="nm-flag">—</span>`;
+  const u = Math.round(r.upside * 100);
+  const recs = { strong_buy: "Strong buy", buy: "Buy", hold: "Hold", sell: "Sell", strong_sell: "Strong sell" };
+  const tip = `Consensus ${rub(t.consensus)} · range ${rub(t.min)}–${rub(t.max)}${t.n ? ` · ${t.n} analysts` : ""}${t.rec ? ` · ${recs[t.rec] || t.rec}` : ""}`;
+  return `<span class="stack" title="${esc(tip)}"><span class="${u >= 0 ? "" : "delta-pos"}">${u >= 0 ? "+" : "−"}${Math.abs(u)}%</span><span class="eps">${rub(t.consensus, t.consensus >= 1000 ? 0 : 1)}</span></span>`;
+}
+function earnCell(r) {
+  const e = r.earnings;
+  if (!e) return `<span class="nm-flag">—</span>`;
+  const d = e.next ? daysTo(e.next) : null;
+  const top = r.pending ? `<span class="pend" title="Reported ${longDate(e.pendingSince)} — not yet in smart-lab's twelve-month figures; updates automatically">${shortDate(e.pendingSince)} · updating</span>`
+    : e.next ? `<span class="nx${d != null && d <= 7 ? " soon" : ""}" title="Next report ${longDate(e.next)}${e.nextPeriod ? " — " + e.nextPeriod : ""} · ${e.nextConfirmed ? "date published by the company" : "estimated from last year's report date"}">${shortDate(e.next)}<span class="est"> ${e.nextConfirmed ? (e.nextPeriod || "").split(" ")[0] : "est."}</span></span>` : `<span class="val-muted">—</span>`;
+  const bottom = e.lastReported ? `<span class="ls" title="Twelve-month figures include the report of ${longDate(e.lastReported)}">last ${shortDate(e.lastReported)}</span>` : "";
+  return `<span class="earn">${top}${bottom}</span>`;
+}
+function renderTable() {
+  document.querySelector("#holdings tbody").innerHTML = rows.map(r => `
+    <tr>
+      <td><div class="co"><span class="tk">${r.t}${fnSup(FN[r.t])}</span><span class="nm">${esc(r.name)} · ${r.groupShort}</span></div></td>
+      <td class="price">${rub(r.price, r.price >= 1000 ? 1 : 2)}</td>
+      <td class="val-strong">${stackCell(r.ttmPe, r.ttmEps, `IFRS EPS, last twelve months (${r.ttmSrc || "—"})${r.ttmCheck != null ? ` · T-Bank TTM ${rub(r.ttmCheck)}` : ""}`)}</td>
+      <td class="val-strong">${fwdCell(r)}</td>
+      <td>${dyCell(r)}</td>
+      <td class="val-muted">${mult(r.secT)}</td>
+      <td class="val-muted">${mult(r.secF)}</td>
+      <td>${deltaCell(r)}</td>
+      <td>${targetCell(r)}</td>
+      <td>${earnCell(r)}</td>
+    </tr>`).join("");
+}
+
+let sortKey = null, sortDir = 1;
+function bindSorting() {
+  document.querySelectorAll("#holdings thead th").forEach(th => {
+    th.addEventListener("click", () => {
+      const k = th.dataset.k;
+      sortDir = (sortKey === k) ? -sortDir : (k === "t" ? 1 : -1);
+      sortKey = k;
+      rows = [...rows].sort((a, b) => {
+        const av = a[k], bv = b[k];
+        if (k === "t") return String(av).localeCompare(String(bv)) * sortDir;
+        if (av == null && bv == null) return 0;
+        if (av == null) return 1;
+        if (bv == null) return -1;
+        return (av - bv) * sortDir;
+      });
+      document.querySelectorAll("#holdings thead th").forEach(x => x.classList.remove("sorted"));
+      th.classList.add("sorted");
+      th.querySelector(".arrow").textContent = sortDir === 1 ? "▴" : "▾";
+      renderTable();
+    });
+  });
+}
+
+function renderPeers() {
+  const used = new Set(rows.map(r => r.group));
+  document.getElementById("peers").innerHTML = Object.entries(DATA.groups).filter(([k]) => used.has(k)).map(([key, g]) => {
+    const gm = groupStats(key);
+    const memberStr = g.members.map(m => {
+      const s = ALL[m], x = multiples(s);
+      if (!s) return `<span>${m} —</span>`;
+      const v = `${x.ttmPe ? fx(x.ttmPe) : "N/M"} / ${x.fwdPe ? fx(x.fwdPe) : s.fwdEps == null ? "—" : "N/M"}×`;
+      const tip = `${s.name}: ${rub(s.price)} ÷ TTM EPS ${rub(s.ttmEps)}${s.fwdEps != null ? ` · ÷ NTM EPS ${rub(s.fwdEps)}` : " · no forecast"}`;
+      return `<span title="${esc(tip)}">${m} ${v}</span>`;
+    }).join(" · ");
+    const who = rows.filter(r => r.group === key).map(r => r.t).join(", ");
+    return `<div class="peer"><div class="pl"><span class="pn">${g.label}</span><span class="pm">${memberStr}</span><span class="pm">for ${who}</span></div>
+      <div class="pv"><b>${fx(gm.t) ?? "—"}×</b> trail · <b>${fx(gm.f) ?? "—"}×</b> fwd median<br><span class="pm">mean ${fx(gm.tMean) ?? "—"}× · ${fx(gm.fMean) ?? "—"}×</span></div></div>`;
+  }).join("");
+}
+
+/* ================= History bands ================= */
+function renderHistory() {
+  const narrow = window.innerWidth <= 640;
+  const L = narrow ? 0 : 44, R = narrow ? 0 : 44;
+  const usable = h => h && h.min != null && h.max != null && h.quarters >= 4;
+  const posOf = r => usable(r.hist) && r.ttmPe != null ? (r.ttmPe - r.hist.min) / Math.max(r.hist.max - r.hist.min, 0.01) : -Infinity;
+  const order = [...rows].sort((a, b) => posOf(b) - posOf(a) || a.t.localeCompare(b.t));
+  document.getElementById("hist").innerHTML = order.map(r => {
+    const h = r.hist, cur = r.ttmPe;
+    if (!usable(h)) {
+      return `<div class="hrow na"><span class="ht">${r.t}</span><div class="track">Insufficient history — fewer than 4 profitable quarters on record</div><div class="hv"><b>${cur != null ? fx(cur) + "×" : "N/M"}</b> today</div></div>`;
+    }
+    const span = Math.max(h.max - h.min, 0.01);
+    const p = v => Math.min(1, Math.max(0, (v - h.min) / span));
+    const pos = v => `calc(${L}px + (100% - ${L + R}px) * ${p(v).toFixed(4)})`;
+    const inRange = cur != null && cur >= h.min && cur <= h.max;
+    const where = cur == null ? "" : cur > h.max ? "above its 5-yr high" : cur < h.min ? "below its 5-yr low" : cur > h.median ? "above median" : "below median";
+    const tip = `${r.name}: P/E today ${cur != null ? fx(cur) + "×" : "N/M"} · 5-yr low ${fx(h.min)}× · median ${fx(h.median)}× · high ${fx(h.max)}× · ${h.quarters} quarters ${h.from}–${h.to}${h.excluded ? ` (${h.excluded} loss or >100× quarters excluded)` : ""}`;
+    return `<div class="hrow" title="${esc(tip)}">
+      <span class="ht">${r.t}</span>
+      <div class="track">
+        <span class="lo">${fx(h.min)}×</span>
+        <span class="band" style="left:${L}px; right:${R}px"></span>
+        <span class="med" style="left:${pos(h.median)}"></span>
+        ${cur != null ? `<span class="dot${inRange ? "" : " out"}" style="left:${pos(cur)}"></span>` : ""}
+        <span class="hi">${fx(h.max)}×</span>
+      </div>
+      <div class="hv"><b>${cur != null ? fx(cur) + "×" : "N/M"}</b> today<span class="pos">${where}${cur == null ? "" : " · median " + fx(h.median) + "×"}</span></div>
+    </div>`;
+  }).join("");
+  const froms = rows.filter(r => r.hist?.from).map(r => r.hist.from).sort();
+  document.getElementById("note-hist").textContent =
+    `Quarterly trailing P/E from smart-lab, ${froms.length ? froms[0].slice(0, 4) : "last five years"}–${TODAY.slice(0, 4)}. Several companies stopped publishing IFRS in 2022, so those quarters are missing. A highlighted dot means today is outside the five-year range.`;
+}
+
+/* ================= Calendar ================= */
+function renderCalendar() {
+  const events = [];
+  for (const r of rows) {
+    const e = r.earnings || {};
+    if (r.pending) events.push({ d: e.pendingSince, t: r.t, what: "Report published", status: "updating", cls: "" });
+    else if (e.next && e.next >= TODAY) events.push({ d: e.next, t: r.t, what: `${e.nextPeriod || "IFRS"} results`, status: e.nextConfirmed ? "confirmed" : "estimated", cls: "" });
+    if (r.nextDiv && r.nextDiv.record >= TODAY) events.push({ d: r.nextDiv.record, t: r.t, what: `Dividend ${rub(r.nextDiv.amt)} · ${r.price ? ((r.nextDiv.amt / r.price) * 100).toFixed(1) + "%" : ""}`, status: "record date", cls: "ok" });
+  }
+  events.sort((a, b) => a.d.localeCompare(b.d));
+  const cut = new Date(Date.now() - 60 * 864e5).toISOString().slice(0, 10);
+  const last = rows.filter(r => r.earnings?.lastReported && r.earnings.lastReported >= cut).sort((a, b) => b.earnings.lastReported.localeCompare(a.earnings.lastReported));
+  document.getElementById("cal-next").innerHTML = events.length ? events.slice(0, 14).map(ev => `
+    <div class="ce${daysTo(ev.d) <= 7 ? " soon" : ""}"><span class="cd">${wkDate(ev.d)}</span><span class="ct">${ev.t}</span><span class="cn">${esc(ev.what)}</span><span class="cs ${ev.cls}">${ev.status}</span></div>`).join("")
+    : `<div class="cal-empty">No dates published yet.</div>`;
+  document.getElementById("cal-last").innerHTML = last.length ? last.map(r => `
+    <div class="ce"><span class="cd">${wkDate(r.earnings.lastReported)}</span><span class="ct">${r.t}</span><span class="cn">${esc(r.earnings.lastPeriod || "IFRS")} results</span><span class="cs ok">✓ in the numbers</span></div>`).join("")
+    : `<div class="cal-empty">No reports in the last 60 days.</div>`;
+}
+
+/* ================= Notes (built from data, numbered dynamically) ================= */
+function renderNotes() {
+  const notes = [];
+  const add = (html, tickers = []) => { notes.push(html); const n = notes.length; tickers.forEach(t => (FN[t] = FN[t] || []).push(n)); };
+  const ix = DATA.indices[0], t = indexPe(ix, "trailing");
+
+  add(`<b>Peer benchmark = median.</b> Russian peer groups are small and often contain one extreme multiple (Surgutneftegas at ${fx(multiples(ALL.SNGS).ttmPe) ?? "—"}× on currency-revaluation gains, Ozon at ${fx(multiples(ALL.OZON).ttmPe) ?? "—"}×), so each benchmark is the median of members' multiples; the plain mean is shown in the Peer groups panel. Loss-makers have no meaningful P/E and drop out.`);
+
+  if (t) {
+    const w = Object.fromEntries((DATA.indexWeights || []).map(x => [x.t, x.w]));
+    const contrib = (DATA.indexWeights || []).map(x => { const s = ALL[x.t]; return s && s.ttmEps != null && s.price ? { t: x.t, c: x.w * s.ttmEps / s.price } : null; }).filter(Boolean);
+    const tot = contrib.reduce((a, c) => a + c.c, 0);
+    const top = contrib.sort((a, b) => b.c - a.c).slice(0, 2);
+    add(`<b>Why the index looks so cheap.</b> The MOEX Russia Index trades at ${fx(t.live)}× trailing earnings, but that figure leans on two names: ${top.map(x => `${x.t} (${(w[x.t] * 100).toFixed(1)}% of the index, ${Math.round(x.c / tot * 100)}% of its earnings)`).join(" and ")}. Gazprom's reported profit includes large non-cash items and Surgutneftegas' is driven by revaluation of its foreign-currency deposits. ${t.liveEx ? `Without the ${t.losers} loss-makers the index is at ${fx(t.liveEx)}×.` : ""}`);
+  }
+
+  /* automatic: smart-lab IFRS LTM vs T-Bank TTM disagree by more than 25% */
+  for (const r of rows) {
+    if (r.ttmCheck == null || !(r.ttmEps > 0)) continue;
+    const gap = r.ttmCheck / r.ttmEps - 1;
+    if (Math.abs(gap) > 0.25) add(`<b>${r.t} — sources disagree on trailing earnings.</b> smart-lab's IFRS twelve-month EPS is ${rub(r.ttmEps)}; T-Investments shows ${rub(r.ttmCheck)}${r.ttmCheck < 0 ? " (a loss)" : ""} — ${r.ttmCheck > 0 ? `${fx(r.price / r.ttmCheck)}× instead of ${fx(r.ttmPe)}×` : "trailing P/E would not be meaningful"}. The gap usually comes from one-off items (impairments, disposals, FX revaluation) or from different reporting periods; the table uses smart-lab's figure, which sums the reported IFRS periods. Flagged automatically.`, [r.t]);
+  }
+  for (const r of rows.filter(r => r.pending)) {
+    add(`<b>${r.t} — new report pending.</b> ${esc(r.name)} published results on ${longDate(r.earnings.pendingSince)}; the twelve-month figures still reflect the report of ${longDate(r.earnings.lastReported)} and update automatically once the new numbers are in.`, [r.t]);
+  }
+  for (const n of DATA.notes || []) {
+    if (n.until && n.until < TODAY) continue;
+    const live = (n.t || []).filter(x => rows.some(r => r.t === x));
+    add(`<b>${esc(n.title)}.</b> ${n.text}`, live);
+  }
+
+  add(`<b>Forward earnings.</b> There is no free analyst consensus for Russian stocks (the only true multi-broker consensus, Cbonds, is a paid service), so forward EPS is dohod.ru's own forecast of net income over the next twelve months — one research team's view, not an average of brokers. It covers almost the whole market, including ${(DATA.indexWeights || []).filter(x => ALL[x.t]?.fwdEps != null).length} of ${(DATA.indexWeights || []).length} index members. Where no forecast exists the forward column is blank and the peer comparison falls back to trailing P/E (marked T).`);
+  add(`<b>Dividends.</b> Yield counts dividends whose record date fell in the last twelve months, so special payouts (X5, CIAN) inflate it until they roll out of the window; hover a cell for each payment. Upcoming record dates in the calendar are those declared or recommended by the board.`);
+  add(`<b>Banks.</b> Sberbank and T-Technologies are shown on P/E like the rest of the market (Russian banks are usually priced on earnings and payout). Book value per share: ${rows.filter(r => r.group === "banks" && r.bvps).map(r => `${r.t} ${rub(r.bvps)} → ${fx(r.price / r.bvps, 2)}× P/B`).join(", ") || "—"}.`, rows.filter(r => r.group === "banks").map(r => r.t));
+  if (HIDDEN.length) add(`<b>Not shown.</b> ${HIDDEN.map(r => r.t).join(", ")} — negative trailing or forward earnings, so P/E can't be computed. ${HIDDEN.length > 1 ? "They return" : "It returns"} automatically once earnings turn positive.`);
+
+  document.getElementById("notes").innerHTML = notes.map(n => `<li>${n}</li>`).join("");
+  document.getElementById("note-hidden").textContent = HIDDEN.length ? `Not shown: ${HIDDEN.map(r => r.t).join(", ")} (negative earnings — P/E not computable).` : "";
+}
+
+/* ================= Charts ================= */
+const tt = document.getElementById("tt");
+function showTT(html, e) {
+  tt.innerHTML = html; tt.style.opacity = 1;
+  const pad = 14, w = tt.offsetWidth;
+  let x = e.clientX + pad;
+  if (x + w > window.innerWidth - 8) x = e.clientX - w - pad;
+  tt.style.left = x + "px";
+  tt.style.top = (e.clientY + pad) + "px";
+}
+function hideTT() { tt.style.opacity = 0; }
+
+function drawChart(svgId, kind) {
+  const vKey = kind === "ttm" ? "ttmPe" : "fwdPe", pKey = kind === "ttm" ? "secT" : "secF";
+  const ref = kind === "ttm" ? IDX.t : IDX.f;
+  const data = rows.filter(r => r[vKey] != null).sort((a, b) => b[vKey] - a[vKey]);
+  const card = document.getElementById(svgId).closest(".card");
+  if (!data.length) { card.style.display = "none"; return; }
+  card.style.display = "";
+  const rowH = 40, mL = 56, mR = 56, mT = 8, mB = 30;
+  const W = 980, H = mT + data.length * rowH + mB;
+  const plotW = W - mL - mR;
+  const max = Math.max(...data.map(d => Math.max(d[vKey], d[pKey] || 0)), ref || 0) * 1.06;
+  const x = v => mL + (v / max) * plotW;
+  const css = getComputedStyle(document.documentElement);
+  const C = p => css.getPropertyValue(p).trim();
+  let svg = "";
+  const step = max > 40 ? 10 : max > 16 ? 5 : 2;
+  for (let g = 0; g <= max; g += step) {
+    svg += `<line x1="${x(g)}" y1="${mT}" x2="${x(g)}" y2="${H - mB}" stroke="${C("--grid")}" stroke-width="1"/>`;
+    svg += `<text x="${x(g)}" y="${H - mB + 18}" font-size="11" fill="${C("--muted")}" text-anchor="middle">${g}×</text>`;
+  }
+  if (ref) svg += `<line x1="${x(ref)}" y1="${mT}" x2="${x(ref)}" y2="${H - mB}" stroke="${C("--muted")}" stroke-width="1.5" stroke-dasharray="4 4"/>`;
+  data.forEach((d, i) => {
+    const y = mT + i * rowH, cy = y + rowH / 2;
+    const v = d[vKey], p = d[pKey];
+    const bw = Math.max(x(v) - mL, 2);
+    const tickRight = p != null && x(p) > x(v) && x(p) - x(v) < 44;
+    const labelX = x(v) + (tickRight ? (x(p) - x(v)) + 12 : 8);
+    svg += `<g class="crow" data-i="${i}">
+      <rect class="row-hit" x="0" y="${y}" width="${W}" height="${rowH}"/>
+      <text x="${mL - 10}" y="${cy + 4}" font-size="12.5" font-weight="600" fill="${C("--ink")}" text-anchor="end">${d.t}</text>
+      <rect class="bar" x="${mL}" y="${cy - 9}" width="${bw}" height="18" rx="4" fill="${C("--accent")}"/>
+      ${p != null ? `<rect x="${x(p) - 1.5}" y="${cy - 13}" width="3" height="26" rx="1.5" fill="${C("--tick")}"/>` : ""}
+      <text x="${labelX}" y="${cy + 4}" font-size="12" font-weight="500" fill="${C("--ink-2")}">${fx(v)}×</text>
+    </g>`;
+  });
+  const el = document.getElementById(svgId);
+  el.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  el.innerHTML = svg;
+  el.querySelectorAll(".crow").forEach(g => {
+    const d = data[+g.dataset.i];
+    const v = d[vKey], p = d[pKey];
+    const rel = p == null ? "" : (v <= p ? `${Math.abs(Math.round((v / p - 1) * 100))}% discount` : `+${Math.round((v / p - 1) * 100)}% premium`);
+    const eps = kind === "ttm" ? d.ttmEps : d.fwdEps;
+    const html = `<div class="tt-title">${esc(d.name)} (${d.t})</div>
+      <div class="tt-line">${kind === "ttm" ? "Trailing" : "Forward"} P/E <b>${fx(v)}×</b></div>
+      <div class="tt-line">${rub(d.price)} ÷ ${kind === "ttm" ? "IFRS LTM" : "NTM forecast"} EPS ${rub(eps)}</div>
+      <div class="tt-line">${d.groupShort} median ${p != null ? fx(p) + "× → " + rel : "n/a"}</div>`;
+    g.addEventListener("mousemove", e => showTT(html, e));
+    g.addEventListener("mouseleave", hideTT);
+  });
+  const excluded = rows.filter(r => r[vKey] == null).map(r => r.t);
+  document.getElementById(kind === "ttm" ? "note-ttm" : "note-fwd").textContent =
+    excluded.length ? `${excluded.join(", ")} not shown — ${kind === "ttm" ? "no positive trailing earnings" : "no dohod.ru forecast"}.` : "";
+}
+function drawAll() { drawChart("chart-ttm", "ttm"); drawChart("chart-fwd", "fwd"); }
+
+/* ================= Boot ================= */
+async function init() {
+  try {
+    const res = await fetch(`data.json?t=${Math.floor(Date.now() / 60000)}`, { cache: "no-cache" });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    DATA = await res.json();
+  } catch (err) {
+    document.getElementById("loading").textContent = "Could not load data.json — " + err.message;
+    document.getElementById("stamp").textContent = "";
+    return;
+  }
+  [...DATA.stocks, ...DATA.peers, ...(DATA.universe || [])].forEach(s => { ALL[s.t] = s; });
+  /* same rule as the US dashboard: only holdings whose P/E can be computed are shown */
+  const all = DATA.stocks.map(derive);
+  HIDDEN = all.filter(r => r.ttmPe == null || (r.fwdEps != null && r.fwdPe == null));
+  rows = all.filter(r => !HIDDEN.includes(r));
+  const ix = DATA.indices[0], it = indexPe(ix, "trailing"), ifw = indexPe(ix, "forward");
+  IDX = { t: it?.live ?? null, f: ifw?.live ?? null };
+  document.getElementById("ref-ttm").textContent = IDX.t ? `${IDX.t.toFixed(1)}×` : "—";
+  document.getElementById("ref-fwd").textContent = IDX.f ? `${IDX.f.toFixed(1)}×` : "—";
+  document.getElementById("eyebrow").textContent = `Portfolio · ${rows.length} Holdings · MOEX`;
+  document.getElementById("th-price").title = `Official MOEX close, ${longDate(DATA.meta.pricesAsOf)} — used for every multiple in the row`;
+  renderStamp();
+  renderTiles();
+  renderNotes();
+  renderTable();
+  renderCalendar();
+  bindSorting();
+  renderPeers();
+  renderHistory();
+  drawAll();
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", drawAll);
+  let rsT; window.addEventListener("resize", () => { clearTimeout(rsT); rsT = setTimeout(renderHistory, 150); });
+  const io = new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+  }), { threshold: 0.05 });
+  document.querySelectorAll(".fade").forEach(el => io.observe(el));
+}
+init();
+</script>
+</body>
+</html>

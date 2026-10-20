@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>com.lopushokbot.ru-dashboard</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>/bin/zsh</string>
+		<string>/Users/iibot/ru-portfolio-dashboard/run.sh</string>
+	</array>
+	<key>WorkingDirectory</key>
+	<string>/Users/iibot/ru-portfolio-dashboard</string>
+	<!-- 08:00 Dubai daily, plus every hour and at login so missed runs catch up (run.sh allows one success per day) -->
+	<key>StartCalendarInterval</key>
+	<dict>
+		<key>Hour</key>
+		<integer>8</integer>
+		<key>Minute</key>
+		<integer>0</integer>
+	</dict>
+	<key>StartInterval</key>
+	<integer>3600</integer>
+	<key>RunAtLoad</key>
+	<true/>
+	<key>StandardOutPath</key>
+	<string>/Users/iibot/ru-portfolio-dashboard/logs/launchd.log</string>
+	<key>StandardErrorPath</key>
+	<string>/Users/iibot/ru-portfolio-dashboard/logs/launchd.log</string>
+	<key>EnvironmentVariables</key>
+	<dict>
+		<key>PATH</key>
+		<string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+	</dict>
+</dict>
+</plist>

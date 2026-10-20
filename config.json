@@ -1,0 +1,48 @@
+{
+ "_doc": "Portfolio definition. Edit this file to add/remove holdings or peers; scripts/update.mjs fills every number into data.json. 'sl' = smart-lab ticker when it differs from MOEX.",
+ "holdings": [
+  { "t": "SBER", "name": "Sberbank", "group": "banks" },
+  { "t": "T",    "name": "T-Technologies", "group": "banks" },
+  { "t": "LKOH", "name": "LUKOIL", "group": "oil" },
+  { "t": "NVTK", "name": "NOVATEK", "group": "oil" },
+  { "t": "TATN", "name": "Tatneft", "group": "oil" },
+  { "t": "GMKN", "name": "Norilsk Nickel", "group": "metals" },
+  { "t": "X5",   "name": "X5 Group", "group": "retail" },
+  { "t": "YDEX", "name": "Yandex", "group": "internet" },
+  { "t": "HEAD", "name": "HeadHunter", "group": "internet" },
+  { "t": "CNRU", "name": "CIAN", "group": "internet" }
+ ],
+ "peers": [
+  { "t": "VTBR",  "name": "VTB" },
+  { "t": "BSPB",  "name": "Bank St. Petersburg" },
+  { "t": "CBOM",  "name": "Credit Bank of Moscow" },
+  { "t": "SVCB",  "name": "Sovcombank" },
+  { "t": "DOMRF", "name": "DOM.RF" },
+  { "t": "MBNK",  "name": "MTS Bank" },
+  { "t": "ROSN",  "name": "Rosneft" },
+  { "t": "SIBN",  "name": "Gazprom Neft" },
+  { "t": "SNGS",  "name": "Surgutneftegas" },
+  { "t": "GAZP",  "name": "Gazprom" },
+  { "t": "NLMK",  "name": "NLMK" },
+  { "t": "MAGN",  "name": "MMK" },
+  { "t": "CHMF",  "name": "Severstal" },
+  { "t": "RUAL",  "name": "Rusal" },
+  { "t": "PLZL",  "name": "Polyus" },
+  { "t": "ALRS",  "name": "ALROSA" },
+  { "t": "MGNT",  "name": "Magnit" },
+  { "t": "LENT",  "name": "Lenta" },
+  { "t": "FIXR",  "name": "Fix Price" },
+  { "t": "OZON",  "name": "Ozon" },
+  { "t": "VKCO",  "name": "VK" },
+  { "t": "POSI",  "name": "Positive Technologies" },
+  { "t": "ASTR",  "name": "Astra Group" }
+ ],
+ "groups": {
+  "banks":    { "label": "Russian banks",       "short": "Banks",    "members": ["SBER", "T", "VTBR", "BSPB", "CBOM", "SVCB", "DOMRF", "MBNK"] },
+  "oil":      { "label": "Oil & gas",           "short": "Oil & gas", "members": ["LKOH", "ROSN", "TATN", "SIBN", "SNGS", "NVTK", "GAZP"] },
+  "metals":   { "label": "Metals & mining",     "short": "Metals",   "members": ["GMKN", "NLMK", "MAGN", "CHMF", "RUAL", "PLZL", "ALRS"] },
+  "retail":   { "label": "Food retail",         "short": "Retail",   "members": ["X5", "MGNT", "LENT", "FIXR"] },
+  "internet": { "label": "Internet & software", "short": "Internet", "members": ["YDEX", "HEAD", "CNRU", "OZON", "VKCO", "POSI", "ASTR"] }
+ },
+ "index": "IMOEX"
+}

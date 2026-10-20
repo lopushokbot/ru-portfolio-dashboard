@@ -1,129 +1,51 @@
-# Russian Portfolio Dashboard v2 — Runbook
+# Russian Portfolio Valuation Dashboard — Runbook
 
-> Read this file before doing ANY work on this project.
+> Read this before any work on the project. Update the Log at the bottom after every change.
 
-## Quick Reference
-| Task | Command / Steps |
-|------|----------------|
-| Generate dashboard | `cd /Users/iibot/Documents/ppppp/workspace/ru-portfolio-dashboard && python -m src.dashboard` |
-| Generate to specific path | `python -m src.dashboard --output /path/to/output.html` |
-| Check LaunchAgent | `launchctl list \| grep ru-dashboard` |
-| Reload LaunchAgent | `launchctl unload ~/Library/LaunchAgents/com.lopushokbot.ru-dashboard.plist && launchctl load ~/Library/LaunchAgents/com.lopushokbot.ru-dashboard.plist` |
-| View live site | https://lopushokbot.github.io/ru-portfolio-dashboard/ |
-| Check logs | `ls -la /Users/iibot/Documents/ppppp/archive/portfolio-dashboard-v2/logs/` |
+## Quick reference
 
----
+| Task | Command |
+|------|---------|
+| Refresh data now (no publish) | `cd ~/ru-portfolio-dashboard && node scripts/update.mjs` |
+| Refresh + publish now | `cd ~/ru-portfolio-dashboard && FORCE_RUN=1 ./run.sh; tail -30 logs/run-$(date +%F).log` |
+| View locally | `cd ~/ru-portfolio-dashboard && python3 -m http.server 8735` → http://localhost:8735/ |
+| Check today's run | `cat ~/ru-portfolio-dashboard/logs/run-$(date +%F).log` |
+| LaunchAgent status | `launchctl list \| grep ru-dashboard` (2nd column = last exit code, 0 = fine) |
+| Reload LaunchAgent | `launchctl bootout gui/$(id -u)/com.lopushokbot.ru-dashboard; launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.lopushokbot.ru-dashboard.plist` |
+| Live site | https://lopushokbot.github.io/ru-portfolio-dashboard/ |
 
-## Task: Weekly Dashboard Update
+## How the daily run works
 
-### When to run
-- Automatically every Sunday 9:00 AM Dubai via LaunchAgent
-- Manually if auto-update fails or data needs refresh
+1. launchd starts `run.sh` at 08:00 Dubai, at login, and every hour. `run.sh` exits immediately unless it's 08:00–22:59 Dubai, today has no successful run yet, and fewer than 4 attempts were made today — so a sleeping/offline Mac catches up the same day.
+2. It holds `caffeinate`, waits up to 10 min for MOEX + GitHub to resolve, then runs `node scripts/update.mjs` (~2–3 min).
+3. `update.mjs` writes `data.json`; `run.sh` commits it to `main` and pushes. GitHub Pages (branch `main`, root) redeploys in ~1 min.
+4. Exit code 3 from update.mjs = core data missing (MOEX prices or smart-lab) → retried next hour. Any single failed source keeps its previous values and shows "N data warnings" in the page header (hover to read them).
 
-### Prerequisites
-- Python 3 with `requests`, `beautifulsoup4`, `lxml` installed (`pip install -r requirements.txt`)
-- `.env` file exists with valid `TBANK_TOKEN` (chmod 600)
-- Internet access
+## If something goes wrong
 
-### Steps
-1. Navigate to project:
-   ```bash
-   cd /Users/iibot/Documents/ppppp/archive/portfolio-dashboard-v2
-   ```
-2. Verify `.env` exists and has the token:
-   ```bash
-   test -f .env && echo "OK" || echo "MISSING .env"
-   ```
-3. Run the dashboard generator:
-   ```bash
-   python -m src.dashboard
-   ```
-4. Script flow:
-   - Fetches all 5 sources in parallel (ThreadPoolExecutor)
-   - T-Bank API: uses Bearer token from `.env`
-   - smart-lab.ru: scraped with 0.7-1s polite delays
-   - Cross-validates all data points across sources
-   - Flags discrepancies above thresholds (35% ratio / 15pp percentage / 30% absolute)
-   - Generates self-contained HTML with Apple-style design
-5. Output goes to `output/` directory
-6. Auto-push to GitHub Pages (if running via LaunchAgent)
-
-### Validation
-- [ ] Open generated HTML in browser
-- [ ] All 10 portfolio stocks + peers are shown
-- [ ] Each stock has price, P/E, P/BV, dividends, and other fundamentals
-- [ ] Cross-validation warnings are reasonable (not flagging everything)
-- [ ] "Generated at" timestamp is current
-- [ ] Sector comparison tables are complete
-
-### If something goes wrong
 | Symptom | Cause | Fix |
 |---------|-------|-----|
-| T-Bank returns 401 | Token expired or invalid | Get new read-only token from T-Bank app, update `.env` |
-| smart-lab timeout on MGNT | Their server is slow for this ticker | Re-run — has retry logic; if persistent, skip MGNT temporarily |
-| MOEX returns empty data | Market is closed / holiday | Normal on weekends before Sunday open; data will be from last trading day |
-| Cross-validation flags everything | T-Bank TTM vs smart-lab annual mismatch | Check if thresholds need widening in `config.py` |
-| LaunchAgent not running | Mac was asleep / agent unloaded | `launchctl load ~/Library/LaunchAgents/com.lopushokbot.ru-dashboard.plist` |
-| `ModuleNotFoundError` | Dependencies not installed | `pip install -r requirements.txt` |
+| Header: "T-Bank token expired" | Token revoked/expired (HTTP 401) | New **read-only** token in the T-Investments app → Settings → API tokens. `echo "TBANK_TOKEN=..." > ~/ru-portfolio-dashboard/.env && chmod 600 .env` |
+| Header: "T-Bank API unavailable", TLS/certificate errors | T-Bank changed its certificate chain | Check: `echo \| openssl s_client -connect invest-public-api.tbank.ru:443 -showcerts 2>/dev/null \| grep -E "s:\|i:"`. If the root is still "Russian Trusted Root CA", re-download https://gu-st.ru/content/lending/russian_trusted_root_ca_pem.crt into `certs/russian_trusted_root_ca.pem` (SHA-256 must start `D2:6D:2D:02` and end `CA:8E:CF:31`). |
+| Run log ends with "Network not ready (20/20)" | No network for 10 min | Nothing — next hourly tick retries |
+| `Failed: push` | GitHub auth / conflict | `cd ~/ru-portfolio-dashboard && git status && git pull --rebase && git push` |
+| A holding disappears from the table | Its trailing or forward EPS turned negative (hidden rule) | Expected; listed under "Not shown", returns automatically |
+| "Sources disagree" note on a stock | smart-lab vs T-Bank TTM EPS differ > 25% | Informational. Check the company's IFRS release if it looks wrong |
+| All trailing EPS null | smart-lab HTML changed | Fix `smartlabLtm()` in `scripts/lib.mjs` — it reads the last ("LTM") cell of each row of the `simple-little-table` on `/q/<T>/f/q/MSFO/` |
+| Forward column empty for everything | Consensus source changed/blocked | See `scripts/forward.mjs` header; previous forward EPS is kept (marked "kept from an earlier run" in the tooltip) |
+| Price stale for one ticker | Ticker renamed / delisted on MOEX | Update `config.json` |
 
----
+## Add / remove a holding or peer
 
-## Task: Add a New Stock to Portfolio
+1. Edit `config.json` → `holdings` (`t` = MOEX ticker, `group` = key in `groups`) or `peers`, and the group's `members`.
+2. If smart-lab uses a different ticker, add it to `SL_TICKER` in `scripts/update.mjs`.
+3. `node scripts/update.mjs`, check locally, commit + push.
+4. Update CLAUDE.md holdings list + this log.
 
-### Steps
-1. In `src/config.py`:
-   - Add ticker to `PORTFOLIO` list
-   - Add to the correct sector in `SECTORS`
-   - Add display name to `TICKER_NAMES`
-   - Check if MOEX uses a different ticker (like TCSG → T) — add mapping if needed
-2. Test: `python -m src.dashboard`
-3. Verify the new stock appears with data from all 5 sources
-4. Check cross-validation isn't flagging it incorrectly
-5. Update this RUNBOOK.md and CLAUDE.md
-6. Commit and push
+## Curated notes
 
----
+`data.json → notes[]` survives every run: `{ "t": ["LKOH"], "title": "…", "text": "…", "until": "2027-03-31" }` — shown until `until`, with footnote markers on the listed tickers.
 
-## Task: Update T-Bank Token
+## Log
 
-### Steps
-1. Get new read-only token from T-Bank Invest app/website
-2. Update the `.env` file:
-   ```bash
-   echo "TBANK_TOKEN=new_token_here" > /Users/iibot/Documents/ppppp/archive/portfolio-dashboard-v2/.env
-   chmod 600 /Users/iibot/Documents/ppppp/archive/portfolio-dashboard-v2/.env
-   ```
-3. Test: `python -m src.dashboard`
-4. Verify T-Bank data is coming through (check logs)
-
-### Security rules
-- NEVER commit `.env` to git
-- NEVER put the token in CLAUDE.md, RUNBOOK.md, or any tracked file
-- NEVER send the token to any external service or API other than T-Bank
-- Token permissions should be READ-ONLY
-
----
-
-## Task: Fix a Broken Data Source
-
-### Steps
-1. Identify which source is failing from logs or dashboard output
-2. Test the source individually:
-   - T-Bank: Check token validity, API status
-   - MOEX: `curl -s "https://iss.moex.com/iss/engines/stock/markets/shares/boards/TQBR/securities/SBER.json" | python -m json.tool | head -20`
-   - smart-lab: Open `https://smart-lab.ru/q/SBER/f/y/` in browser, check if structure changed
-   - Tradernet: `curl -s "https://tradernet.com/securities/export?tickers=SBER" | python -m json.tool | head -20`
-   - dohod.ru: Open `https://www.dohod.ru/ik/analytics/dividend/sber` in browser
-3. Common fixes:
-   - **HTML structure changed** (smart-lab/dohod): Update CSS selectors in scraper
-   - **API endpoint changed**: Update URL in source file
-   - **Rate limited**: Increase delay between requests
-4. Test full pipeline after fix
-5. Update Known Issues in CLAUDE.md
-
----
-
-## Changelog
-| Date | Change |
-|------|--------|
-| 2026-04-14 | v2 completed — 5 sources with cross-validation, LaunchAgent automation |
+- **2026-10-20 (v3)** — Rebuilt from scratch in the US-dashboard format at Sema's request (see CLAUDE.md). Fixed T-Bank (state-CA certificate), fixed "not updating" (daily run with catch-up + network wait + git identity), Pages moved from the force-pushed `gh-pages` branch to `main`. v2 Python code is in git history and at `~/ru-portfolio-dashboard-v2-backup/`.
