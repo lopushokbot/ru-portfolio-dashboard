@@ -35,6 +35,8 @@ NODE=/opt/homebrew/bin/node
     echo "Network not ready ($i/20); waiting 30s."
     sleep 30
   done
+  # pick up code fixes pushed by the weekly review agent before running
+  git pull -q --rebase --autostash || echo "git pull failed; running with local code."
   "$NODE" scripts/update.mjs
   RC=$?
   if [ $RC -ne 0 ]; then
