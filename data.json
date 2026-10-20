@@ -1,6 +1,6 @@
 {
  "meta": {
-  "builtAt": "2026-10-20T11:17:18.612Z",
+  "builtAt": "2026-10-20T11:21:33.586Z",
   "pricesAsOf": "2026-10-19",
   "earningsAsOf": "2026-10-20",
   "forwardSource": "dohod.ru next-12-months net income forecast (Dohod's own analysts — not a multi-broker consensus)",
@@ -53,9 +53,9 @@
   },
   "ofz": {
    "date": "2026-10-20",
-   "y1": 13.8658,
-   "y5": 16.3417,
-   "y10": 16.4942
+   "y1": 13.8628,
+   "y5": 16.3408,
+   "y10": 16.4916
   },
   "usdrub": {
    "rate": 82.8504,
