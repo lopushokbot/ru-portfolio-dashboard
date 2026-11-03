@@ -1,8 +1,8 @@
 {
  "meta": {
-  "builtAt": "2026-11-02T04:05:36.757Z",
-  "pricesAsOf": "2026-10-30",
-  "earningsAsOf": "2026-11-02",
+  "builtAt": "2026-11-03T04:05:19.917Z",
+  "pricesAsOf": "2026-11-02",
+  "earningsAsOf": "2026-11-03",
   "forwardSource": "dohod.ru next-12-months net income forecast (Dohod's own analysts — not a multi-broker consensus)",
   "sources": {
    "smartlab": 47,
@@ -17,49 +17,49 @@
    "key": "imoex",
    "name": "MOEX Russia Index",
    "secid": "IMOEX",
-   "price": 2509.26,
-   "priceDate": "2026-10-30",
+   "price": 2459.53,
+   "priceDate": "2026-11-02",
    "members": 44,
    "trailing": {
-    "pe": 4.0482321347937615,
-    "exLoss": 3.8493113451927465,
+    "pe": 3.958507120813184,
+    "exLoss": 3.757806043189296,
     "n": 44,
     "losers": 5,
-    "coverage": 1.0001000000000002,
-    "level": 2509.26,
-    "date": "2026-10-30"
+    "coverage": 1.0000000000000002,
+    "level": 2459.53,
+    "date": "2026-11-02"
    },
    "forward": {
-    "pe": 3.853881016206653,
-    "exLoss": 3.853881016206653,
+    "pe": 3.749822559172136,
+    "exLoss": 3.749822559172136,
     "n": 42,
     "losers": 0,
-    "coverage": 0.9948000000000002,
-    "level": 2509.26,
-    "date": "2026-10-30"
+    "coverage": 0.9937000000000002,
+    "level": 2459.53,
+    "date": "2026-11-02"
    },
    "divYield": {
-    "pct": 8.22790221279495,
+    "pct": 8.418747262937064,
     "n": 44,
-    "coverage": 1.0001000000000002,
-    "date": "2026-10-30"
+    "coverage": 1.0000000000000002,
+    "date": "2026-11-02"
    }
   }
  ],
  "macro": {
   "keyRate": {
    "rate": 14,
-   "date": "2026-10-30"
+   "date": "2026-11-02"
   },
   "ofz": {
-   "date": "2026-10-30",
-   "y1": 14.0602,
-   "y5": 16.0512,
-   "y10": 16.5553
+   "date": "2026-11-02",
+   "y1": 14.1449,
+   "y5": 16.0723,
+   "y10": 16.5393
   },
   "usdrub": {
-   "rate": 80.5573,
-   "date": "2026-10-31"
+   "rate": 80.9734,
+   "date": "2026-11-03"
   }
  },
  "groups": {
@@ -134,16 +134,16 @@
    "name": "Sberbank",
    "group": "banks",
    "metric": "pb",
-   "price": 296.4,
-   "priceDate": "2026-10-30",
+   "price": 291.29,
+   "priceDate": "2026-11-02",
    "ttmEps": 89.4,
    "ttmSrc": "smart-lab",
    "ttmCheck": 87.91,
    "bvps": 398.68065701509715,
-   "fwdEps": 93.17222790466322,
+   "fwdEps": 93.50134172953369,
    "fwd": {
-    "eps": 93.17222790466322,
-    "netIncome": 2011.43624,
+    "eps": 93.50134172953369,
+    "netIncome": 2018.54127,
     "source": "dohod.ru",
     "basis": "ntm"
    },
@@ -186,8 +186,8 @@
    "name": "T-Technologies",
    "group": "banks",
    "metric": "pb",
-   "price": 276.92,
-   "priceDate": "2026-10-30",
+   "price": 272.7,
+   "priceDate": "2026-11-02",
    "ttmEps": 68.7,
    "ttmSrc": "smart-lab",
    "ttmCheck": 74.09,
@@ -249,8 +249,8 @@
    "t": "LKOH",
    "name": "LUKOIL",
    "group": "oil",
-   "price": 6291,
-   "priceDate": "2026-10-30",
+   "price": 6064.5,
+   "priceDate": "2026-11-02",
    "ttmEps": 629.1,
    "ttmSrc": "smart-lab",
    "ttmCheck": -1451.7,
@@ -309,8 +309,8 @@
    "t": "NVTK",
    "name": "NOVATEK",
    "group": "oil",
-   "price": 1178.1,
-   "priceDate": "2026-10-30",
+   "price": 1135,
+   "priceDate": "2026-11-02",
    "ttmEps": 58,
    "ttmSrc": "smart-lab",
    "ttmCheck": 59.2,
@@ -364,8 +364,8 @@
    "t": "TATN",
    "name": "Tatneft",
    "group": "oil",
-   "price": 645.9,
-   "priceDate": "2026-10-30",
+   "price": 617.7,
+   "priceDate": "2026-11-02",
    "ttmEps": 122,
    "ttmSrc": "smart-lab",
    "ttmCheck": 116.34,
@@ -423,8 +423,8 @@
    "t": "GMKN",
    "name": "Norilsk Nickel",
    "group": "metals",
-   "price": 114.56,
-   "priceDate": "2026-10-30",
+   "price": 113.1,
+   "priceDate": "2026-11-02",
    "ttmEps": 14.7,
    "ttmSrc": "smart-lab",
    "ttmCheck": 14.67,
@@ -474,16 +474,16 @@
    "t": "X5",
    "name": "X5 Group",
    "group": "retail",
-   "price": 2394,
-   "priceDate": "2026-10-30",
+   "price": 2341.5,
+   "priceDate": "2026-11-02",
    "ttmEps": 302.7,
    "ttmSrc": "smart-lab",
    "ttmCheck": 310.2,
    "bvps": null,
-   "fwdEps": 194.15063843065693,
+   "fwdEps": 228.8218669708029,
    "fwd": {
-    "eps": 194.15063843065693,
-    "netIncome": 52.72277,
+    "eps": 228.8218669708029,
+    "netIncome": 62.13795,
     "source": "dohod.ru",
     "basis": "ntm"
    },
@@ -529,16 +529,16 @@
    "t": "YDEX",
    "name": "Yandex",
    "group": "internet",
-   "price": 3480,
-   "priceDate": "2026-10-30",
+   "price": 3429,
+   "priceDate": "2026-11-02",
    "ttmEps": 460,
    "ttmSrc": "smart-lab",
    "ttmCheck": 443.42,
    "bvps": null,
-   "fwdEps": 425.46643037974684,
+   "fwdEps": 435.24972151898737,
    "fwd": {
-    "eps": 425.46643037974684,
-    "netIncome": 168.05924,
+    "eps": 435.24972151898737,
+    "netIncome": 171.92364,
     "source": "dohod.ru",
     "basis": "ntm"
    },
@@ -584,8 +584,8 @@
    "t": "HEAD",
    "name": "HeadHunter",
    "group": "internet",
-   "price": 2685,
-   "priceDate": "2026-10-30",
+   "price": 2680,
+   "priceDate": "2026-11-02",
    "ttmEps": 405,
    "ttmSrc": "smart-lab",
    "ttmCheck": 391.2,
@@ -639,8 +639,8 @@
    "t": "CNRU",
    "name": "CIAN",
    "group": "internet",
-   "price": 740,
-   "priceDate": "2026-10-30",
+   "price": 738.2,
+   "priceDate": "2026-11-02",
    "ttmEps": 47.2,
    "ttmSrc": "smart-lab",
    "ttmCheck": 50.21,
@@ -701,16 +701,16 @@
    "t": "VTBR",
    "name": "VTB",
    "metric": "pb",
-   "price": 56.405,
-   "priceDate": "2026-10-30",
+   "price": 55.725,
+   "priceDate": "2026-11-02",
    "ttmEps": 39.1,
    "ttmSrc": "smart-lab",
    "ttmCheck": null,
    "bvps": 229.03774752475246,
-   "fwdEps": 31.589705421448357,
+   "fwdEps": 37.231088080728135,
    "fwd": {
-    "eps": 31.589705421448357,
-    "netIncome": 408.3232,
+    "eps": 37.231088080728135,
+    "netIncome": 481.24276000000003,
     "source": "dohod.ru",
     "basis": "ntm"
    },
@@ -741,8 +741,8 @@
    "t": "BSPB",
    "name": "Bank St. Petersburg",
    "metric": "pb",
-   "price": 259.67,
-   "priceDate": "2026-10-30",
+   "price": 253.47,
+   "priceDate": "2026-11-02",
    "ttmEps": 66.6,
    "ttmSrc": "smart-lab",
    "ttmCheck": null,
@@ -779,8 +779,8 @@
    "t": "CBOM",
    "name": "Credit Bank of Moscow",
    "metric": "pb",
-   "price": 10.428,
-   "priceDate": "2026-10-30",
+   "price": 10.134,
+   "priceDate": "2026-11-02",
    "ttmEps": 0.94,
    "ttmSrc": "smart-lab",
    "ttmCheck": 0.94,
@@ -813,8 +813,8 @@
    "t": "SVCB",
    "name": "Sovcombank",
    "metric": "pb",
-   "price": 10.77,
-   "priceDate": "2026-10-30",
+   "price": 10.65,
+   "priceDate": "2026-11-02",
    "ttmEps": 3.39,
    "ttmSrc": "smart-lab",
    "ttmCheck": 3.36,
@@ -853,16 +853,16 @@
    "t": "DOMRF",
    "name": "DOM.RF",
    "metric": "pb",
-   "price": 2124.7,
-   "priceDate": "2026-10-30",
+   "price": 2113.6,
+   "priceDate": "2026-11-02",
    "ttmEps": 626.4,
    "ttmSrc": "smart-lab",
    "ttmCheck": 626.74,
    "bvps": 2807.1150639244024,
-   "fwdEps": 664.1261211002662,
+   "fwdEps": 681.813834037267,
    "fwd": {
-    "eps": 664.1261211002662,
-    "netIncome": 119.48757,
+    "eps": 681.813834037267,
+    "netIncome": 122.66989,
     "source": "dohod.ru",
     "basis": "ntm"
    },
@@ -893,8 +893,8 @@
    "t": "MBNK",
    "name": "MTS Bank",
    "metric": "pb",
-   "price": 961,
-   "priceDate": "2026-10-30",
+   "price": 966,
+   "priceDate": "2026-11-02",
    "ttmEps": 485,
    "ttmSrc": "smart-lab",
    "ttmCheck": 423.12,
@@ -932,8 +932,8 @@
   {
    "t": "ROSN",
    "name": "Rosneft",
-   "price": 385.55,
-   "priceDate": "2026-10-30",
+   "price": 373.55,
+   "priceDate": "2026-11-02",
    "ttmEps": 23.4,
    "ttmSrc": "smart-lab",
    "ttmCheck": 38.59,
@@ -975,8 +975,8 @@
   {
    "t": "SIBN",
    "name": "Gazprom Neft",
-   "price": 569.4,
-   "priceDate": "2026-10-30",
+   "price": 547.6,
+   "priceDate": "2026-11-02",
    "ttmEps": 80.5,
    "ttmSrc": "smart-lab",
    "ttmCheck": 79.47,
@@ -1018,8 +1018,8 @@
   {
    "t": "SNGS",
    "name": "Surgutneftegas",
-   "price": 18.14,
-   "priceDate": "2026-10-30",
+   "price": 17.525,
+   "priceDate": "2026-11-02",
    "ttmEps": 37,
    "ttmSrc": "smart-lab",
    "ttmCheck": 37.01,
@@ -1057,8 +1057,8 @@
   {
    "t": "GAZP",
    "name": "Gazprom",
-   "price": 117.17,
-   "priceDate": "2026-10-30",
+   "price": 114.6,
+   "priceDate": "2026-11-02",
    "ttmEps": 61.1,
    "ttmSrc": "smart-lab",
    "ttmCheck": 47.32,
@@ -1090,8 +1090,8 @@
   {
    "t": "NLMK",
    "name": "NLMK",
-   "price": 75.02,
-   "priceDate": "2026-10-30",
+   "price": 73.96,
+   "priceDate": "2026-11-02",
    "ttmEps": 6.46,
    "ttmSrc": "smart-lab",
    "ttmCheck": 6.46,
@@ -1123,8 +1123,8 @@
   {
    "t": "MAGN",
    "name": "MMK",
-   "price": 22.7,
-   "priceDate": "2026-10-30",
+   "price": 22.035,
+   "priceDate": "2026-11-02",
    "ttmEps": -3.46,
    "ttmSrc": "smart-lab",
    "ttmCheck": -3.46,
@@ -1156,16 +1156,16 @@
   {
    "t": "CHMF",
    "name": "Severstal",
-   "price": 693.8,
-   "priceDate": "2026-10-30",
+   "price": 678,
+   "priceDate": "2026-11-02",
    "ttmEps": 1.84,
    "ttmSrc": "smart-lab",
    "ttmCheck": 1.83,
    "bvps": null,
-   "fwdEps": 138.10385246753248,
+   "fwdEps": 140.78542545454548,
    "fwd": {
-    "eps": 138.10385246753248,
-    "netIncome": 115.58691999999999,
+    "eps": 140.78542545454548,
+    "netIncome": 117.83127999999999,
     "source": "dohod.ru",
     "basis": "ntm"
    },
@@ -1189,8 +1189,8 @@
   {
    "t": "RUAL",
    "name": "Rusal",
-   "price": 24.85,
-   "priceDate": "2026-10-30",
+   "price": 23.68,
+   "priceDate": "2026-11-02",
    "ttmEps": -2.24,
    "ttmSrc": "smart-lab",
    "ttmCheck": 0.17,
@@ -1222,16 +1222,16 @@
   {
    "t": "PLZL",
    "name": "Polyus",
-   "price": 1053,
-   "priceDate": "2026-10-30",
+   "price": 1058.4,
+   "priceDate": "2026-11-02",
    "ttmEps": 149.1,
    "ttmSrc": "smart-lab",
    "ttmCheck": 213,
    "bvps": null,
-   "fwdEps": 252.85480267126664,
+   "fwdEps": 146.8786231049778,
    "fwd": {
-    "eps": 252.85480267126664,
-    "netIncome": 344.09282,
+    "eps": 146.8786231049778,
+    "netIncome": 199.87707999999998,
     "source": "dohod.ru",
     "basis": "ntm"
    },
@@ -1269,8 +1269,8 @@
   {
    "t": "ALRS",
    "name": "ALROSA",
-   "price": 20.59,
-   "priceDate": "2026-10-30",
+   "price": 20.28,
+   "priceDate": "2026-11-02",
    "ttmEps": -1.89,
    "ttmSrc": "smart-lab",
    "ttmCheck": -2.07,
@@ -1302,8 +1302,8 @@
   {
    "t": "MGNT",
    "name": "Magnit",
-   "price": 1831,
-   "priceDate": "2026-10-30",
+   "price": 1787,
+   "priceDate": "2026-11-02",
    "ttmEps": -400.6,
    "ttmSrc": "smart-lab",
    "ttmCheck": -368.92,
@@ -1329,16 +1329,16 @@
   {
    "t": "LENT",
    "name": "Lenta",
-   "price": 1857,
-   "priceDate": "2026-10-30",
+   "price": 1851.5,
+   "priceDate": "2026-11-02",
    "ttmEps": 284.2,
    "ttmSrc": "smart-lab",
    "ttmCheck": 269.05,
    "bvps": null,
-   "fwdEps": 161.9530063030303,
+   "fwdEps": 180.6797193939394,
    "fwd": {
-    "eps": 161.9530063030303,
-    "netIncome": 18.80524,
+    "eps": 180.6797193939394,
+    "netIncome": 20.9797,
     "source": "dohod.ru",
     "basis": "ntm"
    },
@@ -1362,16 +1362,16 @@
   {
    "t": "FIXR",
    "name": "Fix Price",
-   "price": 0.4656,
-   "priceDate": "2026-10-30",
+   "price": 0.4747,
+   "priceDate": "2026-11-02",
    "ttmEps": 0.1,
    "ttmSrc": "smart-lab",
    "ttmCheck": 0.1,
    "bvps": null,
-   "fwdEps": 0.1488098223615465,
+   "fwdEps": 0.08059916405433647,
    "fwd": {
-    "eps": 0.1488098223615465,
-    "netIncome": 14.241100000000001,
+    "eps": 0.08059916405433647,
+    "netIncome": 7.7133400000000005,
     "source": "dohod.ru",
     "basis": "ntm"
    },
@@ -1395,16 +1395,16 @@
   {
    "t": "OZON",
    "name": "Ozon",
-   "price": 3820,
-   "priceDate": "2026-10-30",
+   "price": 3716,
+   "priceDate": "2026-11-02",
    "ttmEps": 101.5,
    "ttmSrc": "smart-lab",
    "ttmCheck": 103.13,
    "bvps": null,
-   "fwdEps": 161.8979440909091,
+   "fwdEps": 127.18065340909092,
    "fwd": {
-    "eps": 161.8979440909091,
-    "netIncome": 35.09118,
+    "eps": 127.18065340909092,
+    "netIncome": 27.56625,
     "source": "dohod.ru",
     "basis": "ntm"
    },
@@ -1438,8 +1438,8 @@
   {
    "t": "VKCO",
    "name": "VK",
-   "price": 160.5,
-   "priceDate": "2026-10-30",
+   "price": 209.4,
+   "priceDate": "2026-11-02",
    "ttmEps": -21.8,
    "ttmSrc": "smart-lab",
    "ttmCheck": -28.17,
@@ -1465,8 +1465,8 @@
   {
    "t": "POSI",
    "name": "Positive Technologies",
-   "price": 1231.2,
-   "priceDate": "2026-10-30",
+   "price": 1207,
+   "priceDate": "2026-11-02",
    "ttmEps": 153.6,
    "ttmSrc": "smart-lab",
    "ttmCheck": 153.42,
@@ -1504,8 +1504,8 @@
   {
    "t": "ASTR",
    "name": "Astra Group",
-   "price": 217.75,
-   "priceDate": "2026-10-30",
+   "price": 220,
+   "priceDate": "2026-11-02",
    "ttmEps": 32.8,
    "ttmSrc": "smart-lab",
    "ttmCheck": 30.9,
@@ -1545,7 +1545,7 @@
   {
    "t": "AFKS",
    "name": "Система ао",
-   "price": 8.41,
+   "price": 8.268,
    "ttmEps": -16.9,
    "fwdEps": null,
    "divTtm": 0,
@@ -1554,7 +1554,7 @@
   {
    "t": "AFLT",
    "name": "Аэрофлот",
-   "price": 37.72,
+   "price": 36.66,
    "ttmEps": 4.72,
    "fwdEps": 10.201684978723405,
    "divTtm": 5.29,
@@ -1563,7 +1563,7 @@
   {
    "t": "ENPG",
    "name": "ЭН+ГРУП ао",
-   "price": 327.4,
+   "price": 318.3,
    "ttmEps": 91.9,
    "fwdEps": 118.36615105621804,
    "divTtm": 0,
@@ -1572,7 +1572,7 @@
   {
    "t": "FLOT",
    "name": "Совкомфлот",
-   "price": 89.12,
+   "price": 87.5,
    "ttmEps": 2.13,
    "fwdEps": 15.041592747035573,
    "divTtm": 4.87,
@@ -1581,7 +1581,7 @@
   {
    "t": "IRAO",
    "name": "ИнтерРАОао",
-   "price": 2.809,
+   "price": 2.6885,
    "ttmEps": 1.11,
    "fwdEps": 1.1649367635893013,
    "divTtm": 0.321425305,
@@ -1590,7 +1590,7 @@
   {
    "t": "MDMG",
    "name": "MDMG-ао",
-   "price": 1292.4,
+   "price": 1287.4,
    "ttmEps": 146.5,
    "fwdEps": 156.90229909090908,
    "divTtm": 85,
@@ -1599,7 +1599,7 @@
   {
    "t": "MOEX",
    "name": "МосБиржа",
-   "price": 165.4,
+   "price": 162.81,
    "ttmEps": 28.1,
    "fwdEps": 29.22776425665102,
    "divTtm": 19.57,
@@ -1608,7 +1608,7 @@
   {
    "t": "MTSS",
    "name": "МТС-ао",
-   "price": 177,
+   "price": 175.6,
    "ttmEps": 27.2,
    "fwdEps": 38.6581,
    "divTtm": 35,
@@ -1617,16 +1617,16 @@
   {
    "t": "PHOR",
    "name": "ФосАгро ао",
-   "price": 5493,
+   "price": 5136,
    "ttmEps": 346.9,
-   "fwdEps": 480.4203420489978,
+   "fwdEps": 529.0531724498886,
    "divTtm": 0,
    "ttmSrc": "smart-lab"
   },
   {
    "t": "RAGR",
    "name": "Русагро",
-   "price": 72.58,
+   "price": 72.2,
    "ttmEps": 12,
    "fwdEps": 23.605147826086956,
    "divTtm": 16.48,
@@ -1635,7 +1635,7 @@
   {
    "t": "RENI",
    "name": "Ренессанс",
-   "price": 72.38,
+   "price": 70.28,
    "ttmEps": 9.05,
    "fwdEps": 8.934684325396827,
    "divTtm": 4.1,
@@ -1644,7 +1644,7 @@
   {
    "t": "RTKM",
    "name": "Ростел -ао",
-   "price": 43.33,
+   "price": 45.26,
    "ttmEps": 3.11,
    "fwdEps": 7.655359519607843,
    "divTtm": 2.71,
@@ -1653,16 +1653,16 @@
   {
    "t": "SBERP",
    "name": "Сбербанк-п",
-   "price": 297.07,
+   "price": 291.25,
    "ttmEps": 89.4,
-   "fwdEps": 93.17222790466322,
+   "fwdEps": 93.50134172953369,
    "divTtm": 37.64,
    "ttmSrc": "smart-lab"
   },
   {
    "t": "SNGSP",
    "name": "Сургнфгз-п",
-   "price": 41.03,
+   "price": 41.515,
    "ttmEps": 37,
    "fwdEps": 18.845306278366113,
    "divTtm": 0.85,
@@ -1671,7 +1671,7 @@
   {
    "t": "TATNP",
    "name": "Татнфт 3ап",
-   "price": 631,
+   "price": 604.1,
    "ttmEps": 122,
    "fwdEps": 124.28423656884877,
    "divTtm": 52.620000000000005,
@@ -1680,16 +1680,16 @@
   {
    "t": "TRNFP",
    "name": "Транснф ап",
-   "price": 1066,
+   "price": 1040.6,
    "ttmEps": 388.1,
-   "fwdEps": 446.2950506063349,
+   "fwdEps": 446.0163561719457,
    "divTtm": 204.17,
    "ttmSrc": "smart-lab"
   },
   {
    "t": "UGLD",
    "name": "ЮГК",
-   "price": 0.6668,
+   "price": 0.6722,
    "ttmEps": 0.1,
    "fwdEps": 0.13750214592274676,
    "divTtm": 0,
@@ -1699,7 +1699,7 @@
  "indexWeights": [
   {
    "t": "AFKS",
-   "w": 0.0026
+   "w": 0.0027
   },
   {
    "t": "AFLT",
@@ -1711,7 +1711,7 @@
   },
   {
    "t": "BSPB",
-   "w": 0.0038
+   "w": 0.0039
   },
   {
    "t": "CBOM",
@@ -1719,15 +1719,15 @@
   },
   {
    "t": "CHMF",
-   "w": 0.0086
+   "w": 0.0085
   },
   {
    "t": "CNRU",
-   "w": 0.0036
+   "w": 0.0038
   },
   {
    "t": "DOMRF",
-   "w": 0.0061
+   "w": 0.0062
   },
   {
    "t": "ENPG",
@@ -1739,23 +1739,23 @@
   },
   {
    "t": "GAZP",
-   "w": 0.1041
+   "w": 0.1043
   },
   {
    "t": "GMKN",
-   "w": 0.0369
+   "w": 0.0374
   },
   {
    "t": "HEAD",
-   "w": 0.0108
+   "w": 0.011
   },
   {
    "t": "IRAO",
-   "w": 0.0105
+   "w": 0.0103
   },
   {
    "t": "LKOH",
-   "w": 0.174
+   "w": 0.1724
   },
   {
    "t": "MAGN",
@@ -1771,7 +1771,7 @@
   },
   {
    "t": "MTSS",
-   "w": 0.0093
+   "w": 0.0094
   },
   {
    "t": "NLMK",
@@ -1779,19 +1779,19 @@
   },
   {
    "t": "NVTK",
-   "w": 0.048
+   "w": 0.0471
   },
   {
    "t": "OZON",
-   "w": 0.0343
+   "w": 0.0339
   },
   {
    "t": "PHOR",
-   "w": 0.0065
+   "w": 0.0063
   },
   {
    "t": "PLZL",
-   "w": 0.02
+   "w": 0.0206
   },
   {
    "t": "POSI",
@@ -1799,27 +1799,27 @@
   },
   {
    "t": "RAGR",
-   "w": 0.0022
+   "w": 0.0023
   },
   {
    "t": "RENI",
-   "w": 0.0021
+   "w": 0.002
   },
   {
    "t": "ROSN",
-   "w": 0.0287
+   "w": 0.0285
   },
   {
    "t": "RTKM",
-   "w": 0.0046
+   "w": 0.0049
   },
   {
    "t": "RUAL",
-   "w": 0.0076
+   "w": 0.0075
   },
   {
    "t": "SBER",
-   "w": 0.1175
+   "w": 0.1176
   },
   {
    "t": "SBERP",
@@ -1827,11 +1827,11 @@
   },
   {
    "t": "SNGS",
-   "w": 0.0181
+   "w": 0.018
   },
   {
    "t": "SNGSP",
-   "w": 0.0185
+   "w": 0.0191
   },
   {
    "t": "SVCB",
@@ -1839,15 +1839,15 @@
   },
   {
    "t": "T",
-   "w": 0.0486
+   "w": 0.0488
   },
   {
    "t": "TATN",
-   "w": 0.0553
+   "w": 0.0542
   },
   {
    "t": "TATNP",
-   "w": 0.0118
+   "w": 0.0116
   },
   {
    "t": "TRNFP",
@@ -1855,15 +1855,15 @@
   },
   {
    "t": "UGLD",
-   "w": 0.0026
-  },
-  {
-   "t": "VKCO",
    "w": 0.0027
   },
   {
+   "t": "VKCO",
+   "w": 0.0036
+  },
+  {
    "t": "VTBR",
-   "w": 0.0233
+   "w": 0.0234
   },
   {
    "t": "X5",
@@ -1871,7 +1871,7 @@
   },
   {
    "t": "YDEX",
-   "w": 0.0573
+   "w": 0.0579
   }
  ],
  "notes": []
