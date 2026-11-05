@@ -1,8 +1,8 @@
 {
  "meta": {
-  "builtAt": "2026-11-04T04:05:12.540Z",
+  "builtAt": "2026-11-05T04:03:28.302Z",
   "pricesAsOf": "2026-11-03",
-  "earningsAsOf": "2026-11-04",
+  "earningsAsOf": "2026-11-05",
   "forwardSource": "dohod.ru next-12-months net income forecast (Dohod's own analysts — not a multi-broker consensus)",
   "sources": {
    "smartlab": 47,
@@ -52,10 +52,10 @@
    "date": "2026-11-03"
   },
   "ofz": {
-   "date": "2026-11-03",
-   "y1": 14.2744,
-   "y5": 16.1445,
-   "y10": 16.455
+   "date": "2026-11-04",
+   "y1": 14.0927,
+   "y5": 16.0229,
+   "y10": 16.5207
   },
   "usdrub": {
    "rate": 81.6699,
@@ -401,9 +401,9 @@
     "pendingSince": null
    },
    "target": {
-    "consensus": 742.97,
+    "consensus": 742.52,
     "min": 615,
-    "max": 965,
+    "max": 930,
     "rec": "buy",
     "n": 11
    },
@@ -452,11 +452,11 @@
     "pendingSince": null
    },
    "target": {
-    "consensus": 156,
+    "consensus": 158,
     "min": 121,
-    "max": 195,
+    "max": 201,
     "rec": "buy",
-    "n": 10
+    "n": 12
    },
    "hist": {
     "min": 3.36627615219,
@@ -507,11 +507,11 @@
     "pendingSince": null
    },
    "target": {
-    "consensus": 2815.15,
+    "consensus": 2942.85,
     "min": 2160,
-    "max": 3305,
+    "max": 3603,
     "rec": "buy",
-    "n": 13
+    "n": 14
    },
    "hist": {
     "min": 5.24484953243,
@@ -680,7 +680,7 @@
     "consensus": 811.17,
     "min": 700,
     "max": 1020,
-    "rec": "buy",
+    "rec": "hold",
     "n": 10
    },
    "hist": {
@@ -1008,11 +1008,11 @@
     "pendingSince": null
    },
    "target": {
-    "consensus": 576.8,
-    "min": 484,
+    "consensus": 580.1,
+    "min": 520,
     "max": 680,
     "rec": "hold",
-    "n": 11
+    "n": 10
    }
   },
   {
@@ -1212,11 +1212,11 @@
     "pendingSince": null
    },
    "target": {
-    "consensus": 39.7,
+    "consensus": 38.985,
     "min": 26,
     "max": 65,
     "rec": "hold",
-    "n": 9
+    "n": 10
    }
   },
   {
@@ -1259,11 +1259,11 @@
     "pendingSince": null
    },
    "target": {
-    "consensus": 1393.8,
+    "consensus": 1408.8,
     "min": 1000,
     "max": 1700,
-    "rec": "hold",
-    "n": 8
+    "rec": "buy",
+    "n": 9
    }
   },
   {
@@ -1292,11 +1292,11 @@
     "pendingSince": null
    },
    "target": {
-    "consensus": 26.83,
+    "consensus": 26.79,
     "min": 18,
-    "max": 36,
+    "max": 38.2,
     "rec": "hold",
-    "n": 6
+    "n": 8
    }
   },
   {
@@ -1352,7 +1352,7 @@
     "pendingSince": null
    },
    "target": {
-    "consensus": 2373.33,
+    "consensus": 2356.66,
     "min": 2000,
     "max": 2600,
     "rec": "buy",
@@ -1428,11 +1428,11 @@
     "pendingSince": null
    },
    "target": {
-    "consensus": 5430,
-    "min": 4700,
-    "max": 6800,
+    "consensus": 5640.9,
+    "min": 4640,
+    "max": 8540,
     "rec": "buy",
-    "n": 9
+    "n": 11
    }
   },
   {
@@ -1455,11 +1455,11 @@
     "pendingSince": null
    },
    "target": {
-    "consensus": 243.57,
+    "consensus": 246.12,
     "min": 150,
     "max": 345,
-    "rec": "buy",
-    "n": 7
+    "rec": "hold",
+    "n": 8
    }
   },
   {
