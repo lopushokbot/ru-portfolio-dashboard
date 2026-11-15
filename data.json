@@ -1,8 +1,8 @@
 {
  "meta": {
-  "builtAt": "2026-11-14T04:05:32.686Z",
+  "builtAt": "2026-11-15T04:05:07.826Z",
   "pricesAsOf": "2026-11-13",
-  "earningsAsOf": "2026-11-14",
+  "earningsAsOf": "2026-11-15",
   "forwardSource": "dohod.ru next-12-months net income forecast (Dohod's own analysts — not a multi-broker consensus)",
   "sources": {
    "smartlab": 47,
@@ -622,7 +622,7 @@
     "lastReported": "2026-11-12",
     "lastPeriod": "Q3 2026",
     "next": "2027-03-05",
-    "nextPeriod": null,
+    "nextPeriod": "Q4 2026",
     "nextConfirmed": false,
     "pendingSince": null
    },
@@ -847,7 +847,7 @@
     "lastReported": "2026-11-13",
     "lastPeriod": "Q3 2026",
     "next": "2027-03-12",
-    "nextPeriod": null,
+    "nextPeriod": "Q4 2026",
     "nextConfirmed": false,
     "pendingSince": null
    },
