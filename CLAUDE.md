@@ -25,7 +25,7 @@ config.json         — holdings, peers, peer groups (edit here)
 scripts/lib.mjs      — MOEX ISS, CBR, T-Bank (scoped CA), smart-lab parsers
 scripts/update.mjs   — daily orchestrator (~3 min)
 scripts/forward.mjs  — forward EPS (dohod.ru); the place to plug in a paid consensus (Cbonds)
-certs/russian_trusted_root_ca.pem — Минцифры root, trusted for T-Bank requests ONLY
+certs/russian_trusted_root_ca.pem — Минцифры root, trusted ONLY for T-Bank and iss.moex.com (RU_CA_HOSTS in lib.mjs)
 run.sh              — LaunchAgent wrapper (guards, caffeinate, network wait, commit + push)
 assets/fonts/       — New York Large + Inter, bundled
 ```
@@ -48,6 +48,8 @@ assets/fonts/       — New York Large + Inter, bundled
 ## T-Bank API gotcha (the "T-Bank not working" bug, fixed 2026-10-20)
 
 T-Bank serves `invest-public-api.tbank.ru` (and the old tinkoff.ru host) with a certificate from the Russian state CA ("Russian Trusted Root CA", Минцифры). No OS/Python/Node trusts it, so every call failed TLS and retried into timeouts (runs took 30+ min, 0/20 fundamentals since ~Oct 2026). Fix: the pinned root in `certs/`, passed as `ca` to T-Bank requests only. Also: the bulk `Shares` list takes 80+ s — use per-ticker `ShareBy`.
+
+**Same for MOEX (fixed 2026-11-26):** iss.moex.com switched to the Russian state CA around 2026-11-24 → every run failed `SELF_SIGNED_CERT_IN_CHAIN` (no data 24–26 Nov). Fix: `getText` routes hosts in `RU_CA_HOSTS` through an https.Agent with system roots + the pinned root; all other hosts keep default trust. `run.sh`'s network check curls MOEX with `--cacert` too. If another source starts failing the same way, add its host to `RU_CA_HOSTS`.
 
 ## Methodology (keep consistent)
 

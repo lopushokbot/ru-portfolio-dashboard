@@ -3,6 +3,7 @@
 // No Yahoo Finance anywhere — its Russian data has been wrong since 2022.
 import fs from "node:fs";
 import https from "node:https";
+import tls from "node:tls";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -18,11 +19,32 @@ export const todayDubai = () => new Date(Date.now() + 4 * 3600e3).toISOString().
 const BROWSER_UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36";
 
 /* ---------------- generic HTTP with retries ---------------- */
+/* iss.moex.com switched to a Russian Trusted Root CA (Минцифры) certificate around 2026-11-24, so every run
+   failed with SELF_SIGNED_CERT_IN_CHAIN. Like T-Bank, the pinned root is trusted for these hosts ONLY
+   (system roots + that one root), via https.get; every other host keeps plain fetch with default trust. */
+const RU_CA_HOSTS = new Set(["iss.moex.com"]);
+const ruAgent = new https.Agent({ ca: [...tls.rootCertificates, fs.readFileSync(path.join(ROOT, "certs/russian_trusted_root_ca.pem"), "utf8")], keepAlive: false });
+function fetchRuCa(url, { headers, timeout }) {
+  return new Promise((resolve, reject) => {
+    const req = https.get(url, { agent: ruAgent, headers, timeout }, res => {
+      let body = "";
+      res.setEncoding("utf8");
+      res.on("data", c => (body += c));
+      res.on("end", () => resolve({ status: res.statusCode, ok: res.statusCode >= 200 && res.statusCode < 300, text: async () => body }));
+    });
+    req.on("timeout", () => req.destroy(new Error(`timeout ${url}`)));
+    req.on("error", reject);
+  });
+}
+
 export async function getText(url, { tries = 3, timeout = 30000, headers = {} } = {}) {
   let last;
   for (let i = 0; i < tries; i++) {
     try {
-      const res = await fetch(url, { headers: { "User-Agent": BROWSER_UA, ...headers }, signal: AbortSignal.timeout(timeout) });
+      const h = { "User-Agent": BROWSER_UA, ...headers };
+      const res = RU_CA_HOSTS.has(new URL(url).hostname)
+        ? await fetchRuCa(url, { headers: h, timeout })
+        : await fetch(url, { headers: h, signal: AbortSignal.timeout(timeout) });
       if (res.status === 404) throw Object.assign(new Error("HTTP 404"), { fatal: true });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       return await res.text();

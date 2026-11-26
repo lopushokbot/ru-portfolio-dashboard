@@ -48,5 +48,6 @@
 
 ## Log
 
+- **2026-11-26** — Fixed runs failing since 24 Nov: iss.moex.com now uses the Russian state CA. Pinned root extended from T-Bank to MOEX only (`RU_CA_HOSTS` in lib.mjs) and run.sh network check uses `--cacert`.
 - **2026-10-20 (v3.1)** — Sema: SBER + T on P/B instead of P/E (bank P/B chart, P/B history bands, bank-median benchmark); everything grouped by sector (table headers with sector medians, sector-labelled charts and history).
 - **2026-10-20 (v3)** — Rebuilt from scratch in the US-dashboard format at Sema's request (see CLAUDE.md). Fixed T-Bank (state-CA certificate), fixed "not updating" (daily run with catch-up + network wait + git identity), Pages moved from the force-pushed `gh-pages` branch to `main`. v2 Python code is in git history and at `~/ru-portfolio-dashboard-v2-backup/`.

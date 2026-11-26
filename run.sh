@@ -31,7 +31,7 @@ NODE=/opt/homebrew/bin/node
 {
   echo "=== Run $(date) ==="
   for i in {1..20}; do
-    curl -s -m 10 -o /dev/null https://iss.moex.com/iss/index.json && curl -s -m 10 -o /dev/null https://github.com && break
+    curl -s -m 10 --cacert certs/russian_trusted_root_ca.pem -o /dev/null https://iss.moex.com/iss/index.json && curl -s -m 10 -o /dev/null https://github.com && break
     echo "Network not ready ($i/20); waiting 30s."
     sleep 30
   done
